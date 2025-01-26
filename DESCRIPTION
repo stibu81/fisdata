@@ -1,0 +1,13 @@
+Package: fisdata
+Title: Query Data From the FIS Web Page
+Version: 0.0.0.9000
+Authors@R: 
+  person("Stefan", "Lanz", , "slanz1137@gmail.com", role = c("aut", "cre"))
+Description: Query data from the web site of the International Ski and
+  Snowboard Federation FIS (<https://www.fis-ski.com>). 
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Suggests: 
+    roxygen2
