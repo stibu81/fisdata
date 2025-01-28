@@ -4,18 +4,30 @@
 #' with any value in that field will be returned. Filtering is case-insensitive
 #' and string matches are partial, except for `nation`.
 #'
-#' @param last_name,first_name last and first name. These fields do not support
-#'  special characters. For example, use "e" instead of "é" or "è",
-#'  "ae" instead of "ä", and "ss" instead of "ß".
+#' @param last_name,first_name last and first name. The API does not support
+#'  special characters, but many are handled automatically (see 'Details').
 #' @param discipline abbreviation of the discipline, e.g., AL for alpine skiing
 #' @param nation abbreviation of the nation, e.g., SUI for Switzerland. The
 #'  value is matched exactly.
 #' @param gender abbreviation of the gender: "M" for male or "F" for female
 #' @param birth_year birth year. This also supports multiple years separated
 #'  by commas (e.g, "1995,1998,2000") or year ranges (e.g., "1990-1995").
-#' @param brand ski or snowboard brand used by the athlete. This field does not
-#'  support special characters (see argument `last_name`).
+#' @param brand ski or snowboard brand used by the athlete. The API does not
+#'  support special characters, but many are handled automatically
+#'  (see 'Details').
 #' @param active_only should the query be restricted to active athletes.
+#'
+#' @details
+#' The API does not support special character in the fields `last_name`,
+#' `first_name`, and `brand`. The following special characters are handled
+#' automatically: à, á, å, ä, æ, ç, ć, č, ð, é, è, ê, ë, ï, ñ, ø, ó, ő, ö,
+#' œ, š, ß, ú, ü, and ž.
+#' Other special characters must be replaced by the suitable
+#' substitute by the user.
+#'
+#' @returns
+#' A tibble with the following columns: `active`, `fis_code`, `name`, `nation`,
+#' `age`, `birthdate`, `gender`, `discipline`, `club`, and `brand`.
 #'
 #' @export
 
@@ -36,9 +48,10 @@ query_athletes <- function(last_name = "",
 
   url <- glue::glue(
     "{fis_db_url}/biographies.html?",
-    "lastname={last_name}&firstname={first_name}&",
+    "lastname={replace_special_chars(last_name)}&",
+    "firstname={replace_special_chars(first_name)}&",
     "sectorcode={discipline}&gendercode={gender}&birthyear={birth_year}",
-    "&skiclub=&skis={brand}&",
+    "&skiclub=&skis={replace_special_chars(brand)}&",
     "nationcode={nation}&fiscode=&status={active}&search=true&"
   )
 

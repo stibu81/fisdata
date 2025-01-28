@@ -16,9 +16,8 @@ query_athletes(
 )
 }
 \arguments{
-\item{last_name, first_name}{last and first name. These fields do not support
-special characters. For example, use "e" instead of "é" or "è",
-"ae" instead of "ä", and "ss" instead of "ß".}
+\item{last_name, first_name}{last and first name. The API does not support
+special characters, but many are handled automatically (see 'Details').}
 
 \item{discipline}{abbreviation of the discipline, e.g., AL for alpine skiing}
 
@@ -30,13 +29,26 @@ value is matched exactly.}
 \item{birth_year}{birth year. This also supports multiple years separated
 by commas (e.g, "1995,1998,2000") or year ranges (e.g., "1990-1995").}
 
-\item{brand}{ski or snowboard brand used by the athlete. This field does not
-support special characters (see argument \code{last_name}).}
+\item{brand}{ski or snowboard brand used by the athlete. The API does not
+support special characters, but many are handled automatically
+(see 'Details').}
 
 \item{active_only}{should the query be restricted to active athletes.}
+}
+\value{
+A tibble with the following columns: \code{active}, \code{fis_code}, \code{name}, \code{nation},
+\code{age}, \code{birthdate}, \code{gender}, \code{discipline}, \code{club}, and \code{brand}.
 }
 \description{
 Query athletes using various filters. Omitting a filter means that athletes
 with any value in that field will be returned. Filtering is case-insensitive
 and string matches are partial, except for \code{nation}.
+}
+\details{
+The API does not support special character in the fields \code{last_name},
+\code{first_name}, and \code{brand}. The following special characters are handled
+automatically: à, á, å, ä, æ, ç, ć, č, ð, é, è, ê, ë, ï, ñ, ø, ó, ő, ö,
+œ, š, ß, ú, ü, and ž.
+Other special characters must be replaced by the suitable
+substitute by the user.
 }
