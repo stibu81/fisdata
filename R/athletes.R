@@ -112,7 +112,8 @@ extract_athletes <- function(table_rows) {
     dplyr::mutate(active = .data$active == "Active",
                   name = stringr::str_to_title(.data$name),
                   age = as.integer(.data$age)) %>%
-    dplyr::mutate(dplyr::across(dplyr::where(is.character), set_na))
+    dplyr::mutate(dplyr::across(dplyr::where(is.character), set_na)) %>%
+    dplyr::mutate(birthdate = format_birthdate(.data$birthdate))
 }
 
 

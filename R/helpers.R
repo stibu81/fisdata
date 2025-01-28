@@ -32,3 +32,13 @@ replace_special_chars <- function(x) {
       )
     )
 }
+
+
+# format the birthdate to %Y-%m-%d. The birthdate is kept as a string, because
+# for many athletes, only the birthyear is registered. This format nevertheless
+# allows for correct sorting by birthdate.
+format_birthdate <- function(x) {
+  x %>%
+    stringr::str_replace("^(\\d{2})-(\\d{2})-(\\d{4})$",
+                         "\\3-\\2-\\1")
+}
