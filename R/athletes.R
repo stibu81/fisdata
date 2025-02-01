@@ -27,7 +27,8 @@
 #'
 #' @returns
 #' A tibble with the following columns: `active`, `fis_code`, `name`, `nation`,
-#' `age`, `birthdate`, `gender`, `discipline`, `club`, and `brand`.
+#' `age`, `birthdate`, `gender`, `discipline`, `club`, `brand`, and
+#' `competitor_id`.
 #'
 #' @export
 
@@ -91,15 +92,23 @@ extract_athletes <- function(table_rows) {
   athletes <- athletes %>%
     purrr::map(\(a) if (!a[1] %in% c("Active", "Not allowed")) c("", a) else a)
 
+  # the competitor-id is required in order to query the results for the athlete
+  # it is only contained in the link
+  competitor_ids <- table_rows %>%
+    rvest::html_attr("href") %>%
+    stringr::str_extract("competitorid=(\\d+)", group = 1)
+
   # create data frame
+  df_names <- utils::head(names(empty_df), -1)
   athletes_df <- athletes %>%
     purrr::map(
       function(a)
         a %>%
           tibble::as_tibble_row(.name_repair = "minimal") %>%
-          magrittr::set_names(names(empty_df))
+          magrittr::set_names(df_names)
     ) %>%
-    dplyr::bind_rows()
+    dplyr::bind_rows() %>%
+    dplyr::mutate(competitor_id = competitor_ids)
 
   # prepare output data:
   # * active as logical,
@@ -128,6 +137,7 @@ get_empty_athletes_df <- function() {
     gender = character(),
     discipline = character(),
     club = character(),
-    brand = character()
+    brand = character(),
+    competitor_id = character()
   )
 }

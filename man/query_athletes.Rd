@@ -37,7 +37,8 @@ support special characters, but many are handled automatically
 }
 \value{
 A tibble with the following columns: \code{active}, \code{fis_code}, \code{name}, \code{nation},
-\code{age}, \code{birthdate}, \code{gender}, \code{discipline}, \code{club}, and \code{brand}.
+\code{age}, \code{birthdate}, \code{gender}, \code{discipline}, \code{club}, \code{brand}, and
+\code{competitor_id}.
 }
 \description{
 Query athletes using various filters. Omitting a filter means that athletes
