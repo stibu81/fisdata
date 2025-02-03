@@ -16,20 +16,23 @@ query_athletes(
 )
 }
 \arguments{
-\item{last_name, first_name}{last and first name. The API does not support
-special characters, but many are handled automatically (see 'Details').}
+\item{last_name, first_name}{last and first name. String matching is partial.
+The API does not support special characters, but many are handled
+automatically (see 'Details').}
 
-\item{discipline}{abbreviation of the discipline, e.g., AL for alpine skiing}
+\item{discipline}{abbreviation of the discipline, e.g., AL for alpine skiing.
+See the dataset \link{disciplines} for possible values.}
 
 \item{nation}{abbreviation of the nation, e.g., SUI for Switzerland. The
-value is matched exactly.}
+value is matched exactly. See the dataset \link{nations} for possible values.}
 
 \item{gender}{abbreviation of the gender: "M" for male or "F" for female}
 
 \item{birth_year}{birth year. This also supports multiple years separated
 by commas (e.g, "1995,1998,2000") or year ranges (e.g., "1990-1995").}
 
-\item{brand}{ski or snowboard brand used by the athlete. The API does not
+\item{brand}{ski or snowboard brand used by the athlete. String matching is
+partial. The API does not
 support special characters, but many are handled automatically
 (see 'Details').}
 
@@ -39,11 +42,15 @@ support special characters, but many are handled automatically
 A tibble with the following columns: \code{active}, \code{fis_code}, \code{name}, \code{nation},
 \code{age}, \code{birthdate}, \code{gender}, \code{discipline}, \code{club}, \code{brand}, and
 \code{competitor_id}.
+
+\code{active} is a logical indicating whether the athlete is still active. \code{age}
+gives the year as an integer, but this value is often missing. \code{birthdate}
+is returned as a character.
 }
 \description{
 Query athletes using various filters. Omitting a filter means that athletes
 with any value in that field will be returned. Filtering is case-insensitive
-and string matches are partial, except for \code{nation}.
+and for \code{last_name}, \code{first_name}, and \code{brand}, string matching is partial.
 }
 \details{
 The API does not support special character in the fields \code{last_name},

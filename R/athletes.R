@@ -2,17 +2,20 @@
 #'
 #' Query athletes using various filters. Omitting a filter means that athletes
 #' with any value in that field will be returned. Filtering is case-insensitive
-#' and string matches are partial, except for `nation`.
+#' and for `last_name`, `first_name`, and `brand`, string matching is partial.
 #'
-#' @param last_name,first_name last and first name. The API does not support
-#'  special characters, but many are handled automatically (see 'Details').
-#' @param discipline abbreviation of the discipline, e.g., AL for alpine skiing
+#' @param last_name,first_name last and first name. String matching is partial.
+#'  The API does not support special characters, but many are handled
+#'  automatically (see 'Details').
+#' @param discipline abbreviation of the discipline, e.g., AL for alpine skiing.
+#'  See the dataset [disciplines] for possible values.
 #' @param nation abbreviation of the nation, e.g., SUI for Switzerland. The
-#'  value is matched exactly.
+#'  value is matched exactly. See the dataset [nations] for possible values.
 #' @param gender abbreviation of the gender: "M" for male or "F" for female
 #' @param birth_year birth year. This also supports multiple years separated
 #'  by commas (e.g, "1995,1998,2000") or year ranges (e.g., "1990-1995").
-#' @param brand ski or snowboard brand used by the athlete. The API does not
+#' @param brand ski or snowboard brand used by the athlete. String matching is
+#'  partial. The API does not
 #'  support special characters, but many are handled automatically
 #'  (see 'Details').
 #' @param active_only should the query be restricted to active athletes.
@@ -30,6 +33,10 @@
 #' `age`, `birthdate`, `gender`, `discipline`, `club`, `brand`, and
 #' `competitor_id`.
 #'
+#' `active` is a logical indicating whether the athlete is still active. `age`
+#' gives the year as an integer, but this value is often missing. `birthdate`
+#' is returned as a character.
+#'
 #' @export
 
 query_athletes <- function(last_name = "",
@@ -46,6 +53,12 @@ query_athletes <- function(last_name = "",
   active <- if (active_only) "O" else ""
   # gender is output as "F", but queried as "W"
   if (gender == "F") gender <- "W"
+
+  # if an invalid discipline is used, results for all disciplines are returned.
+  # to avoid this, catch invalid disciplines here.
+  if (!toupper(discipline) %in% c("", fisdata::disciplines$code)) {
+    cli::cli_abort("'{discipline}' is not a valid discipline.")
+  }
 
   url <- glue::glue(
     "{fis_db_url}/biographies.html?",

@@ -1,6 +1,6 @@
 Package: fisdata
 Title: Query Data From the FIS Web Page
-Version: 0.0.0.9005
+Version: 0.0.0.9006
 Authors@R: 
   person("Stefan", "Lanz", , "slanz1137@gmail.com", role = c("aut", "cre"))
 Description: Query data from the web site of the International Ski and
