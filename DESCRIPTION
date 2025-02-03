@@ -21,6 +21,7 @@ Imports:
     tibble,
     dplyr,
     purrr,
+    rlang,
     cli,
     magrittr
 Suggests: 
