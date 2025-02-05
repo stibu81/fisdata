@@ -2,7 +2,7 @@
 #'
 #' Query results for an athlete using various filters. Omitting a filter means
 #' that results with any value in that field will be returned.
-#' Filtering is case-insensitive and string matches are partial.
+#' Filtering is case-insensitive and for `place` string matches are partial.
 #'
 #' @param athlete a list or data frame with fields/columns `competitor_id` and
 #'  `discipline` that describe a *single* athlete. The easiest way to create
@@ -12,12 +12,13 @@
 #'  one will be used.
 #' @param season year when the season ended, i.e., 2020 stands for the season
 #'  2019/2020. It is not possible to filter for multiple seasons at once.
-#' @param category abbreviation of the category of the event, e.g., WC for
-#'  "World Cup".
+#' @param category abbreviation of the category of the event, e.g., "WC" for
+#'  "World Cup". See the dataset [categories] for possible values.
 #' @param place location of the event. The API does not
 #'  support special characters, but many are handled automatically
 #'  (see 'Details').
-#' @param event abbreviation of the type of the event, e.g., DH for "Downhill".
+#' @param event abbreviation of the type of the event, e.g., "DH" for
+#'  "Downhill".
 #'
 #' @details
 #' The API does not support special character in the field `place`.

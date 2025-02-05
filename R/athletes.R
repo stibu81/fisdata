@@ -7,9 +7,9 @@
 #' @param last_name,first_name last and first name. String matching is partial.
 #'  The API does not support special characters, but many are handled
 #'  automatically (see 'Details').
-#' @param discipline abbreviation of the discipline, e.g., AL for alpine skiing.
-#'  See the dataset [disciplines] for possible values.
-#' @param nation abbreviation of the nation, e.g., SUI for Switzerland. The
+#' @param discipline abbreviation of the discipline, e.g., "AL" for
+#'  alpine skiing. See the dataset [disciplines] for possible values.
+#' @param nation abbreviation of the nation, e.g., "SUI" for Switzerland. The
 #'  value is matched exactly. See the dataset [nations] for possible values.
 #' @param gender abbreviation of the gender: "M" for male or "F" for female
 #' @param birth_year birth year. This also supports multiple years separated

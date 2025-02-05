@@ -20,10 +20,10 @@ query_athletes(
 The API does not support special characters, but many are handled
 automatically (see 'Details').}
 
-\item{discipline}{abbreviation of the discipline, e.g., AL for alpine skiing.
-See the dataset \link{disciplines} for possible values.}
+\item{discipline}{abbreviation of the discipline, e.g., "AL" for
+alpine skiing. See the dataset \link{disciplines} for possible values.}
 
-\item{nation}{abbreviation of the nation, e.g., SUI for Switzerland. The
+\item{nation}{abbreviation of the nation, e.g., "SUI" for Switzerland. The
 value is matched exactly. See the dataset \link{nations} for possible values.}
 
 \item{gender}{abbreviation of the gender: "M" for male or "F" for female}

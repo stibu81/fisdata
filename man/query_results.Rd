@@ -17,14 +17,15 @@ one will be used.}
 \item{season}{year when the season ended, i.e., 2020 stands for the season
 2019/2020. It is not possible to filter for multiple seasons at once.}
 
-\item{category}{abbreviation of the category of the event, e.g., WC for
-"World Cup".}
+\item{category}{abbreviation of the category of the event, e.g., "WC" for
+"World Cup". See the dataset \link{categories} for possible values.}
 
 \item{place}{location of the event. The API does not
 support special characters, but many are handled automatically
 (see 'Details').}
 
-\item{event}{abbreviation of the type of the event, e.g., DH for "Downhill".}
+\item{event}{abbreviation of the type of the event, e.g., "DH" for
+"Downhill".}
 }
 \value{
 A tibble with the following columns: \code{athlete}, \code{date}, \code{place}, \code{nation},
@@ -33,7 +34,7 @@ A tibble with the following columns: \code{athlete}, \code{date}, \code{place}, 
 \description{
 Query results for an athlete using various filters. Omitting a filter means
 that results with any value in that field will be returned.
-Filtering is case-insensitive and string matches are partial.
+Filtering is case-insensitive and for \code{place} string matches are partial.
 }
 \details{
 The API does not support special character in the field \code{place}.
