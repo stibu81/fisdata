@@ -30,7 +30,7 @@
 #'
 #' @returns
 #' A tibble with the following columns: `athlete`, `date`, `place`, `nation`,
-#' `category`, `discipline`, `rank`, `fis_points`, and `cup_points`.
+#' `category`, `discipline`, `rank`, `fis_points`, `cup_points`, and `race_id`.
 #'
 #' @export
 
@@ -116,8 +116,14 @@ extract_results <- function(table_rows) {
     rvest::html_text2() %>%
     stringr::str_split("\n")
 
+  # the race-id is required in order to query the results of the race
+  # it is only contained in the link
+  race_ids <- table_rows %>%
+    rvest::html_attr("href") %>%
+    stringr::str_extract("raceid=(\\d+)", group = 1)
+
   # create data frame
-  df_names <- names(empty_df)
+  df_names <- utils::head(names(empty_df), -1)
   results_df <- results %>%
     purrr::map(
       function(a) {
@@ -139,7 +145,11 @@ extract_results <- function(table_rows) {
     results_df <- results_df %>% dplyr::mutate(cup_points = NA_real_)
   }
 
+  # add column race_id at the end
+  results_df <- results_df %>% dplyr::mutate()
+
   # prepare output data:
+  # * add race_id
   # * date as Date
   # * rank as integer (with DNF, DNQ etc. as NA)
   # * fis_points and cup_points as numeric
@@ -147,7 +157,8 @@ extract_results <- function(table_rows) {
     dplyr::mutate(date = as.Date(.data$date, format = "%d-%m-%Y"),
                   rank = suppressWarnings(as.integer(.data$rank)),
                   fis_points = as.numeric(.data$fis_points),
-                  cup_points = as.numeric(.data$cup_points))
+                  cup_points = as.numeric(.data$cup_points),
+                  race_id = race_ids)
 
 }
 
@@ -161,6 +172,7 @@ get_empty_results_df <- function() {
     discipline = character(),
     rank = integer(),
     fis_points = numeric(),
-    cup_points = numeric()
+    cup_points = numeric(),
+    race_id = character()
   )
 }

@@ -29,7 +29,7 @@ support special characters, but many are handled automatically
 }
 \value{
 A tibble with the following columns: \code{athlete}, \code{date}, \code{place}, \code{nation},
-\code{category}, \code{discipline}, \code{rank}, \code{fis_points}, and \code{cup_points}.
+\code{category}, \code{discipline}, \code{rank}, \code{fis_points}, \code{cup_points}, and \code{race_id}.
 }
 \description{
 Query results for an athlete using various filters. Omitting a filter means
