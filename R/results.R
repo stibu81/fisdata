@@ -30,7 +30,8 @@
 #'
 #' @returns
 #' A tibble with the following columns: `athlete`, `date`, `place`, `nation`,
-#' `category`, `discipline`, `rank`, `fis_points`, `cup_points`, and `race_id`.
+#' `discipline`, `category`, `event`, `rank`, `fis_points`, `cup_points`,
+#' and `race_id`.
 #'
 #' @export
 
@@ -60,7 +61,9 @@ query_results <- function(athlete,
     rvest::html_elements(css = "a.table-row")
 
   results <- extract_results(table_rows) %>%
-    dplyr::mutate(athlete =athlete$name, .before = 1)
+    dplyr::mutate(athlete = athlete$name, .before = 1) %>%
+    # the discipline code must be added in order to be able to query races
+    dplyr::mutate(discipline = discipline, .before = "category")
 
   # the search returns at most 1'000 results. Warn if this limit is reached.
   if (nrow(results) >= 1000) {
@@ -145,9 +148,6 @@ extract_results <- function(table_rows) {
     results_df <- results_df %>% dplyr::mutate(cup_points = NA_real_)
   }
 
-  # add column race_id at the end
-  results_df <- results_df %>% dplyr::mutate()
-
   # prepare output data:
   # * add race_id
   # * date as Date
@@ -169,7 +169,7 @@ get_empty_results_df <- function() {
     place = character(),
     nation = character(),
     category = character(),
-    discipline = character(),
+    event = character(),
     rank = integer(),
     fis_points = numeric(),
     cup_points = numeric(),

@@ -125,7 +125,7 @@ extract_athletes <- function(table_rows) {
 
   # prepare output data:
   # * active as logical,
-  # * lastname not in all caps
+  # * last name not in all caps
   # * age as integer
   # * explicit missing values
   # * reorder
