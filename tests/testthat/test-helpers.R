@@ -1,3 +1,5 @@
+library(lubridate, warn.conflicts = FALSE)
+
 test_that("replace_special_chars() works", {
   expect_equal(
     replace_special_chars(
@@ -30,5 +32,19 @@ test_that("format_birthdate() works", {
   expect_equal(
     format_birthdate(c("08-10-1997", "1974", "1987", "12-05-1993", NA)),
     c("1997-10-08", "1974", "1987", "1993-05-12", NA)
+  )
+})
+
+
+test_that("parse_race_time() works", {
+  expect_equal(
+    parse_race_time(
+      c("43.5", "1:24.78", "2:32:5.04", "+43.5", "-1:24.78", "+2:32:5.04",
+        "-1:.4", "+.32", "-.67", "+0.00", "+.0", NA)
+    ),
+    as.period(
+      c("43.5S", "1M 24.78S", "2H 32M 5.04S", "43.5S", "-1M 24.78S",
+        "2H 32M 5.04S", "-1M 0.4S", "0.32S", "-0.67S", "0S", "0S", NA)
+    )
   )
 })

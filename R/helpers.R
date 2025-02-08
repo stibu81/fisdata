@@ -42,3 +42,26 @@ format_birthdate <- function(x) {
     stringr::str_replace("^(\\d{2})-(\\d{2})-(\\d{4})$",
                          "\\3-\\2-\\1")
 }
+
+# parse race time to a Period object. The difficulty here is that the race times
+# are given in different formats:
+# * there may be a +-sign at the beginning (for time differences)
+# * they may be given as seconds (43.5), minutes and seconds (1:57.23) or
+#   hours minutes and seconds (2:23:05.35)
+
+parse_race_time <- function(x) {
+  # extract the sign such that it can be added again later
+  sign <- stringr::str_extract(x, "^(\\+|-)*")
+  # add enough zeroes at the start and then only keep the part that defines a
+  # time period
+  x %>%
+    stringr::str_remove("^(\\+|-)*") %>%
+    stringr::str_c("0:0:", .) %>%
+    stringr::str_extract("\\d+:\\d+:[\\d.]+$") %>%
+    # hms() does not handle a decimal point that is not preceeded by a digit
+    # correctly. E.g., 0:0:.5 is parsed to "5S" instead of "0.5S"
+    # => fix this by adding a "0" in front of such a decimal point
+    stringr::str_replace("(^|:)\\.", "\\10.") %>%
+    stringr::str_c(sign, .) %>%
+    lubridate::hms()
+}

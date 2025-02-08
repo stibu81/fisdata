@@ -86,8 +86,12 @@ extract_race <- function(table_rows) {
     race_df <- race_df %>% dplyr::mutate(cup_points = NA_real_)
   }
 
-  # for the winner, diff_time is set to the winning time. Replace this by 0.
-  race_df$diff_time[1] <- "+0.00"
+  # for the winner, diff_time is set to the winning time. If others have
+  # finished with the same time, the column contains "&nbsp". All other times
+  # start with a "+", so replace those that don't by "+0.00"
+  i_zero <- race_df$diff_time %>%
+    stringr::str_detect("^\\+", negate = TRUE)
+  race_df$diff_time[i_zero] <- "+0.00"
 
   # prepare output data:
   # * rank, bib as integer
@@ -102,8 +106,8 @@ extract_race <- function(table_rows) {
                   bib = as.integer(.data$bib),
                   name = stringr::str_to_title(.data$name),
                   birth_year = as.integer(.data$birth_year),
-                  time = lubridate::ms(.data$time),
-                  diff_time = as.numeric(.data$diff_time),
+                  time = parse_race_time(.data$time),
+                  diff_time = parse_race_time(.data$diff_time),
                   fis_points = as.numeric(.data$fis_points),
                   cup_points = as.numeric(.data$cup_points) %>%
                     tidyr::replace_na(0L))
