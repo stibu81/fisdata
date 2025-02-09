@@ -9,6 +9,12 @@
 #'  results for one race. If multiple results are passed, only the first
 #'  one will be used.
 #'
+#' @details
+#' This function does not yet work for all disciplines. It has been successfully
+#' tested for Cross-Country ("CC"), Alpine Skiing ("AL"),
+#' Nordic Combined ("NK"), for some events in Snowboard ("SB"). It may fail or
+#' give incorrect results for any other discipline.
+#'
 #' @returns
 #' A tibble with the following columns: `rank`, `bib`, `fis_code`, `name`,
 #' `brand`, `birth_year`, `nation`, `time`, `diff_time`, `fis_points`,

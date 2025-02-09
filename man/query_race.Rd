@@ -22,3 +22,9 @@ and \code{cup_points}.
 \description{
 Query full results for a race.
 }
+\details{
+This function does not yet work for all disciplines. It has been successfully
+tested for Cross-Country ("CC"), Alpine Skiing ("AL"),
+Nordic Combined ("NK"), for some events in Snowboard ("SB"). It may fail or
+give incorrect results for any other discipline.
+}
