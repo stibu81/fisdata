@@ -9,3 +9,5 @@ NULL
 
 # base url
 fis_db_url <- "https://www.fis-ski.com/DB/general/"
+
+globalVariables(".")
