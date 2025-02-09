@@ -51,7 +51,7 @@ query_results <- function(athlete,
     "sectorcode={discipline}&seasoncode={season}&",
     "competitorid={competitor_id}&type=result&",
     "categorycode={toupper(category)}&sort=&place={replace_special_chars(place)}&",
-    "disciplinecode={event}&position=&limit=1000"
+    "disciplinecode={event}&position=&limit=2000"
   )
 
   # extract the table rows
@@ -65,9 +65,9 @@ query_results <- function(athlete,
     # the discipline code must be added in order to be able to query races
     dplyr::mutate(discipline = discipline, .before = "category")
 
-  # the search returns at most 1'000 results. Warn if this limit is reached.
-  if (nrow(results) >= 1000) {
-    cli::cli_warn(c("!" = "Maximum number of 1'000 athletes reached.",
+  # the search returns at most 2'000 results. Warn if this limit is reached.
+  if (nrow(results) >= 2000) {
+    cli::cli_warn(c("!" = "Maximum number of 2'000 results reached.",
                     "i" ="Results may be incomplete."))
   }
 
