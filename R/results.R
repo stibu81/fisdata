@@ -142,10 +142,10 @@ extract_results <- function(table_rows) {
   # if the optional two later columns are missing for all results, e.g., when
   # querying for trainings, they must be added here.
   if (!"fis_points" %in% names(results_df)) {
-    results_df <- results_df %>% dplyr::mutate(fis_points = NA_real_)
+    results_df <- results_df %>% dplyr::mutate(fis_points = NA_character_)
   }
   if (!"cup_points" %in% names(results_df)) {
-    results_df <- results_df %>% dplyr::mutate(cup_points = NA_real_)
+    results_df <- results_df %>% dplyr::mutate(cup_points = NA_character_)
   }
 
   # prepare output data:
@@ -156,8 +156,8 @@ extract_results <- function(table_rows) {
   results_df %>%
     dplyr::mutate(date = as.Date(.data$date, format = "%d-%m-%Y"),
                   rank = suppressWarnings(as.integer(.data$rank)),
-                  fis_points = as.numeric(.data$fis_points),
-                  cup_points = as.numeric(.data$cup_points),
+                  fis_points = parse_number(.data$fis_points),
+                  cup_points = parse_number(.data$cup_points),
                   race_id = race_ids)
 
 }

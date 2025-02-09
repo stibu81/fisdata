@@ -80,10 +80,10 @@ extract_race <- function(table_rows) {
   # for some race types, e.g., trainings, the last two columns are missing.
   # They are added here.
   if (!"fis_points" %in% names(race_df)) {
-    race_df <- race_df %>% dplyr::mutate(fis_points = NA_real_)
+    race_df <- race_df %>% dplyr::mutate(fis_points = NA_character_)
   }
   if (!"cup_points" %in% names(race_df)) {
-    race_df <- race_df %>% dplyr::mutate(cup_points = NA_real_)
+    race_df <- race_df %>% dplyr::mutate(cup_points = NA_character_)
   }
 
   # for the winner, diff_time is set to the winning time. If others have
@@ -108,8 +108,8 @@ extract_race <- function(table_rows) {
                   birth_year = as.integer(.data$birth_year),
                   time = parse_race_time(.data$time),
                   diff_time = parse_race_time(.data$diff_time),
-                  fis_points = as.numeric(.data$fis_points),
-                  cup_points = as.numeric(.data$cup_points) %>%
+                  fis_points = parse_number(.data$fis_points),
+                  cup_points = parse_number(.data$cup_points) %>%
                     tidyr::replace_na(0L))
 
 }

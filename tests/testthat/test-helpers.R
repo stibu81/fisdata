@@ -48,3 +48,14 @@ test_that("parse_race_time() works", {
     )
   )
 })
+
+
+test_that("parse_number() works", {
+  expect_equal(
+    parse_number(
+      c("5", "34.6", "5432.7", "1'423.5", "9'593", ".2", "0.3", "-.5",
+        "-4.8", "-4'568.14", "DNS", NA)
+    ),
+    c(5, 34.6, 5432.7, 1423.5, 9593, .2, .3, -.5, -4.8, -4568.14, NA, NA)
+  )
+})

@@ -65,3 +65,14 @@ parse_race_time <- function(x) {
     stringr::str_c(sign, .) %>%
     lubridate::hms()
 }
+
+
+# parse numbers. They come with thousands separator "'" and some values like
+# "DNS" must be converted to NA.
+parse_number <- function(x) {
+  suppressWarnings(
+    x %>%
+      stringr::str_remove_all("'") %>%
+      as.numeric()
+  )
+}
