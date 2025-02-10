@@ -48,10 +48,6 @@ query_athletes <- function(last_name = "",
                            brand = "",
                            active_only = FALSE) {
 
-
-
-
-  # extract the table rows
   athletes <- get_athletes_url(last_name, first_name, discipline, nation,
                                  gender, birth_year, brand, active_only) %>%
     extract_athletes()
