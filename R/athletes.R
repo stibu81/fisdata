@@ -49,33 +49,12 @@ query_athletes <- function(last_name = "",
                            active_only = FALSE) {
 
 
-  # active athletes are found by querying with "O"
-  active <- if (active_only) "O" else ""
-  # gender is output as "F", but queried as "W"
-  if (gender == "F") gender <- "W"
 
-  # if an invalid discipline is used, results for all disciplines are returned.
-  # to avoid this, catch invalid disciplines here.
-  if (!toupper(discipline) %in% c("", fisdata::disciplines$code)) {
-    cli::cli_abort("'{discipline}' is not a valid discipline.")
-  }
-
-  url <- glue::glue(
-    "{fis_db_url}/biographies.html?",
-    "lastname={replace_special_chars(last_name)}&",
-    "firstname={replace_special_chars(first_name)}&",
-    "sectorcode={discipline}&gendercode={gender}&birthyear={birth_year}",
-    "&skiclub=&skis={replace_special_chars(brand)}&",
-    "nationcode={nation}&fiscode=&status={active}&search=true&"
-  )
 
   # extract the table rows
-  table_rows <- url %>%
-    rvest::read_html() %>%
-    rvest::html_element(css = "div.tbody") %>%
-    rvest::html_elements(css = "a.table-row")
-
-  athletes <- extract_athletes(table_rows)
+  athletes <- get_athletes_url(last_name, first_name, discipline, nation,
+                                 gender, birth_year, brand, active_only) %>%
+    extract_athletes()
 
   # the search returns at most 1'000 results. Warn if this limit is reached.
   if (nrow(athletes) >= 1000) {
@@ -87,7 +66,46 @@ query_athletes <- function(last_name = "",
 }
 
 
-extract_athletes <- function(table_rows) {
+get_athletes_url <- function(last_name = "",
+                             first_name = "",
+                             discipline = "",
+                             nation = "",
+                             gender = "",
+                             birth_year = "",
+                             brand = "",
+                             active_only = FALSE,
+                             error_call = rlang::caller_env()) {
+
+  # active athletes are found by querying with "O"
+  active <- if (active_only) "O" else ""
+  # gender is output as "F", but queried as "W"
+  if (gender == "F") gender <- "W"
+
+  # if an invalid discipline is used, results for all disciplines are returned.
+  # to avoid this, catch invalid disciplines here.
+  if (!toupper(discipline) %in% c("", fisdata::disciplines$code)) {
+    cli::cli_abort("'{discipline}' is not a valid discipline.",
+                   call = error_call)
+  }
+
+  glue::glue(
+    "{fis_db_url}/biographies.html?",
+    "lastname={replace_special_chars(last_name)}&",
+    "firstname={replace_special_chars(first_name)}&",
+    "sectorcode={discipline}&gendercode={gender}&birthyear={birth_year}",
+    "&skiclub=&skis={replace_special_chars(brand)}&",
+    "nationcode={nation}&fiscode=&status={active}&search=true"
+  )
+
+}
+
+
+extract_athletes <- function(url) {
+
+  table_rows <- url %>%
+    rvest::read_html() %>%
+    rvest::html_element(css = "div.tbody") %>%
+    rvest::html_elements(css = "a.table-row")
 
   # if there are no rows, return an empty table
   empty_df <- get_empty_athletes_df()
