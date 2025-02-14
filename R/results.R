@@ -43,27 +43,11 @@ query_results <- function(athlete,
 
   athlete <- ensure_one_athlete(athlete)
 
-  competitor_id <- athlete$competitor_id
-  discipline <- athlete$discipline
-
-  url <- glue::glue(
-    "{fis_db_url}/athlete-biography.html?",
-    "sectorcode={discipline}&seasoncode={season}&",
-    "competitorid={competitor_id}&type=result&",
-    "categorycode={toupper(category)}&sort=&place={replace_special_chars(place)}&",
-    "disciplinecode={event}&position=&limit=2000"
-  )
-
-  # extract the table rows
-  table_rows <- url %>%
-    rvest::read_html() %>%
-    rvest::html_element(css = "div.table__body") %>%
-    rvest::html_elements(css = "a.table-row")
-
-  results <- extract_results(table_rows) %>%
+  results <- get_results_url(athlete, season, category, place, event) %>%
+    extract_results() %>%
     dplyr::mutate(athlete = athlete$name, .before = 1) %>%
     # the discipline code must be added in order to be able to query races
-    dplyr::mutate(discipline = discipline, .before = "category")
+    dplyr::mutate(discipline = !!athlete$discipline, .before = "category")
 
   # the search returns at most 2'000 results. Warn if this limit is reached.
   if (nrow(results) >= 2000) {
@@ -105,7 +89,31 @@ ensure_one_athlete <- function(athlete, error_call = rlang::caller_env()) {
 }
 
 
-extract_results <- function(table_rows) {
+get_results_url <- function(athlete,
+                            season = "",
+                            category = "",
+                            place = "",
+                            event = "") {
+
+  competitor_id <- athlete$competitor_id
+  discipline <- athlete$discipline
+
+  glue::glue(
+    "{fis_db_url}/athlete-biography.html?",
+    "sectorcode={discipline}&seasoncode={season}&",
+    "competitorid={competitor_id}&type=result&",
+    "categorycode={toupper(category)}&sort=&place={replace_special_chars(place)}&",
+    "disciplinecode={event}&position=&limit=2000"
+  )
+}
+
+
+extract_results <- function(url) {
+
+  table_rows <- url %>%
+    rvest::read_html() %>%
+    rvest::html_element(css = "div.table__body") %>%
+    rvest::html_elements(css = "a.table-row")
 
   # if there are no rows, return an empty table
   empty_df <- get_empty_results_df()
