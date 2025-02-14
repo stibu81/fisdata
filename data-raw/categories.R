@@ -52,7 +52,8 @@ categories <- tibble::tribble(
     "OPA",         "Alpen Cup",
     "WCQ",         "World Cup Qualification",
     "PR",          "Provisional Round",
-    "CHI",         "Children"
+    "CHI",         "Children",
+    "EXI",         "Exhibition"
   )
 
 usethis::use_data(categories, overwrite = TRUE)

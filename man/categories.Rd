@@ -5,7 +5,7 @@
 \alias{categories}
 \title{Table of Codes for Categories}
 \format{
-A data frame with 37 rows and
+A data frame with 38 rows and
 2 variables:
 \describe{
 \item{code}{code of the category consisting of two to four capital letters
