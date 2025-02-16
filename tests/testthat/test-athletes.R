@@ -72,7 +72,7 @@ test_that("query_athletes() works works", {
 })
 
 
-test_that("extract_athletes() works for empty result", {
+test_that("query_athletes() works for empty result", {
 
   local_mocked_bindings(
     get_athletes_url = function(...) test_path("data", "athletes_empty.html")
@@ -95,7 +95,7 @@ test_that("extract_athletes() works for empty result", {
 })
 
 
-test_that("extract_athletes() warns for large result", {
+test_that("query_athletes() warns for large result", {
   local_mocked_bindings(
     get_athletes_url = function(...) NULL,
     extract_athletes = function(...) tibble(a = 1:1001)
