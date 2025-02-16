@@ -63,14 +63,14 @@ test_that(
       replace(c(2, 8:10), c("Date", "integer", "double", "double"))
     for (i in seq_along(expected_types)) {
       if (expected_types[i] == "Date") {
-        expect_s3_class(dh[[!!expected_names[i]]], expected_types[i])
+        expect_s3_class(dh[[expected_names[i]]], expected_types[i])
       } else {
-        expect_type(dh[[!!expected_names[i]]], expected_types[i])
+        expect_type(dh[[expected_names[i]]], expected_types[i])
       }
     }
 
     expect_in(dh$athlete, "Cuche Didier")
-    expect_match(cuche$name, "cuche", ignore.case = TRUE)
+    expect_match(dh$athlete, "cuche", ignore.case = TRUE)
     expect_in(dh$nation, nations$code)
     expect_true(
       all(between(dh$date, as.Date("2009-11-01"), as.Date("2010-03-31")))
@@ -111,9 +111,9 @@ test_that(
       replace(c(2, 8:10), c("Date", "integer", "double", "double"))
     for (i in seq_along(expected_types)) {
       if (expected_types[i] == "Date") {
-        expect_s3_class(tra[[!!expected_names[i]]], expected_types[i])
+        expect_s3_class(tra[[expected_names[i]]], expected_types[i])
       } else {
-        expect_type(tra[[!!expected_names[i]]], expected_types[i])
+        expect_type(tra[[expected_names[i]]], expected_types[i])
       }
     }
 
@@ -160,9 +160,9 @@ test_that(
       replace(c(2, 8:10), c("Date", "integer", "double", "double"))
     for (i in seq_along(expected_types)) {
       if (expected_types[i] == "Date") {
-        expect_s3_class(wcs[[!!expected_names[i]]], expected_types[i])
+        expect_s3_class(wcs[[expected_names[i]]], expected_types[i])
       } else {
-        expect_type(wcs[[!!expected_names[i]]], expected_types[i])
+        expect_type(wcs[[expected_names[i]]], expected_types[i])
       }
     }
 
@@ -204,9 +204,9 @@ test_that(
       replace(c(2, 8:10), c("Date", "integer", "double", "double"))
     for (i in seq_along(expected_types)) {
       if (expected_types[i] == "Date") {
-        expect_s3_class(empty[[!!expected_names[i]]], expected_types[i])
+        expect_s3_class(empty[[expected_names[i]]], expected_types[i])
       } else {
-        expect_type(empty[[!!expected_names[i]]], expected_types[i])
+        expect_type(empty[[expected_names[i]]], expected_types[i])
       }
     }
   }

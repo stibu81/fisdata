@@ -59,7 +59,7 @@ test_that("query_athletes() works works", {
   expected_types <- rep("character", 11) %>%
     replace(c(1, 5), c("logical", "integer"))
   for (i in seq_along(expected_types)) {
-    expect_type(cuche[[!!expected_names[i]]], expected_types[i])
+    expect_type(cuche[[expected_names[i]]], expected_types[i])
   }
 
   expect_in(cuche$gender, "M")
@@ -90,7 +90,7 @@ test_that("query_athletes() works for empty result", {
   expected_types <- rep("character", 11) %>%
     replace(c(1, 5), c("logical", "integer"))
   for (i in seq_along(expected_types)) {
-    expect_type(empty[[!!expected_names[i]]], expected_types[i])
+    expect_type(empty[[expected_names[i]]], expected_types[i])
   }
 })
 
