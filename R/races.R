@@ -26,27 +26,20 @@ query_race <- function(result) {
 
   result <- ensure_one_result(result)
 
-  race_id <- result$race_id
-  discipline <- result$discipline
-
-  url <- glue::glue(
-    "{fis_db_url}/results.html?",
-    "sectorcode={discipline}&raceid={race_id}"
-  )
-
-  # extract the table rows
-  table_rows <- url %>%
-    rvest::read_html() %>%
-    rvest::html_element(css = "div.table__body#events-info-results") %>%
-    rvest::html_elements(css = "a.table-row")
-
-  race <- extract_race(table_rows)
+  race <- result %>%
+    get_races_url() %>%
+    extract_race()
 
   race
 }
 
 
-extract_race <- function(table_rows) {
+extract_race <- function(url) {
+
+  table_rows <- url %>%
+    rvest::read_html() %>%
+    rvest::html_element(css = "div.table__body#events-info-results") %>%
+    rvest::html_elements(css = "a.table-row")
 
   # if there are no rows, return an empty table
   empty_df <- get_empty_race_df()
@@ -150,6 +143,17 @@ ensure_one_result <- function(result, error_call = rlang::caller_env()) {
 
 }
 
+
+get_races_url <- function(result) {
+
+  race_id <- result$race_id
+  discipline <- result$discipline
+
+  glue::glue(
+    "{fis_db_url}/results.html?",
+    "sectorcode={discipline}&raceid={race_id}"
+  )
+}
 
 get_empty_race_df <- function() {
   tibble::tibble(
