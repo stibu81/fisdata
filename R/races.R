@@ -99,8 +99,7 @@ extract_race <- function(url) {
   # * time as time
   # * diff_time as numeric
   # * fis_points and cup_points as numeric
-  # * set missing cup_points to 0
-  race_df %>%
+  race_df <- race_df %>%
     dplyr::mutate(rank = as.integer(.data$rank),
                   bib = as.integer(.data$bib),
                   name = stringr::str_to_title(.data$name),
@@ -108,9 +107,16 @@ extract_race <- function(url) {
                   time = parse_race_time(.data$time),
                   diff_time = parse_race_time(.data$diff_time),
                   fis_points = parse_number(.data$fis_points),
-                  cup_points = parse_number(.data$cup_points) %>%
-                    tidyr::replace_na(0L))
+                  cup_points = parse_number(.data$cup_points))
 
+  # set missing cup points to zero, if this is a race where cup points are
+  # awarded, i.e., if at least one racer has won cup points
+  if (any(!is.na(race_df$cup_points))) {
+    race_df <- race_df %>%
+      dplyr::mutate(cup_points = tidyr::replace_na(.data$cup_points, 0))
+  }
+
+  race_df
 }
 
 
@@ -164,8 +170,8 @@ get_empty_race_df <- function() {
     brand = character(),
     birth_year = integer(),
     nation = character(),
-    time = numeric(),
-    diff_time = numeric(),
+    time = lubridate::hms(numeric()),
+    diff_time = lubridate::hms(numeric()),
     fis_points = numeric(),
     cup_points = numeric()
   )
