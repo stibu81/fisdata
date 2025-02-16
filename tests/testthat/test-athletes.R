@@ -68,7 +68,7 @@ test_that("query_athletes() works works", {
   expect_match(na.omit(cuche$birthdate), "\\d{4}(-\\d{2}-\\d{2})?")
   expect_in(cuche$discipline, disciplines$code)
 
-  expect_snapshot(cuche)
+  expect_snapshot(print(cuche, width = Inf, n = Inf))
 })
 
 
