@@ -75,7 +75,7 @@ test_that("query_athletes() works works", {
 test_that("query_athletes() works for empty result", {
 
   local_mocked_bindings(
-    get_athletes_url = function(...) test_path("data", "athletes_empty.html")
+    get_athletes_url = function(...) test_path("data", "athletes_empty.html.gz")
   )
   empty <- query_athletes()
 
