@@ -25,3 +25,186 @@ test_that("ensure_one_result() works", {
   expect_error(ensure_one_result(cuche2[integer(0), ]),
                "No result was passed")
 })
+
+
+test_that("query_race() works for an alpline skiing world cup race", {
+  local_mocked_bindings(
+    get_races_url = function(...) test_path("data", "race_al_wc.html.gz")
+  )
+  result <- tibble(athlete = "Odermatt Marco",
+                   place = "Wengen",
+                   discipline = "AL",
+                   race_id = "122808")
+  wengen_dh <- query_race(result)
+
+  expect_s3_class(wengen_dh, "tbl_df")
+
+  expected_names <- c("rank", "bib", "fis_code", "name", "brand",
+                      "birth_year", "nation", "time", "diff_time",
+                      "fis_points", "cup_points")
+  expect_named(wengen_dh, expected_names)
+
+  expected_types <- c("integer", "integer", "character", "character",
+                      "character", "integer", "character",
+                      "Period", "Period", "double", "double")
+  for (i in seq_along(expected_types)) {
+    if (expected_types[i] == "Period") {
+      expect_s4_class(wengen_dh[[expected_names[i]]], expected_types[i])
+    } else {
+      expect_type(wengen_dh[[expected_names[i]]], expected_types[i])
+    }
+  }
+
+  expect_in(wengen_dh$rank, 1:nrow(wengen_dh))
+  expect_in(diff(wengen_dh$rank), 0:2)
+  expect_in(wengen_dh$bib, 1:max(wengen_dh$bib))
+  expect_match(wengen_dh$fis_code, "^\\d+$")
+  expect_in(wengen_dh$birth_year, 1900:2100)
+  expect_in(wengen_dh$nation, nations$code)
+  expect_gte(min(wengen_dh$time), 0)
+  expect_gte(min(wengen_dh$diff_time), 0)
+  expect_lte(
+    max(
+      abs(wengen_dh$time[-1] - wengen_dh$time[1] - wengen_dh$diff_time[-1])
+    ),
+    1e-12
+  )
+  expect_gte(min(wengen_dh$fis_points), 0)
+  expect_gte(min(diff(wengen_dh$fis_points)), 0)
+  expect_in(wengen_dh$cup_points, 0:100)
+  expect_in(-diff(wengen_dh$cup_points), 0:20)
+
+  expect_snapshot(print(wengen_dh, width = Inf, n = Inf))
+})
+
+
+test_that(
+  "query_race() works for an alpline skiing world championships race",
+  {
+    local_mocked_bindings(
+      get_races_url = function(...) test_path("data", "race_al_wcs.html.gz")
+    )
+    result <- tibble(athlete = "Odermatt Marco",
+                     place = "Courchevel Meribel",
+                     discipline = "AL",
+                     race_id = "114189")
+    wcs_dh <- query_race(result)
+
+    expect_s3_class(wcs_dh, "tbl_df")
+
+    expected_names <- c("rank", "bib", "fis_code", "name", "brand",
+                        "birth_year", "nation", "time", "diff_time",
+                        "fis_points", "cup_points")
+    expect_named(wcs_dh, expected_names)
+
+    expected_types <- c("integer", "integer", "character", "character",
+                        "character", "integer", "character",
+                        "Period", "Period", "double", "double")
+    for (i in seq_along(expected_types)) {
+      if (expected_types[i] == "Period") {
+        expect_s4_class(wcs_dh[[expected_names[i]]], expected_types[i])
+      } else {
+        expect_type(wcs_dh[[expected_names[i]]], expected_types[i])
+      }
+    }
+
+    expect_in(wcs_dh$rank, 1:nrow(wcs_dh))
+    expect_in(diff(wcs_dh$rank), 0:2)
+    expect_in(wcs_dh$bib, 1:max(wcs_dh$bib))
+    expect_match(wcs_dh$fis_code, "^\\d+$")
+    expect_in(wcs_dh$birth_year, 1900:2100)
+    expect_in(wcs_dh$nation, nations$code)
+    expect_gte(min(wcs_dh$time), 0)
+    expect_gte(min(wcs_dh$diff_time), 0)
+    expect_lte(
+      max(
+        abs(wcs_dh$time[-1] - wcs_dh$time[1] - wcs_dh$diff_time[-1])
+      ),
+      1e-12
+    )
+    expect_gte(min(wcs_dh$fis_points), 0)
+    expect_gte(min(diff(wcs_dh$fis_points)), 0)
+    expect_in(wcs_dh$cup_points, NA_real_)
+
+    expect_snapshot(print(wcs_dh, width = Inf, n = Inf))
+  }
+)
+
+
+test_that("query_race() works for an alpline skiing world cup race", {
+  local_mocked_bindings(
+    get_races_url = function(...) test_path("data", "race_al_tra.html.gz")
+  )
+  result <- tibble(athlete = "Odermatt Marco",
+                   place = "Wengen",
+                   discipline = "AL",
+                   race_id = "122805")
+  wengen_training <- query_race(result)
+
+  expect_s3_class(wengen_training, "tbl_df")
+
+  expected_names <- c("rank", "bib", "fis_code", "name", "brand",
+                      "birth_year", "nation", "time", "diff_time",
+                      "fis_points", "cup_points")
+  expect_named(wengen_training, expected_names)
+
+  expected_types <- c("integer", "integer", "character", "character",
+                      "character", "integer", "character",
+                      "Period", "Period", "double", "double")
+  for (i in seq_along(expected_types)) {
+    if (expected_types[i] == "Period") {
+      expect_s4_class(wengen_training[[expected_names[i]]], expected_types[i])
+    } else {
+      expect_type(wengen_training[[expected_names[i]]], expected_types[i])
+    }
+  }
+
+  expect_in(wengen_training$rank, 1:nrow(wengen_training))
+  expect_in(diff(wengen_training$rank), 0:2)
+  expect_in(wengen_training$bib, 1:max(wengen_training$bib))
+  expect_match(wengen_training$fis_code, "^\\d+$")
+  expect_in(wengen_training$birth_year, 1900:2100)
+  expect_in(wengen_training$nation, nations$code)
+  expect_gte(min(wengen_training$time), 0)
+  expect_gte(min(wengen_training$diff_time), 0)
+  expect_lte(
+    max(
+      abs(wengen_training$time[-1] - wengen_training$time[1] - wengen_training$diff_time[-1])
+    ),
+    1e-12
+  )
+  expect_in(wengen_training$fis_points, NA_real_)
+  expect_in(wengen_training$cup_points, NA_real_)
+
+  expect_snapshot(print(wengen_training, width = Inf, n = Inf))
+})
+
+
+test_that("query_race() works for empty result", {
+  local_mocked_bindings(
+    get_races_url = function(...) test_path("data", "race_empty.html.gz")
+  )
+  result <- tibble(athlete = "Odermatt Marco",
+                   discipline = "AL",
+                   race_id = "")
+  empty <- query_race(result)
+
+  expect_s3_class(empty, "tbl_df")
+
+  expected_names <- c("rank", "bib", "fis_code", "name", "brand",
+                      "birth_year", "nation", "time", "diff_time",
+                      "fis_points", "cup_points")
+  expect_named(empty, expected_names)
+
+  expected_types <- c("integer", "integer", "character", "character",
+                      "character", "integer", "character",
+                      "Period", "Period", "double", "double")
+  for (i in seq_along(expected_types)) {
+    if (expected_types[i] == "Period") {
+      expect_s4_class(empty[[expected_names[i]]], expected_types[i])
+    } else {
+      expect_type(empty[[expected_names[i]]], expected_types[i])
+    }
+  }
+})
+
