@@ -4,7 +4,7 @@
 \alias{query_results}
 \title{Query Results for an Athlete}
 \usage{
-query_results(athlete, season = "", category = "", place = "", event = "")
+query_results(athlete, season = "", category = "", place = "", discipline = "")
 }
 \arguments{
 \item{athlete}{a list or data frame with fields/columns \code{competitor_id} and
@@ -17,19 +17,19 @@ one will be used.}
 \item{season}{year when the season ended, i.e., 2020 stands for the season
 2019/2020. It is not possible to filter for multiple seasons at once.}
 
-\item{category}{abbreviation of the category of the event, e.g., "WC" for
+\item{category}{abbreviation of the category of the race, e.g., "WC" for
 "World Cup". See the dataset \link{categories} for possible values.}
 
-\item{place}{location of the event. The API does not
+\item{place}{location of the race. The API does not
 support special characters, but many are handled automatically
 (see 'Details').}
 
-\item{event}{abbreviation of the type of the event, e.g., "DH" for
+\item{discipline}{abbreviation for the discipline, e.g., "DH" for
 "Downhill".}
 }
 \value{
 A tibble with the following columns: \code{athlete}, \code{date}, \code{place}, \code{nation},
-\code{sector}, \code{category}, \code{event}, \code{rank}, \code{fis_points}, \code{cup_points},
+\code{sector}, \code{category}, \code{discipline}, \code{rank}, \code{fis_points}, \code{cup_points},
 and \code{race_id}.
 }
 \description{

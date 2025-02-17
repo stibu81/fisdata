@@ -16,7 +16,7 @@ test_that("ensure_one_result() works", {
   cuche2 <- tibble(name = "Cuche Didier",
                   sector = "AL",
                   place = "Kitzbuehel",
-                  event = c("Downhill", "Super G"),
+                  discipline = c("Downhill", "Super G"),
                   race_id = c("59312", "59311"))
   expect_equal(ensure_one_result(cuche2), cuche2[1, ]) %>%
     expect_warning("Multiple results.*Downhill, Kitzbuehel")

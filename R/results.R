@@ -12,12 +12,12 @@
 #'  one will be used.
 #' @param season year when the season ended, i.e., 2020 stands for the season
 #'  2019/2020. It is not possible to filter for multiple seasons at once.
-#' @param category abbreviation of the category of the event, e.g., "WC" for
+#' @param category abbreviation of the category of the race, e.g., "WC" for
 #'  "World Cup". See the dataset [categories] for possible values.
-#' @param place location of the event. The API does not
+#' @param place location of the race. The API does not
 #'  support special characters, but many are handled automatically
 #'  (see 'Details').
-#' @param event abbreviation of the type of the event, e.g., "DH" for
+#' @param discipline abbreviation for the discipline, e.g., "DH" for
 #'  "Downhill".
 #'
 #' @details
@@ -30,7 +30,7 @@
 #'
 #' @returns
 #' A tibble with the following columns: `athlete`, `date`, `place`, `nation`,
-#' `sector`, `category`, `event`, `rank`, `fis_points`, `cup_points`,
+#' `sector`, `category`, `discipline`, `rank`, `fis_points`, `cup_points`,
 #' and `race_id`.
 #'
 #' @export
@@ -39,11 +39,11 @@ query_results <- function(athlete,
                           season = "",
                           category = "",
                           place = "",
-                          event = "") {
+                          discipline = "") {
 
   athlete <- ensure_one_athlete(athlete)
 
-  results <- get_results_url(athlete, season, category, place, event) %>%
+  results <- get_results_url(athlete, season, category, place, discipline) %>%
     extract_results() %>%
     dplyr::mutate(athlete = athlete$name, .before = 1) %>%
     # the sector code must be added in order to be able to query races
@@ -93,7 +93,7 @@ get_results_url <- function(athlete,
                             season = "",
                             category = "",
                             place = "",
-                            event = "") {
+                            discipline = "") {
 
   competitor_id <- athlete$competitor_id
   sector <- athlete$sector
@@ -103,7 +103,7 @@ get_results_url <- function(athlete,
     "sectorcode={sector}&seasoncode={season}&",
     "competitorid={competitor_id}&type=result&",
     "categorycode={toupper(category)}&sort=&place={replace_special_chars(place)}&",
-    "disciplinecode={event}&position=&limit=2000"
+    "disciplinecode={discipline}&position=&limit=2000"
   )
 }
 
@@ -177,7 +177,7 @@ get_empty_results_df <- function() {
     place = character(),
     nation = character(),
     category = character(),
-    event = character(),
+    discipline = character(),
     rank = integer(),
     fis_points = numeric(),
     cup_points = numeric(),

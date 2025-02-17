@@ -12,8 +12,10 @@
 #' @details
 #' This function does not yet work for all sectors. It has been successfully
 #' tested for Cross-Country ("CC"), Alpine Skiing ("AL"),
-#' Nordic Combined ("NK"), for some events in Snowboard ("SB"). It may fail or
-#' give incorrect results for any other sector.
+#' Nordic Combined ("NK"), and for some disciplines in Snowboard ("SB").
+#' It may fail or give incorrect results for any other sector.
+#' In particular, the function is expected to fail for races where the ranking
+#' is not done through a time measurement as, e.g., in Ski Jumping ("JP").
 #'
 #' @returns
 #' A tibble with the following columns: `rank`, `bib`, `fis_code`, `name`,
@@ -140,7 +142,7 @@ ensure_one_result <- function(result, error_call = rlang::caller_env()) {
     result <- result[1, ]
     cli::cli_warn(
       c("!" = "Multiple results were passed to argument 'result'.",
-        "i" = "Only results for the first one ({result$event}, {result$place}) are returned."),
+        "i" = "Only results for the first one ({result$discipline}, {result$place}) are returned."),
       call = error_call
     )
   }

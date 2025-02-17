@@ -11,14 +11,14 @@ test_that("get_results_url() works with valid inputs", {
            "categorycode=&sort=&place=&disciplinecode=&position=&limit=2000")
   )
   expect_equal(
-    get_results_url(cuche, category = "WC", event = "SG"),
+    get_results_url(cuche, category = "WC", discipline = "SG"),
     paste0("https://www.fis-ski.com/DB/general/athlete-biography.html?",
            "sectorcode=AL&seasoncode=&competitorid=11795&type=result&",
            "categorycode=WC&sort=&place=&disciplinecode=SG&position=&",
            "limit=2000")
   )
   expect_equal(
-    get_results_url(cuche, event = "DH", season = "2010", place = "Kitzbühel"),
+    get_results_url(cuche, discipline = "DH", season = "2010", place = "Kitzbühel"),
     paste0("https://www.fis-ski.com/DB/general/athlete-biography.html?",
            "sectorcode=AL&seasoncode=2010&competitorid=11795&type=result&",
            "categorycode=&sort=&place=kitzbuehel&disciplinecode=DH&",
@@ -55,7 +55,7 @@ test_that(
     expect_s3_class(dh, "tbl_df")
 
     expected_names <- c("athlete", "date", "place", "nation", "sector",
-                        "category", "event", "rank", "fis_points",
+                        "category", "discipline", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(dh, expected_names)
 
@@ -77,7 +77,7 @@ test_that(
     )
     expect_in(dh$sector, "AL")
     expect_in(dh$category, c(categories$description, "World Cup Speed Event"))
-    expect_in(dh$event, "Downhill")
+    expect_in(dh$discipline, "Downhill")
     expect_in(dh$rank, c(0:100, NA_integer_))
     expect_true(all(na.omit(dh$fis_points) >= 0))
     expect_in(na.omit(dh$cup_points), 0:100)
@@ -103,7 +103,7 @@ test_that(
     expect_s3_class(tra, "tbl_df")
 
     expected_names <- c("athlete", "date", "place", "nation", "sector",
-                        "category", "event", "rank", "fis_points",
+                        "category", "discipline", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(tra, expected_names)
 
@@ -125,7 +125,7 @@ test_that(
     )
     expect_in(tra$sector, "AL")
     expect_in(tra$category, "Training")
-    expect_in(tra$event, "Downhill")
+    expect_in(tra$discipline, "Downhill")
     expect_in(tra$rank, c(0:100, NA_integer_))
     expect_in(tra$fis_points, NA_real_)
     expect_in(tra$cup_points, NA_real_)
@@ -152,7 +152,7 @@ test_that(
     expect_s3_class(wcs, "tbl_df")
 
     expected_names <- c("athlete", "date", "place", "nation", "sector",
-                        "category", "event", "rank", "fis_points",
+                        "category", "discipline", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(wcs, expected_names)
 
@@ -171,7 +171,7 @@ test_that(
     expect_in(wcs$nation, nations$code)
     expect_in(wcs$sector, "AL")
     expect_in(wcs$category, "World Championships")
-    expect_in(wcs$event, "Super G")
+    expect_in(wcs$discipline, "Super G")
     expect_in(wcs$rank, c(0:100, NA_integer_))
     expect_true(all(na.omit(wcs$fis_points) >= 0))
     expect_in(wcs$cup_points, NA_real_)
@@ -196,7 +196,7 @@ test_that(
     expect_s3_class(empty, "tbl_df")
 
     expected_names <- c("athlete", "date", "place", "nation", "sector",
-                        "category", "event", "rank", "fis_points",
+                        "category", "discipline", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(empty, expected_names)
 

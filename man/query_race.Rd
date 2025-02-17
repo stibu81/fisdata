@@ -25,6 +25,8 @@ Query full results for a race.
 \details{
 This function does not yet work for all sectors. It has been successfully
 tested for Cross-Country ("CC"), Alpine Skiing ("AL"),
-Nordic Combined ("NK"), for some events in Snowboard ("SB"). It may fail or
-give incorrect results for any other sector.
+Nordic Combined ("NK"), and for some disciplines in Snowboard ("SB").
+It may fail or give incorrect results for any other sector.
+In particular, the function is expected to fail for races where the ranking
+is not done through a time measurement as, e.g., in Ski Jumping ("JP").
 }
