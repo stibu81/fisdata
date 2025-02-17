@@ -1,14 +1,14 @@
-# prepare table of discipline. This data has been manually extracted from
+# prepare table of sectors. This data has been manually extracted from
 # https://www.fis-ski.com/DB/general/biographies.html as follows:
-# * enter a nation that likely has athletes in each discipline (e.g., SUI)
+# * enter a nation that likely has athletes in each sector (e.g., SUI)
 #   into the field "Nation" to limit the number of search results
-# * select a discipline from the drop down "Discipline"
+# * select a sector from the drop down "Sector"
 # * run the search
-# * read the code for the discipline from the column "Disc."
-# * repeat for all disciplines from the drop down
+# * read the code for the sector from the column "Disc."
+# * repeat for all sectors from the drop down
 # the current version of the data has been extracted on 2025-01-29
 
-disciplines <- tibble::tribble(
+sectors <- tibble::tribble(
     ~"code",       ~"description",
     "CC",          "Cross-Country",
     "JP",          "Ski Jumping",
@@ -26,4 +26,4 @@ disciplines <- tibble::tribble(
     "FR",          "Freeride"
   )
 
-usethis::use_data(disciplines, overwrite = TRUE)
+usethis::use_data(sectors, overwrite = TRUE)

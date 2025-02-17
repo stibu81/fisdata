@@ -7,8 +7,8 @@
 #' @param last_name,first_name last and first name. String matching is partial.
 #'  The API does not support special characters, but many are handled
 #'  automatically (see 'Details').
-#' @param discipline abbreviation of the discipline, e.g., "AL" for
-#'  alpine skiing. See the dataset [disciplines] for possible values.
+#' @param sector abbreviation of the sector, e.g., "AL" for
+#'  alpine skiing. See the dataset [sectors] for possible values.
 #' @param nation abbreviation of the nation, e.g., "SUI" for Switzerland. The
 #'  value is matched exactly. See the dataset [nations] for possible values.
 #' @param gender abbreviation of the gender: "M" for male or "F" for female
@@ -30,7 +30,7 @@
 #'
 #' @returns
 #' A tibble with the following columns: `active`, `fis_code`, `name`, `nation`,
-#' `age`, `birthdate`, `gender`, `discipline`, `club`, `brand`, and
+#' `age`, `birthdate`, `gender`, `sector`, `club`, `brand`, and
 #' `competitor_id`.
 #'
 #' `active` is a logical indicating whether the athlete is still active. `age`
@@ -41,15 +41,15 @@
 
 query_athletes <- function(last_name = "",
                            first_name = "",
-                           discipline = "",
+                           sector = "",
                            nation = "",
                            gender = "",
                            birth_year = "",
                            brand = "",
                            active_only = FALSE) {
 
-  athletes <- get_athletes_url(last_name, first_name, discipline, nation,
-                                 gender, birth_year, brand, active_only) %>%
+  athletes <- get_athletes_url(last_name, first_name, sector, nation,
+                               gender, birth_year, brand, active_only) %>%
     extract_athletes()
 
   # the search returns at most 1'000 results. Warn if this limit is reached.
@@ -64,7 +64,7 @@ query_athletes <- function(last_name = "",
 
 get_athletes_url <- function(last_name = "",
                              first_name = "",
-                             discipline = "",
+                             sector = "",
                              nation = "",
                              gender = "",
                              birth_year = "",
@@ -77,10 +77,10 @@ get_athletes_url <- function(last_name = "",
   # gender is output as "F", but queried as "W"
   if (gender == "F") gender <- "W"
 
-  # if an invalid discipline is used, results for all disciplines are returned.
-  # to avoid this, catch invalid disciplines here.
-  if (!toupper(discipline) %in% c("", fisdata::disciplines$code)) {
-    cli::cli_abort("'{discipline}' is not a valid discipline.",
+  # if an invalid sector is used, the FIS-page returns results for all sectors.
+  # to avoid this, catch invalid sectors here.
+  if (!toupper(sector) %in% c("", fisdata::sectors$code)) {
+    cli::cli_abort("'{sector}' is not a valid sector.",
                    call = error_call)
   }
 
@@ -88,7 +88,7 @@ get_athletes_url <- function(last_name = "",
     "{fis_db_url}/biographies.html?",
     "lastname={replace_special_chars(last_name)}&",
     "firstname={replace_special_chars(first_name)}&",
-    "sectorcode={discipline}&gendercode={gender}&birthyear={birth_year}",
+    "sectorcode={sector}&gendercode={gender}&birthyear={birth_year}",
     "&skiclub=&skis={replace_special_chars(brand)}&",
     "nationcode={nation}&fiscode=&status={active}&search=true"
   )
@@ -162,7 +162,7 @@ get_empty_athletes_df <- function() {
     age = integer(),
     birthdate = character(),
     gender = character(),
-    discipline = character(),
+    sector = character(),
     club = character(),
     brand = character(),
     competitor_id = character()

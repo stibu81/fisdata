@@ -2,7 +2,7 @@ library(dplyr, warn.conflicts = FALSE)
 
 test_that("get_races_url() works with valid inputs", {
   cuche <- tibble(name = "Cuche Didier",
-                  discipline = "AL",
+                  sector = "AL",
                   race_id = "59312")
   expect_equal(
     get_races_url(cuche),
@@ -14,7 +14,7 @@ test_that("get_races_url() works with valid inputs", {
 
 test_that("ensure_one_result() works", {
   cuche2 <- tibble(name = "Cuche Didier",
-                  discipline = "AL",
+                  sector = "AL",
                   place = "Kitzbuehel",
                   event = c("Downhill", "Super G"),
                   race_id = c("59312", "59311"))
@@ -33,7 +33,7 @@ test_that("query_race() works for an alpline skiing world cup race", {
   )
   result <- tibble(athlete = "Odermatt Marco",
                    place = "Wengen",
-                   discipline = "AL",
+                   sector = "AL",
                    race_id = "122808")
   wengen_dh <- query_race(result)
 
@@ -86,7 +86,7 @@ test_that(
     )
     result <- tibble(athlete = "Odermatt Marco",
                      place = "Courchevel Meribel",
-                     discipline = "AL",
+                     sector = "AL",
                      race_id = "114189")
     wcs_dh <- query_race(result)
 
@@ -137,7 +137,7 @@ test_that("query_race() works for an alpline skiing world cup race", {
   )
   result <- tibble(athlete = "Odermatt Marco",
                    place = "Wengen",
-                   discipline = "AL",
+                   sector = "AL",
                    race_id = "122805")
   wengen_training <- query_race(result)
 
@@ -185,7 +185,7 @@ test_that("query_race() works for empty result", {
     get_races_url = function(...) test_path("data", "race_empty.html.gz")
   )
   result <- tibble(athlete = "Odermatt Marco",
-                   discipline = "AL",
+                   sector = "AL",
                    race_id = "")
   empty <- query_race(result)
 

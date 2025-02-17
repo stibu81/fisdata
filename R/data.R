@@ -1,20 +1,20 @@
-#' Table of Codes for Disciplines
+#' Table of Codes for Sectors
 #'
-#' This dataset contains the codes for all the disciplines for which data
+#' This dataset contains the codes for all the sectors for which data
 #' can be obtained from the FIS webpage. These codes can be used to filter
-#' for a specific discipline in [query_athletes()].
+#' for a specific sector in [query_athletes()].
 #'
-#' @format A data frame with `r nrow(disciplines)` rows and
-#'  `r ncol(disciplines)` variables:
+#' @format A data frame with `r nrow(sectors)` rows and
+#'  `r ncol(sectors)` variables:
 #' \describe{
-#' \item{code}{code of the discipline consisting of two or three
-#' (for parasports disciplines) capital letters}
-#' \item{description}{clear text name of the discipline}
+#' \item{code}{code of the sector consisting of two or three
+#' (for parasports sectors) capital letters}
+#' \item{description}{clear text name of the sector}
 #' }
 #'
 #' @keywords datasets
 
-"disciplines"
+"sectors"
 
 
 #' Table of IOC Country Codes

@@ -4,39 +4,39 @@
       print(dh, width = Inf, n = Inf)
     Output
       # A tibble: 31 x 11
-         athlete      date       place                  nation discipline
-         <chr>        <date>     <chr>                  <chr>  <chr>     
-       1 Cuche Didier 2010-03-19 Stoos                  SUI    AL        
-       2 Cuche Didier 2010-03-18 Stoos                  SUI    AL        
-       3 Cuche Didier 2010-03-17 Stoos                  SUI    AL        
-       4 Cuche Didier 2010-03-17 Stoos                  SUI    AL        
-       5 Cuche Didier 2010-03-10 Garmisch-Partenkirchen GER    AL        
-       6 Cuche Didier 2010-03-09 Garmisch-Partenkirchen GER    AL        
-       7 Cuche Didier 2010-03-06 Kvitfjell              NOR    AL        
-       8 Cuche Didier 2010-03-05 Kvitfjell              NOR    AL        
-       9 Cuche Didier 2010-03-04 Kvitfjell              NOR    AL        
-      10 Cuche Didier 2010-02-15 Whistler Creekside     CAN    AL        
-      11 Cuche Didier 2010-02-11 Whistler Creekside     CAN    AL        
-      12 Cuche Didier 2010-01-23 Kitzbuehel             AUT    AL        
-      13 Cuche Didier 2010-01-21 Kitzbuehel             AUT    AL        
-      14 Cuche Didier 2010-01-20 Kitzbuehel             AUT    AL        
-      15 Cuche Didier 2010-01-16 Wengen                 SUI    AL        
-      16 Cuche Didier 2010-01-15 Wengen                 SUI    AL        
-      17 Cuche Didier 2010-01-14 Wengen                 SUI    AL        
-      18 Cuche Didier 2010-01-12 Wengen                 SUI    AL        
-      19 Cuche Didier 2009-12-29 Bormio                 ITA    AL        
-      20 Cuche Didier 2009-12-28 Bormio                 ITA    AL        
-      21 Cuche Didier 2009-12-27 Bormio                 ITA    AL        
-      22 Cuche Didier 2009-12-19 Val Gardena-Groeden    ITA    AL        
-      23 Cuche Didier 2009-12-17 Val Gardena-Groeden    ITA    AL        
-      24 Cuche Didier 2009-12-16 Val Gardena-Groeden    ITA    AL        
-      25 Cuche Didier 2009-12-05 Beaver Creek           USA    AL        
-      26 Cuche Didier 2009-12-04 Beaver Creek           USA    AL        
-      27 Cuche Didier 2009-12-03 Beaver Creek           USA    AL        
-      28 Cuche Didier 2009-12-02 Beaver Creek           USA    AL        
-      29 Cuche Didier 2009-11-28 Lake Louise            CAN    AL        
-      30 Cuche Didier 2009-11-27 Lake Louise            CAN    AL        
-      31 Cuche Didier 2009-11-25 Lake Louise            CAN    AL        
+         athlete      date       place                  nation sector
+         <chr>        <date>     <chr>                  <chr>  <chr> 
+       1 Cuche Didier 2010-03-19 Stoos                  SUI    AL    
+       2 Cuche Didier 2010-03-18 Stoos                  SUI    AL    
+       3 Cuche Didier 2010-03-17 Stoos                  SUI    AL    
+       4 Cuche Didier 2010-03-17 Stoos                  SUI    AL    
+       5 Cuche Didier 2010-03-10 Garmisch-Partenkirchen GER    AL    
+       6 Cuche Didier 2010-03-09 Garmisch-Partenkirchen GER    AL    
+       7 Cuche Didier 2010-03-06 Kvitfjell              NOR    AL    
+       8 Cuche Didier 2010-03-05 Kvitfjell              NOR    AL    
+       9 Cuche Didier 2010-03-04 Kvitfjell              NOR    AL    
+      10 Cuche Didier 2010-02-15 Whistler Creekside     CAN    AL    
+      11 Cuche Didier 2010-02-11 Whistler Creekside     CAN    AL    
+      12 Cuche Didier 2010-01-23 Kitzbuehel             AUT    AL    
+      13 Cuche Didier 2010-01-21 Kitzbuehel             AUT    AL    
+      14 Cuche Didier 2010-01-20 Kitzbuehel             AUT    AL    
+      15 Cuche Didier 2010-01-16 Wengen                 SUI    AL    
+      16 Cuche Didier 2010-01-15 Wengen                 SUI    AL    
+      17 Cuche Didier 2010-01-14 Wengen                 SUI    AL    
+      18 Cuche Didier 2010-01-12 Wengen                 SUI    AL    
+      19 Cuche Didier 2009-12-29 Bormio                 ITA    AL    
+      20 Cuche Didier 2009-12-28 Bormio                 ITA    AL    
+      21 Cuche Didier 2009-12-27 Bormio                 ITA    AL    
+      22 Cuche Didier 2009-12-19 Val Gardena-Groeden    ITA    AL    
+      23 Cuche Didier 2009-12-17 Val Gardena-Groeden    ITA    AL    
+      24 Cuche Didier 2009-12-16 Val Gardena-Groeden    ITA    AL    
+      25 Cuche Didier 2009-12-05 Beaver Creek           USA    AL    
+      26 Cuche Didier 2009-12-04 Beaver Creek           USA    AL    
+      27 Cuche Didier 2009-12-03 Beaver Creek           USA    AL    
+      28 Cuche Didier 2009-12-02 Beaver Creek           USA    AL    
+      29 Cuche Didier 2009-11-28 Lake Louise            CAN    AL    
+      30 Cuche Didier 2009-11-27 Lake Louise            CAN    AL    
+      31 Cuche Didier 2009-11-25 Lake Louise            CAN    AL    
          category               event     rank fis_points cup_points race_id
          <chr>                  <chr>    <int>      <dbl>      <dbl> <chr>  
        1 National Championships Downhill     3      13.2          NA 60969  
@@ -77,26 +77,26 @@
       print(tra, width = Inf, n = Inf)
     Output
       # A tibble: 18 x 11
-         athlete      date       place                  nation discipline category
-         <chr>        <date>     <chr>                  <chr>  <chr>      <chr>   
-       1 Cuche Didier 2010-03-17 Stoos                  SUI    AL         Training
-       2 Cuche Didier 2010-03-17 Stoos                  SUI    AL         Training
-       3 Cuche Didier 2010-03-09 Garmisch-Partenkirchen GER    AL         Training
-       4 Cuche Didier 2010-03-05 Kvitfjell              NOR    AL         Training
-       5 Cuche Didier 2010-03-04 Kvitfjell              NOR    AL         Training
-       6 Cuche Didier 2010-02-11 Whistler Creekside     CAN    AL         Training
-       7 Cuche Didier 2010-01-21 Kitzbuehel             AUT    AL         Training
-       8 Cuche Didier 2010-01-20 Kitzbuehel             AUT    AL         Training
-       9 Cuche Didier 2010-01-14 Wengen                 SUI    AL         Training
-      10 Cuche Didier 2010-01-12 Wengen                 SUI    AL         Training
-      11 Cuche Didier 2009-12-28 Bormio                 ITA    AL         Training
-      12 Cuche Didier 2009-12-27 Bormio                 ITA    AL         Training
-      13 Cuche Didier 2009-12-17 Val Gardena-Groeden    ITA    AL         Training
-      14 Cuche Didier 2009-12-16 Val Gardena-Groeden    ITA    AL         Training
-      15 Cuche Didier 2009-12-03 Beaver Creek           USA    AL         Training
-      16 Cuche Didier 2009-12-02 Beaver Creek           USA    AL         Training
-      17 Cuche Didier 2009-11-27 Lake Louise            CAN    AL         Training
-      18 Cuche Didier 2009-11-25 Lake Louise            CAN    AL         Training
+         athlete      date       place                  nation sector category
+         <chr>        <date>     <chr>                  <chr>  <chr>  <chr>   
+       1 Cuche Didier 2010-03-17 Stoos                  SUI    AL     Training
+       2 Cuche Didier 2010-03-17 Stoos                  SUI    AL     Training
+       3 Cuche Didier 2010-03-09 Garmisch-Partenkirchen GER    AL     Training
+       4 Cuche Didier 2010-03-05 Kvitfjell              NOR    AL     Training
+       5 Cuche Didier 2010-03-04 Kvitfjell              NOR    AL     Training
+       6 Cuche Didier 2010-02-11 Whistler Creekside     CAN    AL     Training
+       7 Cuche Didier 2010-01-21 Kitzbuehel             AUT    AL     Training
+       8 Cuche Didier 2010-01-20 Kitzbuehel             AUT    AL     Training
+       9 Cuche Didier 2010-01-14 Wengen                 SUI    AL     Training
+      10 Cuche Didier 2010-01-12 Wengen                 SUI    AL     Training
+      11 Cuche Didier 2009-12-28 Bormio                 ITA    AL     Training
+      12 Cuche Didier 2009-12-27 Bormio                 ITA    AL     Training
+      13 Cuche Didier 2009-12-17 Val Gardena-Groeden    ITA    AL     Training
+      14 Cuche Didier 2009-12-16 Val Gardena-Groeden    ITA    AL     Training
+      15 Cuche Didier 2009-12-03 Beaver Creek           USA    AL     Training
+      16 Cuche Didier 2009-12-02 Beaver Creek           USA    AL     Training
+      17 Cuche Didier 2009-11-27 Lake Louise            CAN    AL     Training
+      18 Cuche Didier 2009-11-25 Lake Louise            CAN    AL     Training
          event     rank fis_points cup_points race_id
          <chr>    <int>      <dbl>      <dbl> <chr>  
        1 Downhill     1         NA         NA 60964  
@@ -124,14 +124,14 @@
       print(wcs, width = Inf, n = Inf)
     Output
       # A tibble: 6 x 11
-        athlete      date       place                  nation discipline
-        <chr>        <date>     <chr>                  <chr>  <chr>     
-      1 Cuche Didier 2011-02-09 Garmisch-Partenkirchen GER    AL        
-      2 Cuche Didier 2009-02-04 Val d'Isère            FRA    AL        
-      3 Cuche Didier 2007-02-06 Are                    SWE    AL        
-      4 Cuche Didier 2003-02-02 St. Moritz             SUI    AL        
-      5 Cuche Didier 2001-01-30 St. Anton              AUT    AL        
-      6 Cuche Didier 1999-02-02 Vail/Beaver Creek, CO  USA    AL        
+        athlete      date       place                  nation sector
+        <chr>        <date>     <chr>                  <chr>  <chr> 
+      1 Cuche Didier 2011-02-09 Garmisch-Partenkirchen GER    AL    
+      2 Cuche Didier 2009-02-04 Val d'Isère            FRA    AL    
+      3 Cuche Didier 2007-02-06 Are                    SWE    AL    
+      4 Cuche Didier 2003-02-02 St. Moritz             SUI    AL    
+      5 Cuche Didier 2001-01-30 St. Anton              AUT    AL    
+      6 Cuche Didier 1999-02-02 Vail/Beaver Creek, CO  USA    AL    
         category            event    rank fis_points cup_points race_id
         <chr>               <chr>   <int>      <dbl>      <dbl> <chr>  
       1 World Championships Super G     4      11.1          NA 62334  

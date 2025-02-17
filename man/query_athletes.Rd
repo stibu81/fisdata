@@ -7,7 +7,7 @@
 query_athletes(
   last_name = "",
   first_name = "",
-  discipline = "",
+  sector = "",
   nation = "",
   gender = "",
   birth_year = "",
@@ -20,8 +20,8 @@ query_athletes(
 The API does not support special characters, but many are handled
 automatically (see 'Details').}
 
-\item{discipline}{abbreviation of the discipline, e.g., "AL" for
-alpine skiing. See the dataset \link{disciplines} for possible values.}
+\item{sector}{abbreviation of the sector, e.g., "AL" for
+alpine skiing. See the dataset \link{sectors} for possible values.}
 
 \item{nation}{abbreviation of the nation, e.g., "SUI" for Switzerland. The
 value is matched exactly. See the dataset \link{nations} for possible values.}
@@ -40,7 +40,7 @@ support special characters, but many are handled automatically
 }
 \value{
 A tibble with the following columns: \code{active}, \code{fis_code}, \code{name}, \code{nation},
-\code{age}, \code{birthdate}, \code{gender}, \code{discipline}, \code{club}, \code{brand}, and
+\code{age}, \code{birthdate}, \code{gender}, \code{sector}, \code{club}, \code{brand}, and
 \code{competitor_id}.
 
 \code{active} is a logical indicating whether the athlete is still active. \code{age}

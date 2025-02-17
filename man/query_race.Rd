@@ -8,7 +8,7 @@ query_race(result)
 }
 \arguments{
 \item{result}{a list or data frame with fields/columns \code{race_id} and
-\code{discipline} that describe a \emph{single} race. The easiest way to create
+\code{sector} that describe a \emph{single} race. The easiest way to create
 such a data frame is through the function \code{\link[=query_results]{query_results()}}. This function
 can return multiple results, but \code{query_rac()} only returns the
 results for one race. If multiple results are passed, only the first
@@ -23,8 +23,8 @@ and \code{cup_points}.
 Query full results for a race.
 }
 \details{
-This function does not yet work for all disciplines. It has been successfully
+This function does not yet work for all sectors. It has been successfully
 tested for Cross-Country ("CC"), Alpine Skiing ("AL"),
 Nordic Combined ("NK"), for some events in Snowboard ("SB"). It may fail or
-give incorrect results for any other discipline.
+give incorrect results for any other sector.
 }

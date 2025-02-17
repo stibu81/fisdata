@@ -3,17 +3,17 @@
 #' Query full results for a race.
 #'
 #' @param result a list or data frame with fields/columns `race_id` and
-#'  `discipline` that describe a *single* race. The easiest way to create
+#'  `sector` that describe a *single* race. The easiest way to create
 #'  such a data frame is through the function [query_results()]. This function
 #'  can return multiple results, but `query_rac()` only returns the
 #'  results for one race. If multiple results are passed, only the first
 #'  one will be used.
 #'
 #' @details
-#' This function does not yet work for all disciplines. It has been successfully
+#' This function does not yet work for all sectors. It has been successfully
 #' tested for Cross-Country ("CC"), Alpine Skiing ("AL"),
 #' Nordic Combined ("NK"), for some events in Snowboard ("SB"). It may fail or
-#' give incorrect results for any other discipline.
+#' give incorrect results for any other sector.
 #'
 #' @returns
 #' A tibble with the following columns: `rank`, `bib`, `fis_code`, `name`,
@@ -153,11 +153,11 @@ ensure_one_result <- function(result, error_call = rlang::caller_env()) {
 get_races_url <- function(result) {
 
   race_id <- result$race_id
-  discipline <- result$discipline
+  sector <- result$sector
 
   glue::glue(
     "{fis_db_url}/results.html?",
-    "sectorcode={discipline}&raceid={race_id}"
+    "sectorcode={sector}&raceid={race_id}"
   )
 }
 

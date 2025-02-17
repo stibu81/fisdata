@@ -8,7 +8,7 @@ query_results(athlete, season = "", category = "", place = "", event = "")
 }
 \arguments{
 \item{athlete}{a list or data frame with fields/columns \code{competitor_id} and
-\code{discipline} that describe a \emph{single} athlete. The easiest way to create
+\code{sector} that describe a \emph{single} athlete. The easiest way to create
 such a data frame is through the function \code{\link[=query_athletes]{query_athletes()}}. This function
 can return multiple athletes, but \code{query_results()} only returns the
 results for one athlete. If multiple athletes are passed, only the first
@@ -29,7 +29,7 @@ support special characters, but many are handled automatically
 }
 \value{
 A tibble with the following columns: \code{athlete}, \code{date}, \code{place}, \code{nation},
-\code{discipline}, \code{category}, \code{event}, \code{rank}, \code{fis_points}, \code{cup_points},
+\code{sector}, \code{category}, \code{event}, \code{rank}, \code{fis_points}, \code{cup_points},
 and \code{race_id}.
 }
 \description{

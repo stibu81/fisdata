@@ -2,7 +2,7 @@ library(tibble)
 
 test_that("get_athletes_url() works with valid inputs", {
   expect_equal(
-    get_athletes_url("Meillard", "Loïc", discipline = "AL", active_only = TRUE),
+    get_athletes_url("Meillard", "Loïc", sector = "AL", active_only = TRUE),
     paste0("https://www.fis-ski.com/DB/general/biographies.html?",
            "lastname=meillard&firstname=loic&sectorcode=AL&gendercode=&",
            "birthyear=&skiclub=&skis=&nationcode=&fiscode=&status=O&",
@@ -36,8 +36,8 @@ test_that("get_athletes_url() works with valid inputs", {
 
 test_that("get_athletes_url() errors work", {
   expect_error(
-    get_athletes_url(discipline = "XY"),
-    "'XY' is not a valid discipline."
+    get_athletes_url(sector = "XY"),
+    "'XY' is not a valid sector."
   )
 })
 
@@ -52,7 +52,7 @@ test_that("query_athletes() works works", {
   expect_s3_class(cuche, "tbl_df")
 
   expected_names <- c("active", "fis_code", "name", "nation", "age",
-                      "birthdate", "gender", "discipline", "club", "brand",
+                      "birthdate", "gender", "sector", "club", "brand",
                       "competitor_id")
   expect_named(cuche, expected_names)
 
@@ -66,7 +66,7 @@ test_that("query_athletes() works works", {
   expect_match(cuche$name, "cuche", ignore.case = TRUE)
   expect_in(cuche$nation, nations$code)
   expect_match(na.omit(cuche$birthdate), "\\d{4}(-\\d{2}-\\d{2})?")
-  expect_in(cuche$discipline, disciplines$code)
+  expect_in(cuche$sector, sectors$code)
 
   expect_snapshot(print(cuche, width = Inf, n = Inf))
 })
@@ -83,7 +83,7 @@ test_that("query_athletes() works for empty result", {
   expect_equal(nrow(empty), 0)
 
   expected_names <- c("active", "fis_code", "name", "nation", "age",
-                      "birthdate", "gender", "discipline", "club", "brand",
+                      "birthdate", "gender", "sector", "club", "brand",
                       "competitor_id")
   expect_named(empty, expected_names)
 

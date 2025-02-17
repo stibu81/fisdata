@@ -2,7 +2,7 @@ library(dplyr, warn.conflicts = FALSE)
 
 test_that("get_results_url() works with valid inputs", {
   cuche <- tibble(name = "Cuche Didier",
-                  discipline = "AL",
+                  sector = "AL",
                   competitor_id = "11795")
   expect_equal(
     get_results_url(cuche),
@@ -29,7 +29,7 @@ test_that("get_results_url() works with valid inputs", {
 
 test_that("ensure_one_athlete() works", {
   cuche2 <- tibble(name = c("Cuche Didier", "Cuche Remi"),
-                   discipline = "AL",
+                   sector = "AL",
                    competitor_id = c("11795", "212253"))
   expect_equal(ensure_one_athlete(cuche2), cuche2[1, ]) %>%
     expect_warning("Multiple athletes.*Cuche Didier")
@@ -48,13 +48,13 @@ test_that(
       get_results_url = function(...) test_path("data", "results_al_all.html.gz")
     )
     cuche <- tibble(name = "Cuche Didier",
-                    discipline = "AL",
+                    sector = "AL",
                     competitor_id = "11795")
     dh <- query_results(cuche)
 
     expect_s3_class(dh, "tbl_df")
 
-    expected_names <- c("athlete", "date", "place", "nation", "discipline",
+    expected_names <- c("athlete", "date", "place", "nation", "sector",
                         "category", "event", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(dh, expected_names)
@@ -75,7 +75,7 @@ test_that(
     expect_true(
       all(between(dh$date, as.Date("2009-11-01"), as.Date("2010-03-31")))
     )
-    expect_in(dh$discipline, "AL")
+    expect_in(dh$sector, "AL")
     expect_in(dh$category, c(categories$description, "World Cup Speed Event"))
     expect_in(dh$event, "Downhill")
     expect_in(dh$rank, c(0:100, NA_integer_))
@@ -96,13 +96,13 @@ test_that(
       get_results_url = function(...) test_path("data", "results_al_tra.html.gz")
     )
     cuche <- tibble(name = "Cuche Didier",
-                    discipline = "AL",
+                    sector = "AL",
                     competitor_id = "11795")
     tra <- query_results(cuche)
 
     expect_s3_class(tra, "tbl_df")
 
-    expected_names <- c("athlete", "date", "place", "nation", "discipline",
+    expected_names <- c("athlete", "date", "place", "nation", "sector",
                         "category", "event", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(tra, expected_names)
@@ -123,7 +123,7 @@ test_that(
     expect_true(
       all(between(tra$date, as.Date("2009-11-01"), as.Date("2010-03-31")))
     )
-    expect_in(tra$discipline, "AL")
+    expect_in(tra$sector, "AL")
     expect_in(tra$category, "Training")
     expect_in(tra$event, "Downhill")
     expect_in(tra$rank, c(0:100, NA_integer_))
@@ -145,13 +145,13 @@ test_that(
       get_results_url = function(...) test_path("data", "results_al_wcs.html.gz")
     )
     cuche <- tibble(name = "Cuche Didier",
-                    discipline = "AL",
+                    sector = "AL",
                     competitor_id = "11795")
     wcs <- query_results(cuche)
 
     expect_s3_class(wcs, "tbl_df")
 
-    expected_names <- c("athlete", "date", "place", "nation", "discipline",
+    expected_names <- c("athlete", "date", "place", "nation", "sector",
                         "category", "event", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(wcs, expected_names)
@@ -169,7 +169,7 @@ test_that(
     expect_in(wcs$athlete, "Cuche Didier")
     expect_match(cuche$name, "cuche", ignore.case = TRUE)
     expect_in(wcs$nation, nations$code)
-    expect_in(wcs$discipline, "AL")
+    expect_in(wcs$sector, "AL")
     expect_in(wcs$category, "World Championships")
     expect_in(wcs$event, "Super G")
     expect_in(wcs$rank, c(0:100, NA_integer_))
@@ -189,13 +189,13 @@ test_that(
       get_results_url = function(...) test_path("data", "results_empty.html.gz")
     )
     cuche <- tibble(name = "Cuche Didier",
-                    discipline = "AL",
+                    sector = "AL",
                     competitor_id = "11795")
     empty <- query_results(cuche)
 
     expect_s3_class(empty, "tbl_df")
 
-    expected_names <- c("athlete", "date", "place", "nation", "discipline",
+    expected_names <- c("athlete", "date", "place", "nation", "sector",
                         "category", "event", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(empty, expected_names)
@@ -220,7 +220,7 @@ test_that("query_results() warns for large result", {
   )
 
   cuche <- tibble(name = "Cuche Didier",
-                  discipline = "AL",
+                  sector = "AL",
                   competitor_id = "11795")
   expect_warning(
     query_results(cuche),

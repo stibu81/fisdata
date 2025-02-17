@@ -1,6 +1,6 @@
 # prepare table of categories This data has been manually extracted from
 # https://www.fis-ski.com/DB/general/biographies.html as follows:
-# * list athletes for a discipline
+# * list athletes for a sector
 # * click on one of them to see his profile and select the tab results
 #   (https://www.fis-ski.com/DB/general/athlete-biography.html).
 # * select a category from the dropdown "Category"
@@ -8,7 +8,7 @@
 # * read the code for the category from the url. It is the parameter to
 #   "categorycode", e.g. "&categorycode=EC"
 # * repeat for all categories from the drop down
-# * try other athletes from the same discipline and check whether there are
+# * try other athletes from the same sector and check whether there are
 #   other categories in the dropdown.
 # * repeate with the next disicpline
 # Obviously, this procedure does not guarantee that all available categories

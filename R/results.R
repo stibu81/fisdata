@@ -5,7 +5,7 @@
 #' Filtering is case-insensitive and for `place` string matches are partial.
 #'
 #' @param athlete a list or data frame with fields/columns `competitor_id` and
-#'  `discipline` that describe a *single* athlete. The easiest way to create
+#'  `sector` that describe a *single* athlete. The easiest way to create
 #'  such a data frame is through the function [query_athletes()]. This function
 #'  can return multiple athletes, but `query_results()` only returns the
 #'  results for one athlete. If multiple athletes are passed, only the first
@@ -30,7 +30,7 @@
 #'
 #' @returns
 #' A tibble with the following columns: `athlete`, `date`, `place`, `nation`,
-#' `discipline`, `category`, `event`, `rank`, `fis_points`, `cup_points`,
+#' `sector`, `category`, `event`, `rank`, `fis_points`, `cup_points`,
 #' and `race_id`.
 #'
 #' @export
@@ -46,8 +46,8 @@ query_results <- function(athlete,
   results <- get_results_url(athlete, season, category, place, event) %>%
     extract_results() %>%
     dplyr::mutate(athlete = athlete$name, .before = 1) %>%
-    # the discipline code must be added in order to be able to query races
-    dplyr::mutate(discipline = !!athlete$discipline, .before = "category")
+    # the sector code must be added in order to be able to query races
+    dplyr::mutate(sector = !!athlete$sector, .before = "category")
 
   # the search returns at most 2'000 results. Warn if this limit is reached.
   if (nrow(results) >= 2000) {
@@ -96,11 +96,11 @@ get_results_url <- function(athlete,
                             event = "") {
 
   competitor_id <- athlete$competitor_id
-  discipline <- athlete$discipline
+  sector <- athlete$sector
 
   glue::glue(
     "{fis_db_url}/athlete-biography.html?",
-    "sectorcode={discipline}&seasoncode={season}&",
+    "sectorcode={sector}&seasoncode={season}&",
     "competitorid={competitor_id}&type=result&",
     "categorycode={toupper(category)}&sort=&place={replace_special_chars(place)}&",
     "disciplinecode={event}&position=&limit=2000"
