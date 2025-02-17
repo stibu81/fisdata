@@ -235,7 +235,7 @@
 # query_race() works for an alpline skiing world championships race
 
     Code
-      print(wcs_dh, width = Inf, n = Inf)
+      print(wsc_dh, width = Inf, n = Inf)
     Output
       # A tibble: 41 x 11
           rank   bib fis_code name                     brand birth_year nation

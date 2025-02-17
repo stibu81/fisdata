@@ -142,42 +142,42 @@ test_that(
   # available (as for Olympic Games, National Championships and others)
   {
     local_mocked_bindings(
-      get_results_url = function(...) test_path("data", "results_al_wcs.html.gz")
+      get_results_url = function(...) test_path("data", "results_al_wsc.html.gz")
     )
     cuche <- tibble(name = "Cuche Didier",
                     sector = "AL",
                     competitor_id = "11795")
-    wcs <- query_results(cuche)
+    wsc <- query_results(cuche)
 
-    expect_s3_class(wcs, "tbl_df")
+    expect_s3_class(wsc, "tbl_df")
 
     expected_names <- c("athlete", "date", "place", "nation", "sector",
                         "category", "discipline", "rank", "fis_points",
                         "cup_points", "race_id")
-    expect_named(wcs, expected_names)
+    expect_named(wsc, expected_names)
 
     expected_types <- rep("character", 11) %>%
       replace(c(2, 8:10), c("Date", "integer", "double", "double"))
     for (i in seq_along(expected_types)) {
       if (expected_types[i] == "Date") {
-        expect_s3_class(wcs[[expected_names[i]]], expected_types[i])
+        expect_s3_class(wsc[[expected_names[i]]], expected_types[i])
       } else {
-        expect_type(wcs[[expected_names[i]]], expected_types[i])
+        expect_type(wsc[[expected_names[i]]], expected_types[i])
       }
     }
 
-    expect_in(wcs$athlete, "Cuche Didier")
+    expect_in(wsc$athlete, "Cuche Didier")
     expect_match(cuche$name, "cuche", ignore.case = TRUE)
-    expect_in(wcs$nation, nations$code)
-    expect_in(wcs$sector, "AL")
-    expect_in(wcs$category, "World Championships")
-    expect_in(wcs$discipline, "Super G")
-    expect_in(wcs$rank, c(0:100, NA_integer_))
-    expect_true(all(na.omit(wcs$fis_points) >= 0))
-    expect_in(wcs$cup_points, NA_real_)
-    expect_match(wcs$race_id, "^\\d+$")
+    expect_in(wsc$nation, nations$code)
+    expect_in(wsc$sector, "AL")
+    expect_in(wsc$category, "World Championships")
+    expect_in(wsc$discipline, "Super G")
+    expect_in(wsc$rank, c(0:100, NA_integer_))
+    expect_true(all(na.omit(wsc$fis_points) >= 0))
+    expect_in(wsc$cup_points, NA_real_)
+    expect_match(wsc$race_id, "^\\d+$")
 
-    expect_snapshot(print(wcs, width = Inf, n = Inf))
+    expect_snapshot(print(wsc, width = Inf, n = Inf))
   }
 )
 

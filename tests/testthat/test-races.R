@@ -82,51 +82,51 @@ test_that(
   "query_race() works for an alpline skiing world championships race",
   {
     local_mocked_bindings(
-      get_races_url = function(...) test_path("data", "race_al_wcs.html.gz")
+      get_races_url = function(...) test_path("data", "race_al_wsc.html.gz")
     )
     result <- tibble(athlete = "Odermatt Marco",
                      place = "Courchevel Meribel",
                      sector = "AL",
                      race_id = "114189")
-    wcs_dh <- query_race(result)
+    wsc_dh <- query_race(result)
 
-    expect_s3_class(wcs_dh, "tbl_df")
+    expect_s3_class(wsc_dh, "tbl_df")
 
     expected_names <- c("rank", "bib", "fis_code", "name", "brand",
                         "birth_year", "nation", "time", "diff_time",
                         "fis_points", "cup_points")
-    expect_named(wcs_dh, expected_names)
+    expect_named(wsc_dh, expected_names)
 
     expected_types <- c("integer", "integer", "character", "character",
                         "character", "integer", "character",
                         "Period", "Period", "double", "double")
     for (i in seq_along(expected_types)) {
       if (expected_types[i] == "Period") {
-        expect_s4_class(wcs_dh[[expected_names[i]]], expected_types[i])
+        expect_s4_class(wsc_dh[[expected_names[i]]], expected_types[i])
       } else {
-        expect_type(wcs_dh[[expected_names[i]]], expected_types[i])
+        expect_type(wsc_dh[[expected_names[i]]], expected_types[i])
       }
     }
 
-    expect_in(wcs_dh$rank, 1:nrow(wcs_dh))
-    expect_in(diff(wcs_dh$rank), 0:2)
-    expect_in(wcs_dh$bib, 1:max(wcs_dh$bib))
-    expect_match(wcs_dh$fis_code, "^\\d+$")
-    expect_in(wcs_dh$birth_year, 1900:2100)
-    expect_in(wcs_dh$nation, nations$code)
-    expect_gte(min(wcs_dh$time), 0)
-    expect_gte(min(wcs_dh$diff_time), 0)
+    expect_in(wsc_dh$rank, 1:nrow(wsc_dh))
+    expect_in(diff(wsc_dh$rank), 0:2)
+    expect_in(wsc_dh$bib, 1:max(wsc_dh$bib))
+    expect_match(wsc_dh$fis_code, "^\\d+$")
+    expect_in(wsc_dh$birth_year, 1900:2100)
+    expect_in(wsc_dh$nation, nations$code)
+    expect_gte(min(wsc_dh$time), 0)
+    expect_gte(min(wsc_dh$diff_time), 0)
     expect_lte(
       max(
-        abs(wcs_dh$time[-1] - wcs_dh$time[1] - wcs_dh$diff_time[-1])
+        abs(wsc_dh$time[-1] - wsc_dh$time[1] - wsc_dh$diff_time[-1])
       ),
       1e-12
     )
-    expect_gte(min(wcs_dh$fis_points), 0)
-    expect_gte(min(diff(wcs_dh$fis_points)), 0)
-    expect_in(wcs_dh$cup_points, NA_real_)
+    expect_gte(min(wsc_dh$fis_points), 0)
+    expect_gte(min(diff(wsc_dh$fis_points)), 0)
+    expect_in(wsc_dh$cup_points, NA_real_)
 
-    expect_snapshot(print(wcs_dh, width = Inf, n = Inf))
+    expect_snapshot(print(wsc_dh, width = Inf, n = Inf))
   }
 )
 

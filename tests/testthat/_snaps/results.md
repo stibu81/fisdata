@@ -121,7 +121,7 @@
 # query_results() works for alpline skiing results for World Championships
 
     Code
-      print(wcs, width = Inf, n = Inf)
+      print(wsc, width = Inf, n = Inf)
     Output
       # A tibble: 6 x 11
         athlete      date       place                  nation sector
