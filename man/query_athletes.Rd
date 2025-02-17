@@ -59,4 +59,29 @@ automatically: à, á, å, ä, æ, ç, ć, č, ð, é, è, ê, ë, ï, ñ, ø, �
 œ, š, ß, ú, ü, and ž.
 Other special characters must be replaced by the suitable
 substitute by the user.
+
+One use of this function is to get the competitor id for an athlete, which
+is needed in order to query an athletes results with \code{\link[=query_results]{query_results()}}.
+}
+\examples{
+\dontrun{
+# find Swiss athletes with last name "Cuche"
+query_athletes("cuche", nation = "SUI")
+
+# find French alpine skiers using Rossignol skis
+query_athletes(
+  sector = "AL",
+  nation = "FRA",
+  brand = "Rossignol",
+  active_only = TRUE
+)
+
+# find Loïc Maillard. Note that even if the "ï" may be used in the query,
+# the name the name is returned without the special character.
+query_athletes("meillard", "loïc")
+
+# the query works the same without the special character
+query_athletes("meillard", "loic")
+}
+
 }

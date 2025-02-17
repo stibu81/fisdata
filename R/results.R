@@ -33,6 +33,31 @@
 #' `sector`, `category`, `discipline`, `rank`, `fis_points`, `cup_points`,
 #' and `race_id`.
 #'
+#' @examples
+#' \dontrun{
+#' # in order to query an athletes results, we first
+#' # have to obtain the competitor id, which is
+#' # required for the query. This can be conveniently
+#' done with `query_athletes()`.
+#' odermatt <- query_athletes("odermatt", "marco")
+#'
+#' # get all of his results
+#' query_results(odermatt)
+#'
+#' # get only World Cup Downhill results from the
+#' # season 2023/2024
+#' query_results(
+#'   odermatt,
+#'   category = "WC",
+#'   season = 2024,
+#'   discipline = "DH"
+#'  )
+#'
+#'  # get all results from Kitzbühel. Note that the
+#'  # umlaut is removed in the output.
+#'  query_results(odermatt, place = "Kitzbühl")
+#' }
+#'
 #' @export
 
 query_results <- function(athlete,

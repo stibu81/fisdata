@@ -5,7 +5,7 @@
 #' @param result a list or data frame with fields/columns `race_id` and
 #'  `sector` that describe a *single* race. The easiest way to create
 #'  such a data frame is through the function [query_results()]. This function
-#'  can return multiple results, but `query_rac()` only returns the
+#'  can return multiple results, but `query_race()` only returns the
 #'  results for one race. If multiple results are passed, only the first
 #'  one will be used.
 #'
@@ -21,6 +21,21 @@
 #' A tibble with the following columns: `rank`, `bib`, `fis_code`, `name`,
 #' `brand`, `birth_year`, `nation`, `time`, `diff_time`, `fis_points`,
 #' and `cup_points`.
+#'
+#' @examples
+#' \dontrun{
+#' # the results for a race can be queried by using a specific race of an
+#' # athlete as input. So we get all results for Marco Odermatt.
+#' odermatt <- query_athletes("odermatt", "marco")
+#' odermatt_res <- query_results(odermatt)
+#'
+#' # show the first of the results
+#' odermatt_res[1, ]
+#'
+#' # get the full results for this race
+#' query_race(odermatt_res[1, ])
+#' }
+#'
 #'
 #' @export
 
