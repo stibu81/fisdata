@@ -29,7 +29,7 @@ test_that("ensure_one_result() works", {
 
 test_that("query_race() works for an alpline skiing world cup race", {
   local_mocked_bindings(
-    get_races_url = function(...) test_path("data", "race_al_wc.html.gz")
+    get_races_url = function(...) test_path("data", "race_al_wc_dh.html.gz")
   )
   result <- tibble(athlete = "Odermatt Marco",
                    place = "Wengen",
@@ -84,7 +84,7 @@ test_that(
   "query_race() works for an alpline skiing world championships race",
   {
     local_mocked_bindings(
-      get_races_url = function(...) test_path("data", "race_al_wsc.html.gz")
+      get_races_url = function(...) test_path("data", "race_al_wsc_dh.html.gz")
     )
     result <- tibble(athlete = "Odermatt Marco",
                      place = "Courchevel Meribel",
