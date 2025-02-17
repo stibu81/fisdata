@@ -74,6 +74,8 @@ test_that("query_race() works for an alpline skiing world cup race", {
   expect_in(wengen_dh$cup_points, 0:100)
   expect_in(-diff(wengen_dh$cup_points), 0:20)
 
+  expect_equal(attr(wengen_dh, "url"), get_races_url())
+
   expect_snapshot(print(wengen_dh, width = Inf, n = Inf))
 })
 
@@ -126,6 +128,8 @@ test_that(
     expect_gte(min(diff(wsc_dh$fis_points)), 0)
     expect_in(wsc_dh$cup_points, NA_real_)
 
+    expect_equal(attr(wsc_dh, "url"), get_races_url())
+
     expect_snapshot(print(wsc_dh, width = Inf, n = Inf))
   }
 )
@@ -176,6 +180,8 @@ test_that("query_race() works for an alpline skiing world cup race", {
   expect_in(wengen_training$fis_points, NA_real_)
   expect_in(wengen_training$cup_points, NA_real_)
 
+  expect_equal(attr(wengen_training, "url"), get_races_url())
+
   expect_snapshot(print(wengen_training, width = Inf, n = Inf))
 })
 
@@ -206,5 +212,7 @@ test_that("query_race() works for empty result", {
       expect_type(empty[[expected_names[i]]], expected_types[i])
     }
   }
+
+  expect_equal(attr(empty, "url"), get_races_url())
 })
 

@@ -83,6 +83,8 @@ test_that(
     expect_in(na.omit(dh$cup_points), 0:100)
     expect_match(dh$race_id, "^\\d+$")
 
+    expect_equal(attr(dh, "url"), get_results_url())
+
     expect_snapshot(print(dh, width = Inf, n = Inf))
   }
 )
@@ -131,6 +133,8 @@ test_that(
     expect_in(tra$cup_points, NA_real_)
     expect_match(tra$race_id, "^\\d+$")
 
+    expect_equal(attr(tra, "url"), get_results_url())
+
     expect_snapshot(print(tra, width = Inf, n = Inf))
   }
 )
@@ -177,6 +181,8 @@ test_that(
     expect_in(wsc$cup_points, NA_real_)
     expect_match(wsc$race_id, "^\\d+$")
 
+    expect_equal(attr(wsc, "url"), get_results_url())
+
     expect_snapshot(print(wsc, width = Inf, n = Inf))
   }
 )
@@ -209,6 +215,8 @@ test_that(
         expect_type(empty[[expected_names[i]]], expected_types[i])
       }
     }
+
+    expect_equal(attr(empty, "url"), get_results_url())
   }
 )
 

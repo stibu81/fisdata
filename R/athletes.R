@@ -72,15 +72,18 @@ query_athletes <- function(last_name = "",
                            brand = "",
                            active_only = FALSE) {
 
-  athletes <- get_athletes_url(last_name, first_name, sector, nation,
-                               gender, birth_year, brand, active_only) %>%
-    extract_athletes()
+  url <- get_athletes_url(last_name, first_name, sector, nation,
+                          gender, birth_year, brand, active_only)
+  athletes <- extract_athletes(url)
 
   # the search returns at most 1'000 results. Warn if this limit is reached.
   if (nrow(athletes) >= 1000) {
     cli::cli_warn(c("!" = "Maximum number of 1'000 athletes reached.",
                     "i" ="Results may be incomplete."))
   }
+
+  # add the url as an attribute
+  attr(athletes, "url") <- url
 
   athletes
 }

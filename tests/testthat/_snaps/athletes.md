@@ -1,4 +1,4 @@
-# query_athletes() works works
+# query_athletes() works
 
     Code
       print(cuche, width = Inf, n = Inf)

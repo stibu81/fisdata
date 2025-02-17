@@ -68,8 +68,8 @@ query_results <- function(athlete,
 
   athlete <- ensure_one_athlete(athlete)
 
-  results <- get_results_url(athlete, season, category, place, discipline) %>%
-    extract_results() %>%
+  url <- get_results_url(athlete, season, category, place, discipline)
+  results <- extract_results(url) %>%
     dplyr::mutate(athlete = athlete$name, .before = 1) %>%
     # the sector code must be added in order to be able to query races
     dplyr::mutate(sector = !!athlete$sector, .before = "category")
@@ -79,6 +79,9 @@ query_results <- function(athlete,
     cli::cli_warn(c("!" = "Maximum number of 2'000 results reached.",
                     "i" ="Results may be incomplete."))
   }
+
+  # add the url as an attribute
+  attr(results, "url") <- url
 
   results
 }

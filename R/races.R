@@ -43,9 +43,10 @@ query_race <- function(result) {
 
   result <- ensure_one_result(result)
 
-  race <- result %>%
-    get_races_url() %>%
-    extract_race()
+  url <- get_races_url(result)
+  race <- extract_race(url)
+
+  attr(race, "url") <- url
 
   race
 }

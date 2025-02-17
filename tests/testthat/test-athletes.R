@@ -42,7 +42,7 @@ test_that("get_athletes_url() errors work", {
 })
 
 
-test_that("query_athletes() works works", {
+test_that("query_athletes() works", {
 
   local_mocked_bindings(
     get_athletes_url = function(...) test_path("data", "athletes_cuche.html.gz")
@@ -68,6 +68,8 @@ test_that("query_athletes() works works", {
   expect_match(na.omit(cuche$birthdate), "\\d{4}(-\\d{2}-\\d{2})?")
   expect_in(cuche$sector, sectors$code)
 
+  expect_equal(attr(cuche, "url"), get_athletes_url())
+
   expect_snapshot(print(cuche, width = Inf, n = Inf))
 })
 
@@ -92,6 +94,8 @@ test_that("query_athletes() works for empty result", {
   for (i in seq_along(expected_types)) {
     expect_type(empty[[expected_names[i]]], expected_types[i])
   }
+
+  expect_equal(attr(empty, "url"), get_athletes_url())
 })
 
 
