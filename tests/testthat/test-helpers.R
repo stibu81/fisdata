@@ -1,5 +1,18 @@
 library(lubridate, warn.conflicts = FALSE)
 
+
+test_that("show_url() works", {
+  local_mocked_bindings(
+    get_athletes_url = function(...) test_path("data", "athletes_cuche.html.gz")
+  )
+  cuche <- query_athletes()
+
+  expect_equal(show_url(cuche), get_athletes_url())
+
+  expect_equal(show_url(mtcars), NULL)
+})
+
+
 test_that("replace_special_chars() works", {
   expect_equal(
     replace_special_chars(

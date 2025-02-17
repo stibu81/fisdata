@@ -1,3 +1,32 @@
+#' Show URL associated With a Query
+#'
+#' All the functions `query_*()` call a URL on the FIS web page to collect
+#' their data. `show_url()` returns the URL that was used to produce a table
+#' of fisdata-results.
+#'
+#' @param fisdata_df a table of fisdata-results produced by one of the
+#'  `query_*()`-functions.
+#'
+#' @details
+#' If run from an interactive session, the URL is also copied into the
+#' clipboard such that it can be pasted into a browser.
+#'
+#' @returns
+#' a character vector of length one with the URL that was used to create the
+#' table. In an interactive session it also copies the URL to the clipboard
+#' as a side effect.
+#'
+#' @export
+
+show_url <- function(fisdata_df) {
+  url <- attr(fisdata_df, "url")
+  if (interactive() && !is.null(url)) {
+    clipr::write_clip(url) # nocov
+  }
+  url
+}
+
+
 # Replace special characters
 # the function also converts to lower case such that capital letters need nod
 # be replaced. This is possible because the function is used to convert strings

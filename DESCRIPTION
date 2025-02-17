@@ -25,7 +25,8 @@ Imports:
     lubridate,
     rlang,
     cli,
-    magrittr
+    magrittr,
+    clipr
 Suggests: 
     roxygen2,
     spelling,
