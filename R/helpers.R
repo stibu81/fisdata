@@ -105,3 +105,18 @@ parse_number <- function(x) {
       as.numeric()
   )
 }
+
+
+# standardise column names:
+# * replace anything but letters and numbers by "_"
+# * remove leading and training "_"
+# * replace multiple "_" by a single one
+# * remove "_" followed by a digit
+standardise_colnames <- function(x) {
+  x %>%
+    stringr::str_replace_all("[^[:alnum:]]", "_") %>%
+    stringr::str_remove_all("^_+|_+$") %>%
+    stringr::str_replace_all("_+", "_") %>%
+    stringr::str_remove_all("_(?=\\d)")
+}
+

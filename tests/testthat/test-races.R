@@ -82,6 +82,7 @@ test_that("query_race() works for an alpline skiing world cup race", {
 
 test_that(
   "query_race() works for an alpline skiing world championships race",
+  # brand and cup_points are missing for world cup races
   {
     local_mocked_bindings(
       get_races_url = function(...) test_path("data", "race_al_wsc_dh.html.gz")
@@ -94,12 +95,12 @@ test_that(
 
     expect_s3_class(wsc_dh, "tbl_df")
 
-    expected_names <- c("rank", "bib", "fis_code", "name", "brand",
+    expected_names <- c("rank", "bib", "fis_code", "name",
                         "birth_year", "nation", "time", "diff_time",
                         "fis_points", "cup_points")
     expect_named(wsc_dh, expected_names)
 
-    expected_types <- c("integer", "integer", "character", "character",
+    expected_types <- c("integer", "integer", "character",
                         "character", "integer", "character",
                         "Period", "Period", "double", "double")
     for (i in seq_along(expected_types)) {
@@ -135,7 +136,8 @@ test_that(
 )
 
 
-test_that("query_race() works for an alpline skiing world cup race", {
+test_that("query_race() works for an alpline skiing downhill training", {
+  # fis_points and cup_points are missing for a training
   local_mocked_bindings(
     get_races_url = function(...) test_path("data", "race_al_tra.html.gz")
   )
@@ -197,20 +199,14 @@ test_that("query_race() works for empty result", {
 
   expect_s3_class(empty, "tbl_df")
 
-  expected_names <- c("rank", "bib", "fis_code", "name", "brand",
-                      "birth_year", "nation", "time", "diff_time",
-                      "fis_points", "cup_points")
+  expected_names <- c("rank", "bib", "fis_code", "name",
+                      "birth_year", "nation")
   expect_named(empty, expected_names)
 
-  expected_types <- c("integer", "integer", "character", "character",
-                      "character", "integer", "character",
-                      "Period", "Period", "double", "double")
+  expected_types <- c("integer", "integer", "character",
+                      "character", "integer", "character")
   for (i in seq_along(expected_types)) {
-    if (expected_types[i] == "Period") {
-      expect_s4_class(empty[[expected_names[i]]], expected_types[i])
-    } else {
-      expect_type(empty[[expected_names[i]]], expected_types[i])
-    }
+    expect_type(empty[[expected_names[i]]], expected_types[i])
   }
 
   expect_equal(attr(empty, "url"), get_races_url())

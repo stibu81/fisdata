@@ -105,7 +105,100 @@
       47 2M 28.07S 5.49S          48.1           0
       48 2M 28.08S 5.5S           48.2           0
 
----
+# query_race() works for an alpline skiing world championships race
+
+    Code
+      print(wsc_dh, width = Inf, n = Inf)
+    Output
+      # A tibble: 41 x 10
+          rank   bib fis_code name                     birth_year nation time     
+         <int> <int> <chr>    <chr>                         <int> <chr>  <Period> 
+       1     1    10 512269   Odermatt Marco                 1997 SUI    1M 47.05S
+       2     2    15 422139   Kilde Aleksander Aamodt        1992 NOR    1M 47.53S
+       3     3    20 104537   Alexander Cameron              1997 CAN    1M 47.94S
+       4     4    21 54320    Schwarz Marco                  1995 AUT    1M 47.98S
+       5     5    12 104531   Crawford James                 1997 CAN    1M 48.06S
+       6     6    24 194167   Muzaton Maxence                1990 FRA    1M 48.13S
+       7     7     1 6291625  Schieder Florian               1995 ITA    1M 48.14S
+       8     8    28 561310   Hrobat Miha                    1995 SLO    1M 48.18S
+       9     8    14 291459   Paris Dominik                  1989 ITA    1M 48.18S
+      10    10    16 202535   Dressen Thomas                 1993 GER    1M 48.2S 
+      11    11     6 53980    Kriechmayr Vincent             1991 AUT    1M 48.21S
+      12    12    23 511896   Murisier Justin                1992 SUI    1M 48.28S
+      13    12     9 512124   Hintermann Niels               1995 SUI    1M 48.28S
+      14    14     7 53975    Hemetsberger Daniel            1991 AUT    1M 48.33S
+      15    15    19 293550   Marsaglia Matteo               1985 ITA    1M 48.58S
+      16    16     3 422310   Sejersted Adrian Smiseth       1994 NOR    1M 48.63S
+      17    17    31 6531444  Arvidsson Erik                 1996 USA    1M 48.66S
+      18    18    29 512408   Monney Alexis                  2000 SUI    1M 48.8S 
+      19    19     4 51215    Baumann Romed                  1986 GER    1M 48.85S
+      20    20    11 990081   Casse Mattia                   1990 ITA    1M 48.88S
+      21    21    30 194858   Allegre Nils                   1994 FRA    1M 48.92S
+      22    22    34 110324   Von Appen Henrik               1994 CHI    1M 48.93S
+      23    23     8 191740   Clarey Johan                   1981 FRA    1M 48.94S
+      24    24     2 6530319  Cochran-Siegle Ryan            1992 USA    1M 48.95S
+      25    25    33 180877   Lehto Elian                    2000 FIN    1M 48.97S
+      26    26    18 934643   Goldberg Jared                 1991 USA    1M 49.03S
+      27    27    17 202059   Ferstl Josef                   1988 GER    1M 49.12S
+      28    28    13 530874   Ganong Travis                  1988 USA    1M 49.25S
+      29    29    27 200379   Sander Andreas                 1989 GER    1M 49.45S
+      30    30    32 104468   Read Jeffrey                   1997 CAN    1M 49.5S 
+      31    31    38 561397   Naralocnik Nejc                1999 SLO    1M 49.62S
+      32    32    35 54371    Babinsky Stefan                1996 AUT    1M 49.74S
+      33    33    36 350095   Pfiffner Marco                 1994 LIE    1M 50.5S 
+      34    34    22 192746   Theaux Adrien                  1984 FRA    1M 50.51S
+      35    35    25 561255   Cater Martin                   1992 SLO    1M 51.03S
+      36    36    41 180904   Tapanainen Jaakko              2002 FIN    1M 51.41S
+      37    37    40 240148   Szollos Barnabas               1998 ISR    1M 51.48S
+      38    38    44 390041   Luik Juhan                     1997 EST    1M 52.74S
+      39    39    39 221053   Steudle Roy-Alexander          1993 GBR    1M 52.76S
+      40    40    42 690694   Kovbasnyuk Ivan                1993 UKR    1M 54.04S
+      41    41    45 550109   Opmanis Lauris                 2001 LAT    1M 54.45S
+         diff_time fis_points cup_points
+         <Period>       <dbl>      <dbl>
+       1 0S               0           NA
+       2 0.48S            5.6         NA
+       3 0.89S           10.4         NA
+       4 0.93S           10.9         NA
+       5 1.01S           11.8         NA
+       6 1.08S           12.6         NA
+       7 1.09S           12.7         NA
+       8 1.13S           13.2         NA
+       9 1.13S           13.2         NA
+      10 1.15S           13.4         NA
+      11 1.16S           13.6         NA
+      12 1.23S           14.4         NA
+      13 1.23S           14.4         NA
+      14 1.28S           15.0         NA
+      15 1.53S           17.9         NA
+      16 1.58S           18.4         NA
+      17 1.61S           18.8         NA
+      18 1.75S           20.4         NA
+      19 1.8S            21.0         NA
+      20 1.83S           21.4         NA
+      21 1.87S           21.8         NA
+      22 1.88S           22.0         NA
+      23 1.89S           22.1         NA
+      24 1.9S            22.2         NA
+      25 1.92S           22.4         NA
+      26 1.98S           23.1         NA
+      27 2.07S           24.2         NA
+      28 2.2S            25.7         NA
+      29 2.4S            28.0         NA
+      30 2.45S           28.6         NA
+      31 2.57S           30.0         NA
+      32 2.69S           31.4         NA
+      33 3.45S           40.3         NA
+      34 3.46S           40.4         NA
+      35 3.98S           46.5         NA
+      36 4.36S           50.9         NA
+      37 4.43S           51.7         NA
+      38 5.69S           66.4         NA
+      39 5.71S           66.7         NA
+      40 6.99S           81.6         NA
+      41 7.4S            86.4         NA
+
+# query_race() works for an alpline skiing downhill training
 
     Code
       print(wengen_training, width = Inf, n = Inf)
@@ -231,97 +324,4 @@
       56 2M 30.56S 5.02S             NA         NA
       57 2M 31.09S 5.55S             NA         NA
       58 2M 32.83S 7.29S             NA         NA
-
-# query_race() works for an alpline skiing world championships race
-
-    Code
-      print(wsc_dh, width = Inf, n = Inf)
-    Output
-      # A tibble: 41 x 11
-          rank   bib fis_code name                     brand birth_year nation
-         <int> <int> <chr>    <chr>                    <chr>      <int> <chr> 
-       1     1    10 512269   Odermatt Marco           <NA>        1997 SUI   
-       2     2    15 422139   Kilde Aleksander Aamodt  <NA>        1992 NOR   
-       3     3    20 104537   Alexander Cameron        <NA>        1997 CAN   
-       4     4    21 54320    Schwarz Marco            <NA>        1995 AUT   
-       5     5    12 104531   Crawford James           <NA>        1997 CAN   
-       6     6    24 194167   Muzaton Maxence          <NA>        1990 FRA   
-       7     7     1 6291625  Schieder Florian         <NA>        1995 ITA   
-       8     8    28 561310   Hrobat Miha              <NA>        1995 SLO   
-       9     8    14 291459   Paris Dominik            <NA>        1989 ITA   
-      10    10    16 202535   Dressen Thomas           <NA>        1993 GER   
-      11    11     6 53980    Kriechmayr Vincent       <NA>        1991 AUT   
-      12    12    23 511896   Murisier Justin          <NA>        1992 SUI   
-      13    12     9 512124   Hintermann Niels         <NA>        1995 SUI   
-      14    14     7 53975    Hemetsberger Daniel      <NA>        1991 AUT   
-      15    15    19 293550   Marsaglia Matteo         <NA>        1985 ITA   
-      16    16     3 422310   Sejersted Adrian Smiseth <NA>        1994 NOR   
-      17    17    31 6531444  Arvidsson Erik           <NA>        1996 USA   
-      18    18    29 512408   Monney Alexis            <NA>        2000 SUI   
-      19    19     4 51215    Baumann Romed            <NA>        1986 GER   
-      20    20    11 990081   Casse Mattia             <NA>        1990 ITA   
-      21    21    30 194858   Allegre Nils             <NA>        1994 FRA   
-      22    22    34 110324   Von Appen Henrik         <NA>        1994 CHI   
-      23    23     8 191740   Clarey Johan             <NA>        1981 FRA   
-      24    24     2 6530319  Cochran-Siegle Ryan      <NA>        1992 USA   
-      25    25    33 180877   Lehto Elian              <NA>        2000 FIN   
-      26    26    18 934643   Goldberg Jared           <NA>        1991 USA   
-      27    27    17 202059   Ferstl Josef             <NA>        1988 GER   
-      28    28    13 530874   Ganong Travis            <NA>        1988 USA   
-      29    29    27 200379   Sander Andreas           <NA>        1989 GER   
-      30    30    32 104468   Read Jeffrey             <NA>        1997 CAN   
-      31    31    38 561397   Naralocnik Nejc          <NA>        1999 SLO   
-      32    32    35 54371    Babinsky Stefan          <NA>        1996 AUT   
-      33    33    36 350095   Pfiffner Marco           <NA>        1994 LIE   
-      34    34    22 192746   Theaux Adrien            <NA>        1984 FRA   
-      35    35    25 561255   Cater Martin             <NA>        1992 SLO   
-      36    36    41 180904   Tapanainen Jaakko        <NA>        2002 FIN   
-      37    37    40 240148   Szollos Barnabas         <NA>        1998 ISR   
-      38    38    44 390041   Luik Juhan               <NA>        1997 EST   
-      39    39    39 221053   Steudle Roy-Alexander    <NA>        1993 GBR   
-      40    40    42 690694   Kovbasnyuk Ivan          <NA>        1993 UKR   
-      41    41    45 550109   Opmanis Lauris           <NA>        2001 LAT   
-         time      diff_time fis_points cup_points
-         <Period>  <Period>       <dbl>      <dbl>
-       1 1M 47.05S 0S               0           NA
-       2 1M 47.53S 0.48S            5.6         NA
-       3 1M 47.94S 0.89S           10.4         NA
-       4 1M 47.98S 0.93S           10.9         NA
-       5 1M 48.06S 1.01S           11.8         NA
-       6 1M 48.13S 1.08S           12.6         NA
-       7 1M 48.14S 1.09S           12.7         NA
-       8 1M 48.18S 1.13S           13.2         NA
-       9 1M 48.18S 1.13S           13.2         NA
-      10 1M 48.2S  1.15S           13.4         NA
-      11 1M 48.21S 1.16S           13.6         NA
-      12 1M 48.28S 1.23S           14.4         NA
-      13 1M 48.28S 1.23S           14.4         NA
-      14 1M 48.33S 1.28S           15.0         NA
-      15 1M 48.58S 1.53S           17.9         NA
-      16 1M 48.63S 1.58S           18.4         NA
-      17 1M 48.66S 1.61S           18.8         NA
-      18 1M 48.8S  1.75S           20.4         NA
-      19 1M 48.85S 1.8S            21.0         NA
-      20 1M 48.88S 1.83S           21.4         NA
-      21 1M 48.92S 1.87S           21.8         NA
-      22 1M 48.93S 1.88S           22.0         NA
-      23 1M 48.94S 1.89S           22.1         NA
-      24 1M 48.95S 1.9S            22.2         NA
-      25 1M 48.97S 1.92S           22.4         NA
-      26 1M 49.03S 1.98S           23.1         NA
-      27 1M 49.12S 2.07S           24.2         NA
-      28 1M 49.25S 2.2S            25.7         NA
-      29 1M 49.45S 2.4S            28.0         NA
-      30 1M 49.5S  2.45S           28.6         NA
-      31 1M 49.62S 2.57S           30.0         NA
-      32 1M 49.74S 2.69S           31.4         NA
-      33 1M 50.5S  3.45S           40.3         NA
-      34 1M 50.51S 3.46S           40.4         NA
-      35 1M 51.03S 3.98S           46.5         NA
-      36 1M 51.41S 4.36S           50.9         NA
-      37 1M 51.48S 4.43S           51.7         NA
-      38 1M 52.74S 5.69S           66.4         NA
-      39 1M 52.76S 5.71S           66.7         NA
-      40 1M 54.04S 6.99S           81.6         NA
-      41 1M 54.45S 7.4S            86.4         NA
 

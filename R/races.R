@@ -54,12 +54,14 @@ query_race <- function(result) {
 
 extract_race <- function(url) {
 
-  table_rows <- url %>%
-    rvest::read_html() %>%
+  html <- rvest::read_html(url)
+
+  table_rows <- html %>%
     rvest::html_element(css = "div.table__body#events-info-results") %>%
     rvest::html_elements(css = "a.table-row")
 
-  # if there are no rows, return an empty table
+  # if there are no rows, return an empty table with the columns that are
+  # always present
   empty_df <- get_empty_race_df()
   if (length(table_rows) == 0) {
     return(empty_df)
@@ -77,19 +79,16 @@ extract_race <- function(url) {
     rvest::html_attr("href") %>%
     stringr::str_extract("competitorid=(\\d+)", group = 1)
 
+  # determine the column names of the result tibble
+  out_names <- get_race_column_names(html)
+
   # create data frame
-  df_names <- names(empty_df)
   race_df <- race %>%
     purrr::map(
       function(a) {
-        # in some cases, the column "brand" is missing. Identifz this situation
-        # by checking whether column 7 contains the race time.
-        if (stringr::str_detect(a[7], "\\d+:\\d+\\.\\d+")) {
-          a <- append(a, NA_character_, 4)
-        }
         a %>%
           tibble::as_tibble_row(.name_repair = "minimal") %>%
-          magrittr::set_names(df_names[seq_along(a)])
+          magrittr::set_names(out_names[seq_along(a)])
       }
     ) %>%
     dplyr::bind_rows()
@@ -179,18 +178,14 @@ get_races_url <- function(result) {
   )
 }
 
+
 get_empty_race_df <- function() {
   tibble::tibble(
     rank = integer(),
     bib = integer(),
     fis_code = character(),
     name = character(),
-    brand = character(),
     birth_year = integer(),
     nation = character(),
-    time = lubridate::hms(numeric()),
-    diff_time = lubridate::hms(numeric()),
-    fis_points = numeric(),
-    cup_points = numeric()
   )
 }
