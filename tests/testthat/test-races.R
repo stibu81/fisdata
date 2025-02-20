@@ -97,12 +97,12 @@ test_that(
 
     expected_names <- c("rank", "bib", "fis_code", "name",
                         "birth_year", "nation", "time", "diff_time",
-                        "fis_points", "cup_points")
+                        "fis_points")
     expect_named(wsc_dh, expected_names)
 
     expected_types <- c("integer", "integer", "character",
                         "character", "integer", "character",
-                        "Period", "Period", "double", "double")
+                        "Period", "Period", "double")
     for (i in seq_along(expected_types)) {
       if (expected_types[i] == "Period") {
         expect_s4_class(wsc_dh[[expected_names[i]]], expected_types[i])
@@ -127,7 +127,6 @@ test_that(
     )
     expect_gte(min(wsc_dh$fis_points), 0)
     expect_gte(min(diff(wsc_dh$fis_points)), 0)
-    expect_in(wsc_dh$cup_points, NA_real_)
 
     expect_equal(attr(wsc_dh, "url"), get_races_url())
 
@@ -150,13 +149,12 @@ test_that("query_race() works for an alpline skiing downhill training", {
   expect_s3_class(wengen_training, "tbl_df")
 
   expected_names <- c("rank", "bib", "fis_code", "name", "brand",
-                      "birth_year", "nation", "time", "diff_time",
-                      "fis_points", "cup_points")
+                      "birth_year", "nation", "time", "diff_time")
   expect_named(wengen_training, expected_names)
 
   expected_types <- c("integer", "integer", "character", "character",
                       "character", "integer", "character",
-                      "Period", "Period", "double", "double")
+                      "Period", "Period")
   for (i in seq_along(expected_types)) {
     if (expected_types[i] == "Period") {
       expect_s4_class(wengen_training[[expected_names[i]]], expected_types[i])
@@ -175,12 +173,11 @@ test_that("query_race() works for an alpline skiing downhill training", {
   expect_gte(min(wengen_training$diff_time), 0)
   expect_lte(
     max(
-      abs(wengen_training$time[-1] - wengen_training$time[1] - wengen_training$diff_time[-1])
+      abs(wengen_training$time[-1] - wengen_training$time[1] -
+            wengen_training$diff_time[-1])
     ),
     1e-12
   )
-  expect_in(wengen_training$fis_points, NA_real_)
-  expect_in(wengen_training$cup_points, NA_real_)
 
   expect_equal(attr(wengen_training, "url"), get_races_url())
 
@@ -212,3 +209,7 @@ test_that("query_race() works for empty result", {
   expect_equal(attr(empty, "url"), get_races_url())
 })
 
+# races with two runs fail => fix this!
+# odi <- query_athletes("odermatt", "marco")
+# query_results(odi, season = 2025, category = "WSC", discipline = "GS") %>% query_race()
+# query_results(odi, season = 2025, category = "WC", discipline = "GS", place = "Schladming") %>% query_race()

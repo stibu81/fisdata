@@ -18,9 +18,10 @@
 #' is not done through a time measurement as, e.g., in Ski Jumping ("JP").
 #'
 #' @returns
-#' A tibble with the following columns: `rank`, `bib`, `fis_code`, `name`,
-#' `brand`, `birth_year`, `nation`, `time`, `diff_time`, `fis_points`,
-#' and `cup_points`.
+#' A tibble with at least the following columns: `rank`, `bib`, `fis_code`,
+#' `name`, `birth_year`, and `nation`. Depending on the type of race, there are
+#' be additional columns like `time`, `run1`, `run2`, `total_time`, `diff_time`,
+#' `fis_points`, and `cup_points`.
 #'
 #' @examples
 #' \dontrun{
@@ -52,7 +53,7 @@ query_race <- function(result) {
 }
 
 
-extract_race <- function(url) {
+extract_race <- function(url, error_call = rlang::caller_env()) {
 
   html <- rvest::read_html(url)
 
@@ -80,7 +81,7 @@ extract_race <- function(url) {
     stringr::str_extract("competitorid=(\\d+)", group = 1)
 
   # determine the column names of the result tibble
-  out_names <- get_race_column_names(html)
+  out_names <- get_race_column_names(html, error_call = error_call)
 
   # create data frame
   race_df <- race %>%
@@ -93,47 +94,13 @@ extract_race <- function(url) {
     ) %>%
     dplyr::bind_rows()
 
-  # for some race types, e.g., trainings, the last two columns are missing.
-  # They are added here.
-  if (!"fis_points" %in% names(race_df)) {
-    race_df <- race_df %>% dplyr::mutate(fis_points = NA_character_)
-  }
-  if (!"cup_points" %in% names(race_df)) {
-    race_df <- race_df %>% dplyr::mutate(cup_points = NA_character_)
-  }
-
-  # for the winner, diff_time is set to the winning time. If others have
-  # finished with the same time, the column contains "&nbsp". All other times
-  # start with a "+", so replace those that don't by "+0.00"
-  i_zero <- race_df$diff_time %>%
-    stringr::str_detect("^\\+", negate = TRUE)
-  race_df$diff_time[i_zero] <- "+0.00"
-
-  # prepare output data:
-  # * rank, bib as integer
-  # * last name not in all caps
-  # * birth_year as integer
-  # * time as time
-  # * diff_time as numeric
-  # * fis_points and cup_points as numeric
-  race_df <- race_df %>%
-    dplyr::mutate(rank = as.integer(.data$rank),
-                  bib = as.integer(.data$bib),
-                  name = stringr::str_to_title(.data$name),
-                  birth_year = as.integer(.data$birth_year),
-                  time = parse_race_time(.data$time),
-                  diff_time = parse_race_time(.data$diff_time),
-                  fis_points = parse_number(.data$fis_points),
-                  cup_points = parse_number(.data$cup_points))
-
-  # set missing cup points to zero, if this is a race where cup points are
-  # awarded, i.e., if at least one racer has won cup points
-  if (any(!is.na(race_df$cup_points))) {
-    race_df <- race_df %>%
-      dplyr::mutate(cup_points = tidyr::replace_na(.data$cup_points, 0))
-  }
-
-  race_df
+  # process all the columns based on their name
+  purrr::map(
+      out_names,
+      \(name) process_race_column(name, race_df)
+    ) %>%
+    purrr::set_names(out_names) %>%
+    dplyr::as_tibble()
 }
 
 

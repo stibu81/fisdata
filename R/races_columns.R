@@ -1,14 +1,16 @@
 # This file contains functions to determine the names of the columns in
 # the tibble for a race and to convert them to the appropriate format.
 
-get_race_column_names <- function(html) {
+get_race_column_names <- function(html, error_call = rlang::caller_env()) {
 
   # look at the headers to identify the columns of the data frame to return
   df_names <- html %>%
-    rvest::html_element(css = "div.sticky[data-boundary='#events-info-results']") %>%
+    rvest::html_element(
+      css = "div.sticky[data-boundary='#events-info-results']"
+    ) %>%
     rvest::html_text2() %>%
     stringr::str_split_1("\n") %>%
-    # convert to lower to avoid problems due to inconsistent capitalisation
+    # convert to lower case to avoid problems due to inconsistent capitalisation
     tolower()
 
   translation_table <- c(
@@ -33,8 +35,9 @@ get_race_column_names <- function(html) {
   if (sum(unknown_names) > 0) {
     cli::cli_warn(
       c("!" = "The data contains some fields unknown to fisdata.",
-        "i" = "Affected column{?s}: {paste0('\\'', html_names[unknown_names], '\\'')}",
-        "!" = "These columns might not be processed as expected.")
+        "i" = "Affected column{?s}: {paste0('\\'', df_names[unknown_names], '\\'')}",
+        "!" = "These columns might not be processed as expected."),
+      call = error_call
     )
     df_names[unknown_names] <-
       standardise_colnames(df_names[unknown_names])
@@ -60,4 +63,56 @@ get_race_column_names <- function(html) {
   }
 
   df_names
+}
+
+
+# process columns of the race df. Use the column name to decide which processing
+# is needed. Columns with unknown names will be left unchanged.
+
+process_race_column <- function(name, data) {
+
+  # if the column does not exist in the data, initialise a column with missing
+  # values
+  col <- if (name %in% names(data)) {
+      data[[name]]
+    } else {
+      rep(NA_character_, nrow(data))
+    }
+
+  # process the column based on the column name
+
+  # integer columns
+  col_out <- if (name %in% c("rank", "bib", "birth_year")) {
+      as.integer(col)
+    # numeric columns
+    } else if (name %in% c("fis_points")) {
+      parse_number(col)
+    # athlete's name
+    } else if (name == "name") {
+        stringr::str_to_title(col)
+    # race time
+    } else if (name %in% c("time", "run1", "run2", "total_time")) {
+      parse_race_time(col)
+    # time difference
+    } else if (name %in% c("diff_time")) {
+      # for the winner, diff_time is set to the winning time. If others have
+      # finished with the same time, the column contains "&nbsp". All other times
+      # start with a "+", so replace those that don't by "+0.00"
+      i_zero <- stringr::str_detect(col, "^\\+", negate = TRUE)
+      replace(col, i_zero, "+0.00") %>%
+        parse_race_time()
+    # cup points: if any athletes have gained cup points, fill all missing
+    # values with zero
+    } else if (name == "cup_points") {
+      out <- parse_number(col)
+      if (any(!is.na(out))) {
+        out <- tidyr::replace_na(out, 0)
+      }
+      out
+    # everything else is left unchanged
+    } else {
+      col
+    }
+
+  col_out
 }

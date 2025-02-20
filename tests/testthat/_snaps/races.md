@@ -110,7 +110,7 @@
     Code
       print(wsc_dh, width = Inf, n = Inf)
     Output
-      # A tibble: 41 x 10
+      # A tibble: 41 x 9
           rank   bib fis_code name                     birth_year nation time     
          <int> <int> <chr>    <chr>                         <int> <chr>  <Period> 
        1     1    10 512269   Odermatt Marco                 1997 SUI    1M 47.05S
@@ -154,56 +154,56 @@
       39    39    39 221053   Steudle Roy-Alexander          1993 GBR    1M 52.76S
       40    40    42 690694   Kovbasnyuk Ivan                1993 UKR    1M 54.04S
       41    41    45 550109   Opmanis Lauris                 2001 LAT    1M 54.45S
-         diff_time fis_points cup_points
-         <Period>       <dbl>      <dbl>
-       1 0S               0           NA
-       2 0.48S            5.6         NA
-       3 0.89S           10.4         NA
-       4 0.93S           10.9         NA
-       5 1.01S           11.8         NA
-       6 1.08S           12.6         NA
-       7 1.09S           12.7         NA
-       8 1.13S           13.2         NA
-       9 1.13S           13.2         NA
-      10 1.15S           13.4         NA
-      11 1.16S           13.6         NA
-      12 1.23S           14.4         NA
-      13 1.23S           14.4         NA
-      14 1.28S           15.0         NA
-      15 1.53S           17.9         NA
-      16 1.58S           18.4         NA
-      17 1.61S           18.8         NA
-      18 1.75S           20.4         NA
-      19 1.8S            21.0         NA
-      20 1.83S           21.4         NA
-      21 1.87S           21.8         NA
-      22 1.88S           22.0         NA
-      23 1.89S           22.1         NA
-      24 1.9S            22.2         NA
-      25 1.92S           22.4         NA
-      26 1.98S           23.1         NA
-      27 2.07S           24.2         NA
-      28 2.2S            25.7         NA
-      29 2.4S            28.0         NA
-      30 2.45S           28.6         NA
-      31 2.57S           30.0         NA
-      32 2.69S           31.4         NA
-      33 3.45S           40.3         NA
-      34 3.46S           40.4         NA
-      35 3.98S           46.5         NA
-      36 4.36S           50.9         NA
-      37 4.43S           51.7         NA
-      38 5.69S           66.4         NA
-      39 5.71S           66.7         NA
-      40 6.99S           81.6         NA
-      41 7.4S            86.4         NA
+         diff_time fis_points
+         <Period>       <dbl>
+       1 0S               0  
+       2 0.48S            5.6
+       3 0.89S           10.4
+       4 0.93S           10.9
+       5 1.01S           11.8
+       6 1.08S           12.6
+       7 1.09S           12.7
+       8 1.13S           13.2
+       9 1.13S           13.2
+      10 1.15S           13.4
+      11 1.16S           13.6
+      12 1.23S           14.4
+      13 1.23S           14.4
+      14 1.28S           15.0
+      15 1.53S           17.9
+      16 1.58S           18.4
+      17 1.61S           18.8
+      18 1.75S           20.4
+      19 1.8S            21.0
+      20 1.83S           21.4
+      21 1.87S           21.8
+      22 1.88S           22.0
+      23 1.89S           22.1
+      24 1.9S            22.2
+      25 1.92S           22.4
+      26 1.98S           23.1
+      27 2.07S           24.2
+      28 2.2S            25.7
+      29 2.4S            28.0
+      30 2.45S           28.6
+      31 2.57S           30.0
+      32 2.69S           31.4
+      33 3.45S           40.3
+      34 3.46S           40.4
+      35 3.98S           46.5
+      36 4.36S           50.9
+      37 4.43S           51.7
+      38 5.69S           66.4
+      39 5.71S           66.7
+      40 6.99S           81.6
+      41 7.4S            86.4
 
 # query_race() works for an alpline skiing downhill training
 
     Code
       print(wengen_training, width = Inf, n = Inf)
     Output
-      # A tibble: 58 x 11
+      # A tibble: 58 x 9
           rank   bib fis_code name                     brand     birth_year nation
          <int> <int> <chr>    <chr>                    <chr>          <int> <chr> 
        1     1    14 6530319  Cochran-Siegle Ryan      Head            1992 USA   
@@ -264,64 +264,64 @@
       56    56    59 6294868  Bernardi Gregorio        Rossignol       2004 ITA   
       57    57    54 54628    Feurstein Lukas          Head            2001 AUT   
       58    58    60 6532084  Radamus River            Rossignol       1998 USA   
-         time      diff_time fis_points cup_points
-         <Period>  <Period>       <dbl>      <dbl>
-       1 2M 25.54S 0S                NA         NA
-       2 2M 25.8S  0.26S             NA         NA
-       3 2M 26.03S 0.49S             NA         NA
-       4 2M 26.51S 0.97S             NA         NA
-       5 2M 26.78S 1.24S             NA         NA
-       6 2M 26.78S 1.24S             NA         NA
-       7 2M 26.8S  1.26S             NA         NA
-       8 2M 26.98S 1.44S             NA         NA
-       9 2M 27.06S 1.52S             NA         NA
-      10 2M 27.11S 1.57S             NA         NA
-      11 2M 27.16S 1.62S             NA         NA
-      12 2M 27.2S  1.66S             NA         NA
-      13 2M 27.22S 1.68S             NA         NA
-      14 2M 27.24S 1.7S              NA         NA
-      15 2M 27.42S 1.88S             NA         NA
-      16 2M 27.45S 1.91S             NA         NA
-      17 2M 27.47S 1.93S             NA         NA
-      18 2M 27.49S 1.95S             NA         NA
-      19 2M 27.51S 1.97S             NA         NA
-      20 2M 27.55S 2.01S             NA         NA
-      21 2M 27.74S 2.2S              NA         NA
-      22 2M 27.83S 2.29S             NA         NA
-      23 2M 27.87S 2.33S             NA         NA
-      24 2M 27.88S 2.34S             NA         NA
-      25 2M 27.89S 2.35S             NA         NA
-      26 2M 27.89S 2.35S             NA         NA
-      27 2M 27.91S 2.37S             NA         NA
-      28 2M 27.94S 2.4S              NA         NA
-      29 2M 28S    2.46S             NA         NA
-      30 2M 28S    2.46S             NA         NA
-      31 2M 28.02S 2.48S             NA         NA
-      32 2M 28.13S 2.59S             NA         NA
-      33 2M 28.15S 2.61S             NA         NA
-      34 2M 28.17S 2.63S             NA         NA
-      35 2M 28.21S 2.67S             NA         NA
-      36 2M 28.23S 2.69S             NA         NA
-      37 2M 28.34S 2.8S              NA         NA
-      38 2M 28.35S 2.81S             NA         NA
-      39 2M 28.35S 2.81S             NA         NA
-      40 2M 28.38S 2.84S             NA         NA
-      41 2M 28.46S 2.92S             NA         NA
-      42 2M 28.51S 2.97S             NA         NA
-      43 2M 28.62S 3.08S             NA         NA
-      44 2M 28.68S 3.14S             NA         NA
-      45 2M 28.75S 3.21S             NA         NA
-      46 2M 28.87S 3.33S             NA         NA
-      47 2M 28.94S 3.4S              NA         NA
-      48 2M 29.03S 3.49S             NA         NA
-      49 2M 29.28S 3.74S             NA         NA
-      50 2M 29.33S 3.79S             NA         NA
-      51 2M 29.62S 4.08S             NA         NA
-      52 2M 29.73S 4.19S             NA         NA
-      53 2M 29.74S 4.2S              NA         NA
-      54 2M 29.92S 4.38S             NA         NA
-      55 2M 30.13S 4.59S             NA         NA
-      56 2M 30.56S 5.02S             NA         NA
-      57 2M 31.09S 5.55S             NA         NA
-      58 2M 32.83S 7.29S             NA         NA
+         time      diff_time
+         <Period>  <Period> 
+       1 2M 25.54S 0S       
+       2 2M 25.8S  0.26S    
+       3 2M 26.03S 0.49S    
+       4 2M 26.51S 0.97S    
+       5 2M 26.78S 1.24S    
+       6 2M 26.78S 1.24S    
+       7 2M 26.8S  1.26S    
+       8 2M 26.98S 1.44S    
+       9 2M 27.06S 1.52S    
+      10 2M 27.11S 1.57S    
+      11 2M 27.16S 1.62S    
+      12 2M 27.2S  1.66S    
+      13 2M 27.22S 1.68S    
+      14 2M 27.24S 1.7S     
+      15 2M 27.42S 1.88S    
+      16 2M 27.45S 1.91S    
+      17 2M 27.47S 1.93S    
+      18 2M 27.49S 1.95S    
+      19 2M 27.51S 1.97S    
+      20 2M 27.55S 2.01S    
+      21 2M 27.74S 2.2S     
+      22 2M 27.83S 2.29S    
+      23 2M 27.87S 2.33S    
+      24 2M 27.88S 2.34S    
+      25 2M 27.89S 2.35S    
+      26 2M 27.89S 2.35S    
+      27 2M 27.91S 2.37S    
+      28 2M 27.94S 2.4S     
+      29 2M 28S    2.46S    
+      30 2M 28S    2.46S    
+      31 2M 28.02S 2.48S    
+      32 2M 28.13S 2.59S    
+      33 2M 28.15S 2.61S    
+      34 2M 28.17S 2.63S    
+      35 2M 28.21S 2.67S    
+      36 2M 28.23S 2.69S    
+      37 2M 28.34S 2.8S     
+      38 2M 28.35S 2.81S    
+      39 2M 28.35S 2.81S    
+      40 2M 28.38S 2.84S    
+      41 2M 28.46S 2.92S    
+      42 2M 28.51S 2.97S    
+      43 2M 28.62S 3.08S    
+      44 2M 28.68S 3.14S    
+      45 2M 28.75S 3.21S    
+      46 2M 28.87S 3.33S    
+      47 2M 28.94S 3.4S     
+      48 2M 29.03S 3.49S    
+      49 2M 29.28S 3.74S    
+      50 2M 29.33S 3.79S    
+      51 2M 29.62S 4.08S    
+      52 2M 29.73S 4.19S    
+      53 2M 29.74S 4.2S     
+      54 2M 29.92S 4.38S    
+      55 2M 30.13S 4.59S    
+      56 2M 30.56S 5.02S    
+      57 2M 31.09S 5.55S    
+      58 2M 32.83S 7.29S    
 
