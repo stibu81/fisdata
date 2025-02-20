@@ -81,6 +81,105 @@ test_that("query_race() works for an alpline skiing world cup race", {
 
 
 test_that(
+  "query_race() works for an alpline skiing world cup race with 2 runs",
+  # a race with two runs has different columns than a race with 1 run
+  {
+    local_mocked_bindings(
+      get_races_url = function(...) test_path("data", "race_al_wc_gs.html.gz")
+    )
+    result <- tibble(athlete = "Odermatt Marco",
+                     place = "Adelboden",
+                     sector = "AL",
+                     race_id = "122802")
+    chuenis_gs <- query_race(result)
+
+    expect_s3_class(chuenis_gs, "tbl_df")
+
+    expected_names <- c("rank", "bib", "fis_code", "name", "brand",
+                        "birth_year", "nation", "run1", "run2", "total_time",
+                        "diff_time", "fis_points", "cup_points")
+    expect_named(chuenis_gs, expected_names)
+
+    expected_types <- c("integer", "integer", "character", "character",
+                        "character", "integer", "character",
+                        rep("Period", 4), "double", "double")
+    for (i in seq_along(expected_types)) {
+      if (expected_types[i] == "Period") {
+        expect_s4_class(chuenis_gs[[expected_names[i]]], expected_types[i])
+      } else {
+        expect_type(chuenis_gs[[expected_names[i]]], expected_types[i])
+      }
+    }
+
+    expect_in(chuenis_gs$rank, 1:nrow(chuenis_gs))
+    expect_in(diff(chuenis_gs$rank), 0:3)
+    expect_in(chuenis_gs$bib, 1:max(chuenis_gs$bib))
+    expect_match(chuenis_gs$fis_code, "^\\d+$")
+    expect_in(chuenis_gs$birth_year, 1900:2100)
+    expect_in(chuenis_gs$nation, nations$code)
+    expect_gte(min(chuenis_gs$run1), 0)
+    expect_gte(min(chuenis_gs$run2), 0)
+    expect_equal(chuenis_gs$run1 + chuenis_gs$run2, chuenis_gs$total_time)
+    expect_gte(min(chuenis_gs$diff_time), 0)
+    expect_lte(
+      max(
+        abs(chuenis_gs$total_time[-1] - chuenis_gs$total_time[1] -
+              chuenis_gs$diff_time[-1])
+      ),
+      1e-12
+    )
+    expect_gte(min(chuenis_gs$fis_points), 0)
+    expect_gte(min(diff(chuenis_gs$fis_points)), 0)
+    expect_in(chuenis_gs$cup_points, 0:100)
+    expect_in(-diff(chuenis_gs$cup_points), 0:20)
+
+    expect_equal(attr(chuenis_gs, "url"), get_races_url())
+
+    expect_snapshot(print(chuenis_gs, width = Inf, n = Inf))
+  }
+)
+
+
+test_that("query_race() works for an alpline skiing parallel race", {
+  # parallel races have no time columns
+  local_mocked_bindings(
+    get_races_url = function(...) test_path("data", "race_al_wc_par.html.gz")
+  )
+  result <- tibble(athlete = "Meillard Loic",
+                   place = "Chamonix",
+                   sector = "AL",
+                   race_id = "100149")
+  chamonix_par <- query_race(result)
+
+  expect_s3_class(chamonix_par, "tbl_df")
+
+  expected_names <- c("rank", "bib", "fis_code", "name",
+                      "birth_year", "nation", "cup_points")
+  expect_named(chamonix_par, expected_names)
+
+  expected_types <- c("integer", "integer", "character", "character",
+                      "integer", "character", "double")
+  for (i in seq_along(expected_types)) {
+    expect_type(chamonix_par[[expected_names[i]]], expected_types[i])
+  }
+
+  expect_in(chamonix_par$rank, 1:nrow(chamonix_par))
+  expect_in(diff(chamonix_par$rank), 0:2)
+  expect_in(chamonix_par$bib, 1:max(chamonix_par$bib))
+  expect_match(chamonix_par$fis_code, "^\\d+$")
+  expect_in(chamonix_par$birth_year, 1900:2100)
+  expect_in(chamonix_par$nation, nations$code)
+  expect_in(chamonix_par$cup_points, 0:100)
+  expect_in(-diff(chamonix_par$cup_points), 0:20)
+
+  expect_equal(attr(chamonix_par, "url"), get_races_url())
+
+  expect_snapshot(print(chamonix_par, width = Inf, n = Inf))
+})
+
+
+
+test_that(
   "query_race() works for an alpline skiing world championships race",
   # brand and cup_points are missing for world cup races
   {
@@ -208,8 +307,3 @@ test_that("query_race() works for empty result", {
 
   expect_equal(attr(empty, "url"), get_races_url())
 })
-
-# races with two runs fail => fix this!
-# odi <- query_athletes("odermatt", "marco")
-# query_results(odi, season = 2025, category = "WSC", discipline = "GS") %>% query_race()
-# query_results(odi, season = 2025, category = "WC", discipline = "GS", place = "Schladming") %>% query_race()
