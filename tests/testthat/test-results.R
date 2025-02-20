@@ -41,7 +41,7 @@ test_that("ensure_one_athlete() works", {
 
 
 test_that(
-  "query_results() works for alpline skiing results for all categories",
+  "query_results() works for alpine skiing results for all categories",
   {
 
     local_mocked_bindings(
@@ -91,7 +91,7 @@ test_that(
 
 
 test_that(
-  "query_results() works for alpline skiing results for trainings",
+  "query_results() works for alpine skiing results for trainings",
   # trainings have no data for fis_points and cup_points
   {
     local_mocked_bindings(
@@ -141,7 +141,7 @@ test_that(
 
 
 test_that(
-  "query_results() works for alpline skiing results for World Championships",
+  "query_results() works for alpine skiing results for World Championships",
   # world championsships have not data for cup_points, but fis_points are
   # available (as for Olympic Games, National Championships and others)
   {

@@ -1,4 +1,4 @@
-# query_race() works for an alpline skiing world cup race
+# query_race() works for an alpine skiing world cup race
 
     Code
       print(wengen_dh, width = Inf, n = Inf)
@@ -105,7 +105,7 @@
       47 2M 28.07S 5.49S          48.1           0
       48 2M 28.08S 5.5S           48.2           0
 
-# query_race() works for an alpline skiing world cup race with 2 runs
+# query_race() works for an alpine skiing world cup race with 2 runs
 
     Code
       print(chuenis_gs, width = Inf, n = Inf)
@@ -166,7 +166,7 @@
       24 1M 17.63S 1M 14.52S 2M 32.15S  4.6S           31.5           7
       25 1M 18.09S 1M 14.64S 2M 32.73S  5.18S          35.5           6
 
-# query_race() works for an alpline skiing parallel race
+# query_race() works for an alpine skiing parallel race
 
     Code
       print(chamonix_par, width = Inf, n = Inf)
@@ -241,7 +241,7 @@
       31          1
       32          1
 
-# query_race() works for an alpline skiing world championships race
+# query_race() works for an alpine skiing world championships race
 
     Code
       print(wsc_dh, width = Inf, n = Inf)
@@ -334,7 +334,7 @@
       40 6.99S           81.6
       41 7.4S            86.4
 
-# query_race() works for an alpline skiing downhill training
+# query_race() works for an alpine skiing downhill training
 
     Code
       print(wengen_training, width = Inf, n = Inf)

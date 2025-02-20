@@ -1,4 +1,4 @@
-# query_results() works for alpline skiing results for all categories
+# query_results() works for alpine skiing results for all categories
 
     Code
       print(dh, width = Inf, n = Inf)
@@ -71,7 +71,7 @@
       30 Training               Downhill       8      NA            NA 59016  
       31 Training               Downhill       1      NA            NA 59014  
 
-# query_results() works for alpline skiing results for trainings
+# query_results() works for alpine skiing results for trainings
 
     Code
       print(tra, width = Inf, n = Inf)
@@ -118,7 +118,7 @@
       17 Downhill       8         NA         NA 59016  
       18 Downhill       1         NA         NA 59014  
 
-# query_results() works for alpline skiing results for World Championships
+# query_results() works for alpine skiing results for World Championships
 
     Code
       print(wsc, width = Inf, n = Inf)

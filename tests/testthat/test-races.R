@@ -27,7 +27,7 @@ test_that("ensure_one_result() works", {
 })
 
 
-test_that("query_race() works for an alpline skiing world cup race", {
+test_that("query_race() works for an alpine skiing world cup race", {
   local_mocked_bindings(
     get_races_url = function(...) test_path("data", "race_al_wc_dh.html.gz")
   )
@@ -81,7 +81,7 @@ test_that("query_race() works for an alpline skiing world cup race", {
 
 
 test_that(
-  "query_race() works for an alpline skiing world cup race with 2 runs",
+  "query_race() works for an alpine skiing world cup race with 2 runs",
   # a race with two runs has different columns than a race with 1 run
   {
     local_mocked_bindings(
@@ -140,7 +140,7 @@ test_that(
 )
 
 
-test_that("query_race() works for an alpline skiing parallel race", {
+test_that("query_race() works for an alpine skiing parallel race", {
   # parallel races have no time columns
   local_mocked_bindings(
     get_races_url = function(...) test_path("data", "race_al_wc_par.html.gz")
@@ -180,7 +180,7 @@ test_that("query_race() works for an alpline skiing parallel race", {
 
 
 test_that(
-  "query_race() works for an alpline skiing world championships race",
+  "query_race() works for an alpine skiing world championships race",
   # brand and cup_points are missing for world cup races
   {
     local_mocked_bindings(
@@ -234,7 +234,7 @@ test_that(
 )
 
 
-test_that("query_race() works for an alpline skiing downhill training", {
+test_that("query_race() works for an alpine skiing downhill training", {
   # fis_points and cup_points are missing for a training
   local_mocked_bindings(
     get_races_url = function(...) test_path("data", "race_al_tra.html.gz")
