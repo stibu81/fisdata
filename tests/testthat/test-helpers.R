@@ -72,3 +72,13 @@ test_that("parse_number() works", {
     c(5, 34.6, 5432.7, 1423.5, 9593, .2, .3, -.5, -4.8, -4568.14, NA, NA)
   )
 })
+
+
+test_that("standardise_colnames() works", {
+  expect_equal(
+    standardise_colnames(
+      c("abc", "ABC", "Run 1", "Diff. Time", " % . Run_ _.2 /__*", "FIS points")
+    ),
+    c("abc", "abc", "run1", "diff_time", "run2", "fis_points")
+  )
+})
