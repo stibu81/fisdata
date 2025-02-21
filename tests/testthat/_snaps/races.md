@@ -655,3 +655,112 @@
       27 46.58S        184.  
       28 1M 10.96S     276.  
 
+# query_race() works for a ski jumping event
+
+    Code
+      print(vancouver_jp, width = Inf, n = Inf)
+    Output
+      # A tibble: 49 x 8
+          rank   bib fis_code name                     birth_year nation total_points
+         <int> <int> <chr>    <chr>                         <int> <chr>         <dbl>
+       1     1    50 2067     Ammann Simon                   1981 SUI           284. 
+       2     2    45 2039     Malysz Adam                    1977 POL           269. 
+       3     3    49 5040     Schlierenzauer Gregor          1990 AUT           262. 
+       4     4    47 4141     Kofler Andreas                 1984 AUT           261. 
+       5     5    48 4143     Morgenstern Thomas             1986 AUT           247. 
+       6     6    34 2927     Neumayer Michael               1979 GER           246. 
+       7     7    32 4593     Hajek Antonin                  1987 CZE           241. 
+       8     8    36 2022     Kasai Noriaki                  1972 JPN           239. 
+       9     9    42 2918     Kranjec Robert                 1981 SLO           234. 
+      10    10    46 2088     Loitzl Wolfgang                1980 AUT           230. 
+      11    11    30 5064     Hilde Tom                      1987 NOR           228. 
+      12    12    43 4889     Jacobsen Anders                1985 NOR           226. 
+      13    13    37 2819     Chedal Emmanuel                1983 FRA           226. 
+      14    14    31 4321     Stoch Kamil                    1987 POL           224. 
+      15    15    39 5749     Evensen Johan Remen            1985 NOR           224. 
+      16    16    18 5658     Prevc Peter                    1992 SLO           222. 
+      17    17    33 1984     Janda Jakub                    1978 CZE           221. 
+      18    18    38 4580     Olli Harri                     1985 FIN           218. 
+      19    19    11 4322     Hula Stefan                    1986 POL           217. 
+      20    20    40 4259     Ito Daiki                      1985 JPN           217. 
+      21    21    12 2987     Descombes Sevoie Vincent       1984 FRA           212. 
+      22    22    22 2934     Bardal Anders                  1982 NOR           211. 
+      23    23    14 4801     Koudelka Roman                 1989 CZE           208. 
+      24    24    26 2062     Kuettel Andreas                1979 SUI           205. 
+      25    25    41 2010     Uhrmann Michael                1978 GER           203. 
+      26    26    25 1991     Hautamaeki Matti               1981 FIN           202. 
+      27    27    24 4186     Colloredo Sebastian            1987 ITA           202. 
+      28    28    35 4226     Wank Andreas                   1988 GER           200. 
+      29    29    20 4939     Meznar Mitja                   1988 SLO           198. 
+      30    30    29 1998     Schmitt Martin                 1978 GER           182. 
+      31    31    44 1995     Ahonen Janne                   1977 FIN           111  
+      32    32     3 5336     Frenette Peter                 1992 USA            90.6
+      33    33    27 4025     Damjan Jernej                  1983 SLO            89.7
+      34    34     4 4041     Lazzaroni David                1985 FRA            85.6
+      35    35    16 4880     Kornilov Denis                 1986 RUS            85.2
+      36    36    23 5302     Mietus Krzysztof               1991 POL            84.7
+      37    37    21 4367     Takeuchi Taku                  1987 JPN            83.9
+      38    38    17 2546     Karelin Pavel                  1990 RUS            80.2
+      39    39     7 1905     Korolev Alexey                 1987 KAZ            79.8
+      40    40     5 5219     Alexander Nicholas             1988 USA            79.2
+      41    41    15 4643     Cikl Martin                    1987 CZE            78.4
+      42    42     8 2024     Kim Hyun-Ki                    1983 KOR            78  
+      43    43     2 1967     Zmoray Tomas                   1989 SVK            77.4
+      44    44     9 4664     Rosliakov Ilja                 1983 RUS            73.9
+      45    45    28 2530     Tochimoto Shohei               1989 JPN            73.4
+      46    46     1 4561     Read Stefan                    1987 CAN            71.6
+      47    47    10 4613     Ipatov Dimitry                 1984 RUS            63.9
+      48    48    19 4724     Morassi Andrea                 1988 ITA            59.9
+      49    49     6 2025     Choi Heung-Chul                1981 KOR            56.3
+         diff_points
+               <dbl>
+       1         0  
+       2       -14.2
+       3       -21.4
+       4       -22.4
+       5       -36.9
+       6       -38.1
+       7       -43  
+       8       -44.4
+       9       -49.9
+      10       -53.3
+      11       -55.7
+      12       -57.2
+      13       -58.1
+      14       -59.5
+      15       -60  
+      16       -61.3
+      17       -62.2
+      18       -65.8
+      19       -66.4
+      20       -66.7
+      21       -72  
+      22       -72.2
+      23       -75.1
+      24       -78.7
+      25       -80.9
+      26       -81.2
+      27       -81.4
+      28       -83.1
+      29       -85.1
+      30      -101. 
+      31      -173. 
+      32      -193  
+      33      -194. 
+      34      -198  
+      35      -198. 
+      36      -199. 
+      37      -200. 
+      38      -203. 
+      39      -204. 
+      40      -204. 
+      41      -205. 
+      42      -206. 
+      43      -206. 
+      44      -210. 
+      45      -210. 
+      46      -212  
+      47      -220. 
+      48      -224. 
+      49      -227. 
+

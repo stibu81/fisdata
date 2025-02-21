@@ -25,6 +25,8 @@ get_race_column_names <- function(html, error_call = rlang::caller_env()) {
     "run 2" = "run2",
     "tot. time" = "total_time",
     "diff. time" = "diff_time",
+    "tot. points" = "total_points",
+    "diff. points" = "diff_points",
     "fis points" = "fis_points",
     "cup points" = "cup_points"
   )
@@ -85,7 +87,7 @@ process_race_column <- function(name, data) {
   col_out <- if (name %in% c("rank", "bib", "birth_year")) {
       as.integer(col)
     # numeric columns
-    } else if (name %in% c("fis_points")) {
+    } else if (name %in% c("fis_points", "total_points")) {
       parse_number(col)
     # athlete's name
     } else if (name == "name") {
@@ -101,6 +103,13 @@ process_race_column <- function(name, data) {
       i_zero <- stringr::str_detect(col, "^\\+", negate = TRUE)
       replace(col, i_zero, "+0.00") %>%
         parse_race_time()
+    } else if (name %in% c("diff_points")) {
+      # for the winner, diff_points is set to the winning points. If others have
+      # finished with the same time, the column contains "&nbsp". All other times
+      # start with a "-", so replace those that don't by "0"
+      i_zero <- stringr::str_detect(col, "^\\-", negate = TRUE)
+      replace(col, i_zero, "0") %>%
+        parse_number()
     # cup points: if any athletes have gained cup points, fill all missing
     # values with zero
     } else if (name == "cup_points") {

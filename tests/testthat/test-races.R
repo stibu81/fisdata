@@ -178,7 +178,6 @@ test_that("query_race() works for an alpine skiing parallel race", {
 })
 
 
-
 test_that(
   "query_race() works for an alpine skiing world championships race",
   # brand and cup_points are missing for world cup races
@@ -381,9 +380,55 @@ test_that("query_race() works for a telemark world cup race", {
     1e-12
   )
 
-  #expect_equal(attr(samoens_tm, "url"), get_races_url())
+  expect_equal(attr(samoens_tm, "url"), get_races_url())
 
   expect_snapshot(print(samoens_tm, width = Inf, n = Inf))
+})
+
+
+test_that("query_race() works for a ski jumping event", {
+  # ski jumping uses points, not times
+  local_mocked_bindings(
+    get_races_url = function(...) test_path("data", "race_jp.html.gz")
+  )
+  result <- tibble(athlete = "Ammann Simon",
+                   place = "Vancouver",
+                   sector = "JP",
+                   race_id = "2838")
+  vancouver_jp <- query_race(result)
+
+  expect_s3_class(vancouver_jp, "tbl_df")
+
+  expected_names <- c("rank", "bib", "fis_code", "name", "birth_year",
+                      "nation", "total_points", "diff_points")
+  expect_named(vancouver_jp, expected_names)
+
+  expected_types <- c("integer", "integer", "character", "character",
+                      "integer", "character", "double", "double")
+  for (i in seq_along(expected_types)) {
+    expect_type(vancouver_jp[[expected_names[i]]], expected_types[i])
+  }
+
+  expect_in(vancouver_jp$rank, 1:nrow(vancouver_jp))
+  expect_in(diff(vancouver_jp$rank), 0:2)
+  expect_in(vancouver_jp$bib, 1:max(vancouver_jp$bib))
+  expect_match(vancouver_jp$fis_code, "^\\d+$")
+  expect_in(vancouver_jp$birth_year, 1900:2100)
+  expect_in(vancouver_jp$nation, nations$code)
+  expect_gte(min(vancouver_jp$total_points), 0)
+  expect_lte(min(vancouver_jp$diff_points), 0)
+
+  expect_lte(
+    max(
+      abs(vancouver_jp$total_points[-1] - vancouver_jp$total_points[1] -
+            vancouver_jp$diff_points[-1])
+    ),
+    1e-12
+  )
+
+  expect_equal(attr(vancouver_jp, "url"), get_races_url())
+
+  expect_snapshot(print(vancouver_jp, width = Inf, n = Inf))
 })
 
 
