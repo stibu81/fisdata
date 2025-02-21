@@ -17,26 +17,28 @@ one will be used.}
 \value{
 A tibble with at least the following columns: \code{rank}, \code{bib}, \code{fis_code},
 \code{name}, \code{birth_year}, and \code{nation}. Depending on the type of race, there are
-be additional columns like \code{time}, \code{run1}, \code{run2}, \code{total_time}, \code{diff_time},
+additional columns like \code{time}, \code{run1}, \code{run2}, \code{total_time}, \code{diff_time},
 \code{fis_points}, and \code{cup_points}.
 }
 \description{
 Query full results for a race.
 }
 \details{
-This function does not yet work for all sectors. It has been successfully
-tested for Cross-Country ("CC"), Alpine Skiing ("AL"),
-Nordic Combined ("NK"), and for some disciplines in Snowboard ("SB").
-It may fail or give incorrect results for any other sector.
-In particular, the function is expected to fail for races where the ranking
-is not done through a time measurement as, e.g., in Ski Jumping ("JP").
+Different types of races may have very different way to display the results.
+Some disciplines use time measurements, other use a points system or even
+a combination of different systems. In some disciplines, races involve a
+single run and a single time measurement, while other use mutliple
+runs and accordingly have multiple run times and possibly a total time.
+The function tries to be flexible in determining the format that is used
+for a given race, but it is known to fail for some special cases (e.g.,
+team races in alpine skiiing).
 }
 \examples{
 \dontrun{
 # the results for a race can be queried by using a specific race of an
-# athlete as input. So we get all results for Marco Odermatt.
+# athlete as input. So we get all downhill results for Marco Odermatt.
 odermatt <- query_athletes("odermatt", "marco")
-odermatt_res <- query_results(odermatt)
+odermatt_res <- query_results(odermatt, discipline = "DH")
 
 # show the first of the results
 odermatt_res[1, ]

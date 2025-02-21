@@ -10,25 +10,27 @@
 #'  one will be used.
 #'
 #' @details
-#' This function does not yet work for all sectors. It has been successfully
-#' tested for Cross-Country ("CC"), Alpine Skiing ("AL"),
-#' Nordic Combined ("NK"), and for some disciplines in Snowboard ("SB").
-#' It may fail or give incorrect results for any other sector.
-#' In particular, the function is expected to fail for races where the ranking
-#' is not done through a time measurement as, e.g., in Ski Jumping ("JP").
+#' Different types of races may have very different way to display the results.
+#' Some disciplines use time measurements, other use a points system or even
+#' a combination of different systems. In some disciplines, races involve a
+#' single run and a single time measurement, while other use mutliple
+#' runs and accordingly have multiple run times and possibly a total time.
+#' The function tries to be flexible in determining the format that is used
+#' for a given race, but it is known to fail for some special cases (e.g.,
+#' team races in alpine skiiing).
 #'
 #' @returns
 #' A tibble with at least the following columns: `rank`, `bib`, `fis_code`,
 #' `name`, `birth_year`, and `nation`. Depending on the type of race, there are
-#' be additional columns like `time`, `run1`, `run2`, `total_time`, `diff_time`,
+#' additional columns like `time`, `run1`, `run2`, `total_time`, `diff_time`,
 #' `fis_points`, and `cup_points`.
 #'
 #' @examples
 #' \dontrun{
 #' # the results for a race can be queried by using a specific race of an
-#' # athlete as input. So we get all results for Marco Odermatt.
+#' # athlete as input. So we get all downhill results for Marco Odermatt.
 #' odermatt <- query_athletes("odermatt", "marco")
-#' odermatt_res <- query_results(odermatt)
+#' odermatt_res <- query_results(odermatt, discipline = "DH")
 #'
 #' # show the first of the results
 #' odermatt_res[1, ]
