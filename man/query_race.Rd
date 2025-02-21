@@ -27,11 +27,11 @@ Query full results for a race.
 Different types of races may have very different way to display the results.
 Some disciplines use time measurements, other use a points system or even
 a combination of different systems. In some disciplines, races involve a
-single run and a single time measurement, while other use mutliple
+single run and a single time measurement, while other use multiple
 runs and accordingly have multiple run times and possibly a total time.
 The function tries to be flexible in determining the format that is used
 for a given race, but it is known to fail for some special cases (e.g.,
-team races in alpine skiiing).
+team races in alpine skiing).
 }
 \examples{
 \dontrun{
