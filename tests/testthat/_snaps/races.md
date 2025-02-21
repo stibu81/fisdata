@@ -461,3 +461,197 @@
       57 2M 31.09S 5.55S    
       58 2M 32.83S 7.29S    
 
+# query_race() works for a cross-country world cup race
+
+    Code
+      print(oslo_cc, width = Inf, n = Inf)
+    Output
+      # A tibble: 58 x 9
+          rank   bib fis_code name                     birth_year nation time        
+         <int> <int> <chr>    <chr>                         <int> <chr>  <Period>    
+       1     1     4 3510023  Cologna Dario                  1986 SUI    2H 1M 48.1S 
+       2     2     3 3420228  Sundby Martin Johnsrud         1984 NOR    2H 1M 48.1S 
+       3     3    29 3480013  Vylegzhanin Maxim              1982 RUS    2H 1M 49.2S 
+       4     4    20 3420605  Roethe Sjur                    1988 NOR    2H 1M 52.3S 
+       5     5    14 3482280  Spitsov Denis                  1996 RUS    2H 1M 52.5S 
+       6     6     6 3420586  Holund Hans Christer           1989 NOR    2H 1M 52.6S 
+       7     7    12 3220002  Musgrave Andrew                1990 GBR    2H 2M 3.2S  
+       8     8    24 3200376  Notz Florian                   1992 GER    2H 2M 14S   
+       9     9     5 3100110  Harvey Alex                    1988 CAN    2H 2M 20.5S 
+      10    10    42 3190029  Duvillard Robin                1983 FRA    2H 2M 21.6S 
+      11    11    13 3500015  Rickardsson Daniel             1982 SWE    2H 2M 31.6S 
+      12    12    30 3190268  Backscheider Adrien            1992 FRA    2H 2M 33.6S 
+      13    13     7 3421779  Krueger Simen Hegstad          1993 NOR    2H 2M 34.4S 
+      14    14    23 3422521  Augdal Eirik Sverdrup          1995 NOR    2H 2M 41.6S 
+      15    15    22 3300190  Yoshida Keishin                1987 JPN    2H 2M 44.1S 
+      16    16    32 3530532  Patterson Scott                1992 USA    2H 2M 44.4S 
+      17    17    41 3420672  Sveen Simen Andreas            1988 NOR    2H 2M 46.1S 
+      18    18    27 3421269  Stock Daniel                   1992 NOR    2H 3M 12.9S 
+      19    19    51 3290357  Bertolina Mirco                1991 ITA    2H 3M 23.8S 
+      20    20    33 3200356  Dobler Jonas                   1991 GER    2H 3M 38S   
+      21    21     2 3190111  Manificat Maurice              1986 FRA    2H 3M 39.9S 
+      22    22    18 3480695  Bessmertnykh Alexander         1986 RUS    2H 3M 44.4S 
+      23    23    53 3501167  Engdahl Petter                 1994 SWE    2H 4M 19.8S 
+      24    24     9 3180535  Niskanen Iivo                  1992 FIN    2H 4M 24.2S 
+      25    25     8 3482119  Chervotkin Alexey              1995 RUS    2H 5M 14.7S 
+      26    26    47 3501297  Sandstroem Bjoern              1995 SWE    2H 5M 17.3S 
+      27    27    44 3420614  Nygaard Per Kristian           1987 NOR    2H 5M 28.4S 
+      28    28    35 3100006  Kershaw Devon                  1982 CAN    2H 5M 31.7S 
+      29    29    21 3180301  Lehtonen Lari                  1987 FIN    2H 5M 43.6S 
+      30    30    34 3482105  Yakimushkin Ivan               1996 RUS    2H 6M 1.8S  
+      31    31    28 3421467  Rundgreen Mathias              1991 NOR    2H 6M 3.5S  
+      32    32    31 3422029  Hoel Johan                     1994 NOR    2H 6M 14.5S 
+      33    33    26 1362656  Livers Toni                    1983 SUI    2H 6M 42.9S 
+      34    34    48 3100175  Killick Graeme                 1989 CAN    2H 6M 43.2S 
+      35    35    16 3420577  Dyrhaug Niklas                 1987 NOR    2H 7M 9.7S  
+      36    36    43 3300494  Baba Naoto                     1996 JPN    2H 7M 9.8S  
+      37    37    17 3190302  Parisse Clement                1993 FRA    2H 7M 52.5S 
+      38    38    37 3530496  Norris David                   1990 USA    2H 8M 7.8S  
+      39    39    25 3190280  Tarantola Damien               1991 FRA    2H 8M 20.5S 
+      40    40     1 3422819  Klaebo Johannes Hoesflot       1996 NOR    2H 8M 37.7S 
+      41    41    11 3421320  Iversen Emil                   1991 NOR    2H 8M 38.4S 
+      42    42    39 3180557  Hyvarinen Perttu               1991 FIN    2H 8M 50.5S 
+      43    43    54 3150509  Knop Petr                      1994 CZE    2H 8M 59.1S 
+      44    44    10 3420994  Toenseth Didrik                1991 NOR    2H 9M 44.4S 
+      45    45    57 3050159  Tritscher Bernhard             1988 AUT    2H 9M 53.8S 
+      46    46    40 3530629  Caldwell Patrick               1994 USA    2H 10M 0.4S 
+      47    47    45 3100232  Shields Andy                   1991 CAN    2H 10M 1.7S 
+      48    48    38 3190398  Lapierre Jules                 1996 FRA    2H 10M 25.1S
+      49    49    46 3150070  Razym Ales                     1986 CZE    2H 11M 8.1S 
+      50    50    55 3150570  Novak Michal                   1996 CZE    2H 12M 5.3S 
+      51    51    49 3530489  Hoffman Noah                   1989 USA    2H 12M 16S  
+      52    52    50 3530713  Bolger Kevin                   1993 USA    2H 14M 32.3S
+      53    53    61 3320185  Kim Magnus                     1998 KOR    2H 15M 7.9S 
+      54    54    56 3490145  Rojo Imanol                    1990 ESP    2H 15M 27.1S
+      55    55    59 3181007  Vuorela Markus                 1996 FIN    2H 16M 1.5S 
+      56    56    60 3180978  Gummerus Lauri                 1996 FIN    2H 16M 55.6S
+      57    57    58 3501356  Danielsson Filip               1996 SWE    2H 21M 13.1S
+      58    58    15 3420961  Krogh Finn Haagen              1990 NOR    2H 23M 7.4S 
+         diff_time fis_points
+         <Period>       <dbl>
+       1 0S              0   
+       2 0S              0   
+       3 1.1S            0.21
+       4 4.2S            0.8 
+       5 4.4S            0.84
+       6 4.5S            0.86
+       7 15.1S           2.89
+       8 25.9S           4.96
+       9 32.4S           6.21
+      10 33.5S           6.42
+      11 43.5S           8.33
+      12 45.5S           8.72
+      13 46.3S           8.87
+      14 53.5S          10.2 
+      15 56S            10.7 
+      16 56.3S          10.8 
+      17 58S            11.1 
+      18 1M 24.8S       16.2 
+      19 1M 35.7S       18.3 
+      20 1M 49.9S       21.0 
+      21 1M 51.8S       21.4 
+      22 1M 56.3S       22.3 
+      23 2M 31.7S       29.1 
+      24 2M 36.1S       29.9 
+      25 3M 26.6S       39.6 
+      26 3M 29.2S       40.1 
+      27 3M 40.3S       42.2 
+      28 3M 43.6S       42.8 
+      29 3M 55.5S       45.1 
+      30 4M 13.7S       48.6 
+      31 4M 15.4S       48.9 
+      32 4M 26.4S       51.0 
+      33 4M 54.8S       56.5 
+      34 4M 55.1S       56.5 
+      35 5M 21.6S       61.6 
+      36 5M 21.7S       61.6 
+      37 6M 4.4S        69.8 
+      38 6M 19.7S       72.7 
+      39 6M 32.4S       75.2 
+      40 6M 49.6S       78.5 
+      41 6M 50.3S       78.6 
+      42 7M 2.4S        80.9 
+      43 7M 11S         82.6 
+      44 7M 56.3S       91.2 
+      45 8M 5.7S        93.0 
+      46 8M 12.3S       94.3 
+      47 8M 13.6S       94.6 
+      48 8M 37S         99.0 
+      49 9M 20S        107.  
+      50 10M 17.2S     118.  
+      51 10M 27.9S     120.  
+      52 12M 44.2S     146.  
+      53 13M 19.8S     153.  
+      54 13M 39S       157.  
+      55 14M 13.4S     163.  
+      56 15M 7.5S      174.  
+      57 19M 25S       223.  
+      58 21M 19.3S     245.  
+
+# query_race() works for a telemark world cup race
+
+    Code
+      print(samoens_tm, width = Inf, n = Inf)
+    Output
+      # A tibble: 28 x 9
+          rank   bib fis_code name                  birth_year nation time     
+         <int> <int> <chr>    <chr>                      <int> <chr>  <Period> 
+       1     1     1 4510016  Matter Stefan               1987 SUI    2M 12.31S
+       2     2     2 4510011  Michel Nicolas              1995 SUI    2M 13.9S 
+       3     3     5 4510001  Dayer Bastien               1987 SUI    2M 14.95S
+       4     4     3 4190048  Lopez Matti                 1996 FRA    2M 16.69S
+       5     5     4 4560009  Ales Jure                   1995 SLO    2M 16.81S
+       6     6     9 4190056  Claye Noe                   1999 FRA    2M 17.19S
+       7     7     7 4420098  Moster Haugen Amund         1996 NOR    2M 17.26S
+       8     8     8 4190055  Nabot Elie                  1997 FRA    2M 18.2S 
+       9     9     6 4420078  Hole Sivert                 1995 NOR    2M 20.11S
+      10    10    11 4200019  Mueller Leonhard            1991 GER    2M 21.84S
+      11    11    15 4530013  Snyder Cory                 1992 USA    2M 22.48S
+      12    12    24 4510017  Beney Romain                1997 SUI    2M 24.84S
+      13    13    10 4200018  Orlovius Thomas             1989 GER    2M 25.8S 
+      14    14    12 4190053  Sillon Theo                 1998 FRA    2M 28.36S
+      15    15    16 4190060  Etievent Adrien             1998 FRA    2M 28.91S
+      16    16    13 4200024  Frank Christoph             1998 GER    2M 29.01S
+      17    17    18 4420125  Alveberg Jacob              2000 NOR    2M 29.7S 
+      18    18    29 4190067  Page Alexis                 2003 FRA    2M 30.67S
+      19    19    28 4220034  Taylor Jasper               1996 GBR    2M 35.08S
+      20    20    19 4510019  Roduit Valentin             1999 SUI    2M 35.28S
+      21    21    17 4510014  Procureur Gaetan            1995 SUI    2M 35.4S 
+      22    22    20 4220032  Bingham Sion                1997 GBR    2M 36.64S
+      23    23    22 4220037  Emsley Ben                  1996 GBR    2M 41.84S
+      24    24    26 4220039  Emsley Jack                 1998 GBR    2M 42.96S
+      25    25    27 4020000  Rodriguez Barrull Ian       2001 AND    2M 43.06S
+      26    26    23 4220033  Dixon Colin                 1998 GBR    2M 48.12S
+      27    27    25 4480000  Isaev Nikolay               1980 RUS    2M 58.89S
+      28    28    30 4270000  Screawn Max                 2002 IRL    3M 23.27S
+         diff_time fis_points
+         <Period>       <dbl>
+       1 0S              7.73
+       2 1.59S          13.7 
+       3 2.64S          17.7 
+       4 4.38S          24.3 
+       5 4.5S           24.7 
+       6 4.88S          26.2 
+       7 4.95S          26.4 
+       8 5.89S          30.0 
+       9 7.8S           37.2 
+      10 9.53S          43.7 
+      11 10.17S         46.2 
+      12 12.53S         55.1 
+      13 13.49S         58.7 
+      14 16.05S         68.4 
+      15 16.6S          70.5 
+      16 16.7S          70.8 
+      17 17.39S         73.4 
+      18 18.36S         77.1 
+      19 22.77S         93.8 
+      20 22.97S         94.5 
+      21 23.09S         95.0 
+      22 24.33S         99.7 
+      23 29.53S        119.  
+      24 30.65S        124.  
+      25 30.75S        124.  
+      26 35.81S        143.  
+      27 46.58S        184.  
+      28 1M 10.96S     276.  
+

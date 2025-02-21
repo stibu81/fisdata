@@ -284,6 +284,109 @@ test_that("query_race() works for an alpine skiing downhill training", {
 })
 
 
+test_that("query_race() works for a cross-country world cup race", {
+  # similar to AL, brand and cup_points are missing, times over 1 hour
+  local_mocked_bindings(
+    get_races_url = function(...) test_path("data", "race_cc_50km.html.gz")
+  )
+  result <- tibble(athlete = "Cologna Dario",
+                   place = "Oslo",
+                   sector = "CC",
+                   race_id = "29847")
+  oslo_cc <- query_race(result)
+
+  expect_s3_class(oslo_cc, "tbl_df")
+
+  expected_names <- c("rank", "bib", "fis_code", "name", "birth_year",
+                      "nation", "time", "diff_time", "fis_points")
+  expect_named(oslo_cc, expected_names)
+
+  expected_types <- c("integer", "integer", "character", "character",
+                      "integer", "character",
+                      "Period", "Period", "double")
+  for (i in seq_along(expected_types)) {
+    if (expected_types[i] == "Period") {
+      expect_s4_class(oslo_cc[[expected_names[i]]], expected_types[i])
+    } else {
+      expect_type(oslo_cc[[expected_names[i]]], expected_types[i])
+    }
+  }
+
+  expect_in(oslo_cc$rank, 1:nrow(oslo_cc))
+  expect_in(diff(oslo_cc$rank), 0:2)
+  expect_in(oslo_cc$bib, 1:max(oslo_cc$bib))
+  expect_match(oslo_cc$fis_code, "^\\d+$")
+  expect_in(oslo_cc$birth_year, 1900:2100)
+  expect_in(oslo_cc$nation, nations$code)
+  expect_gte(min(oslo_cc$time), 0)
+  expect_gte(min(oslo_cc$diff_time), 0)
+  expect_lte(
+    max(
+      abs(
+        # for some reason, this fails when not converted to numeric.
+        # Some Periods are of the form "1M -60S"
+        as.numeric(oslo_cc$time[-1] - oslo_cc$time[1] -
+              oslo_cc$diff_time[-1])
+      )
+    ),
+    1e-12
+  )
+
+  expect_equal(attr(oslo_cc, "url"), get_races_url())
+
+  expect_snapshot(print(oslo_cc, width = Inf, n = Inf))
+})
+
+
+test_that("query_race() works for a telemark world cup race", {
+  # similar to AL, brand and cup_points are missing
+  local_mocked_bindings(
+    get_races_url = function(...) test_path("data", "race_tm_classic.html.gz")
+  )
+  result <- tibble(athlete = "Matter Stefan",
+                   place = "Samoens",
+                   sector = "TM",
+                   race_id = "1225")
+  samoens_tm <- query_race(result)
+
+  expect_s3_class(samoens_tm, "tbl_df")
+
+  expected_names <- c("rank", "bib", "fis_code", "name", "birth_year",
+                      "nation", "time", "diff_time", "fis_points")
+  expect_named(samoens_tm, expected_names)
+
+  expected_types <- c("integer", "integer", "character", "character",
+                      "integer", "character",
+                      "Period", "Period", "double")
+  for (i in seq_along(expected_types)) {
+    if (expected_types[i] == "Period") {
+      expect_s4_class(samoens_tm[[expected_names[i]]], expected_types[i])
+    } else {
+      expect_type(samoens_tm[[expected_names[i]]], expected_types[i])
+    }
+  }
+
+  expect_in(samoens_tm$rank, 1:nrow(samoens_tm))
+  expect_in(diff(samoens_tm$rank), 0:2)
+  expect_in(samoens_tm$bib, 1:max(samoens_tm$bib))
+  expect_match(samoens_tm$fis_code, "^\\d+$")
+  expect_in(samoens_tm$birth_year, 1900:2100)
+  expect_in(samoens_tm$nation, nations$code)
+  expect_gte(min(samoens_tm$time), 0)
+  expect_gte(min(samoens_tm$diff_time), 0)
+  expect_lte(
+    max(
+      abs(samoens_tm$time[-1] - samoens_tm$time[1] - samoens_tm$diff_time[-1])
+    ),
+    1e-12
+  )
+
+  #expect_equal(attr(samoens_tm, "url"), get_races_url())
+
+  expect_snapshot(print(samoens_tm, width = Inf, n = Inf))
+})
+
+
 test_that("query_race() works for empty result", {
   local_mocked_bindings(
     get_races_url = function(...) test_path("data", "race_empty.html.gz")
