@@ -916,3 +916,78 @@
       19        120         12
       20        110         11
 
+# query_race() works for a nordic combined world cup race
+
+    Code
+      print(lillehammer_nk, width = Inf, n = Inf)
+    Output
+      # A tibble: 32 x 11
+          rank   bib fis_code name                 birth_year nation distance points
+         <int> <int> <chr>    <chr>                     <int> <chr>     <dbl>  <dbl>
+       1     1     3 100733   Hagen Ida Marie            2000 NOR        96    119.6
+       2     2     9 187104   Armbruster Nathalie        2006 GER        87.5  103.9
+       3     3    13 100845   Westvold Hansen Gyda       2002 NOR        85.5   98.1
+       4     4    14 101146   Volavsek Ema               2002 SLO        84.5   96  
+       5     5    10 101144   Hirner Lisa                2003 AUT        86.5  103.6
+       6     6    12 101203   Kasai Haruka               2004 JPN        85     99.2
+       7     7    17 100988   Leinan Lund Marte          2001 NOR        83     91.4
+       8     8     4 101204   Kasai Yuna                 2004 JPN        94.5  116.6
+       9     9     6 100696   Nowak Jenny                2002 GER        91    109.9
+      10    10    18 187263   Korhonen Minja             2007 FIN        80     87.7
+      11    11    22 101376   Brabec Alexa               2004 USA        78     84.2
+      12    12     1 100655   Gerboth Maria              2002 GER        96.5  125.8
+      13    13    21 101072   Brocard Lena               2000 FRA        80     84.6
+      14    14    34 100731   Midtsundstad Hanna         1999 NOR        58     34.7
+      15    15     8 187079   Purker Claudia             1999 AUT        89    104  
+      16    16    19 100941   Azegami Sana               2001 JPN        80.5   86.2
+      17    17    29 101198   Gianmoena Veronica         1995 ITA        75     72.9
+      18    18    16 187282   Malovrh Tia                2008 SLO        83.5   92.5
+      19    19    28 101437   Kil Joanna                 2000 POL        75     74.2
+      20    20     5 101515   Loh Ronja                  2005 GER        88.5  110.9
+      21    21    24 101377   Malacinski Annika          2001 USA        76     78.2
+      22    22    11 187403   Hirvonen Heta              2008 FIN        87    102.3
+      23    23    33 101301   Pletz Laura                2005 AUT        67.5   54.9
+      24    24    20 101109   Haasch Cindy               2004 GER        80     85.7
+      25    25    32 101180   Hagen Mille Marie          2002 NOR        71     58  
+      26    26     7 187084   Wuerth Svenja              1993 GER        89.5  107.7
+      27    27    25 101211   Pinzani Greta              2005 ITA        77.5   78.1
+      28    28    23 187141   Pavec Teja                 2007 SLO        79     80.8
+      29    29    15 100995   Slamik Annalena            2003 AUT        84.5   92.6
+      30    30    31 100683   Dejori Daniela             2002 ITA        68.5   65  
+      31    31    30 187400   Evans Nora Helene          2008 NOR        74.5   67.4
+      32    32    27 187081   Senoner Anna               2007 ITA        75.5   74.7
+         jump_rank time      diff_time
+             <int> <Period>  <Period> 
+       1         3 13M 43.4S 0S       
+       2         9 14M 34.5S 51.1S    
+       3        13 14M 39.1S 55.7S    
+       4        14 14M 39.2S 55.8S    
+       5        10 14M 56.3S 1M 12.9S 
+       6        12 14M 59S   1M 15.6S 
+       7        17 15M 8.1S  1M 24.7S 
+       8         4 15M 13.3S 1M 29.9S 
+       9         6 15M 21.7S 1M 38.3S 
+      10        18 15M 27.9S 1M 44.5S 
+      11        22 15M 34.6S 1M 51.2S 
+      12         1 15M 35.4S 1M 52S   
+      13        21 15M 37.3S 1M 53.9S 
+      14        34 15M 37.8S 1M 54.4S 
+      15         8 15M 44.3S 2M 0.9S  
+      16        19 15M 45.9S 2M 2.5S  
+      17        29 15M 47.8S 2M 4.4S  
+      18        16 15M 51.3S 2M 7.9S  
+      19        28 15M 52.6S 2M 9.2S  
+      20         5 15M 55S   2M 11.6S 
+      21        24 16M 3.4S  2M 20S   
+      22        11 16M 13.2S 2M 29.8S 
+      23        33 16M 13.9S 2M 30.5S 
+      24        20 16M 14.7S 2M 31.3S 
+      25        32 16M 25.1S 2M 41.7S 
+      26         7 16M 27.2S 2M 43.8S 
+      27        25 16M 33.7S 2M 50.3S 
+      28        23 16M 37.4S 2M 54S   
+      29        15 17M 1.8S  3M 18.4S 
+      30        31 17M 2S    3M 18.6S 
+      31        30 17M 31.3S 3M 47.9S 
+      32        27 17M 56.3S 4M 12.9S 
+

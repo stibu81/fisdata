@@ -522,6 +522,67 @@ test_that("query_race() works for a freestyle ski cross event", {
 })
 
 
+test_that("query_race() works for a nordic combined world cup race", {
+  # similar to AL, brand missing, additional columns for ski jump
+  local_mocked_bindings(
+    get_races_url = function(...) test_path("data", "race_nk_wc.html.gz")
+  )
+  result <- tibble(athlete = "Hagen Ida Marie",
+                   place = "Lillehammer",
+                   sector = "NK",
+                   race_id = "3345")
+  lillehammer_nk <- query_race(result)
+
+  expect_s3_class(lillehammer_nk, "tbl_df")
+
+  expected_names <- c("rank", "bib", "fis_code", "name", "birth_year", "nation",
+                      "distance", "points", "jump_rank", "time", "diff_time")
+  expect_named(lillehammer_nk, expected_names)
+
+  expected_types <- c("integer", "integer", "character", "character", "integer",
+                      "character", "double", "double", "integer",
+                      "Period", "Period")
+  for (i in seq_along(expected_types)) {
+    if (expected_types[i] == "Period") {
+      expect_s4_class(lillehammer_nk[[expected_names[i]]], expected_types[i])
+    } else {
+      expect_type(lillehammer_nk[[expected_names[i]]], expected_types[i])
+    }
+  }
+
+  expect_in(lillehammer_nk$rank, 1:nrow(lillehammer_nk))
+  expect_in(diff(lillehammer_nk$rank), 1)
+  expect_in(lillehammer_nk$bib, 1:max(lillehammer_nk$bib))
+  expect_match(lillehammer_nk$fis_code, "^\\d+$")
+  expect_in(lillehammer_nk$birth_year, 1900:2100)
+  expect_in(lillehammer_nk$nation, nations$code)
+  expect_gt(max(lillehammer_nk$distance), 0)
+  expect_gt(max(lillehammer_nk$distance), 0)
+  expect_in(lillehammer_nk$jump_rank, 1:max(lillehammer_nk$jump_rank))
+  expect_gte(min(lillehammer_nk$time), 0)
+  expect_gte(min(lillehammer_nk$diff_time), 0)
+  expect_lte(
+    max(
+      abs(
+        # for some reason, this fails when not converted to numeric.
+        # Some Periods are of the form "1M -60S"
+        as.numeric(lillehammer_nk$time[-1] - lillehammer_nk$time[1] -
+              lillehammer_nk$diff_time[-1])
+      )
+    ),
+    1e-12
+  )
+
+  expect_equal(attr(lillehammer_nk, "url"), get_races_url())
+
+  # score is given with four significant digits => make sure all digits are
+  # printed to the snapshot
+  local_options(list(pillar.sigfig = 4))
+
+  expect_snapshot(print(lillehammer_nk, width = Inf, n = Inf))
+})
+
+
 test_that("query_race() works for empty result", {
   local_mocked_bindings(
     get_races_url = function(...) test_path("data", "race_empty.html.gz")

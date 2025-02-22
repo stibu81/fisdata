@@ -9,6 +9,12 @@ get_race_column_names <- function(html, error_call = rlang::caller_env()) {
       css = "div.sticky[data-boundary='#events-info-results']"
     ) %>%
     rvest::html_text2() %>%
+    # in nordic combined, there are two special cases in the headers:
+    # * the header "Jump Rank" is split into two rows.
+    # * add the end, there is an additional (and invisible) column
+    # => handle those cases
+    stringr::str_replace("Jump\nRank", "Jump Rank") %>%
+    stringr::str_remove("\nTime\nDiff.$") %>%
     stringr::str_split_1("\n") %>%
     # convert to lower case to avoid problems due to inconsistent capitalisation
     tolower()
@@ -26,8 +32,11 @@ get_race_column_names <- function(html, error_call = rlang::caller_env()) {
     "tot. time" = "total_time",
     "qual. time" = "qual_time",
     "diff. time" = "diff_time",
+    "distance" = "distance",
     "tot. points" = "total_points",
+    "points" = "points",
     "diff. points" = "diff_points",
+    "jump rank" = "jump_rank",
     "score" = "score",
     "fis points" = "fis_points",
     "cup points" = "cup_points"
@@ -86,10 +95,11 @@ process_race_column <- function(name, data) {
   # process the column based on the column name
 
   # integer columns
-  col_out <- if (name %in% c("rank", "bib", "birth_year")) {
+  col_out <- if (name %in% c("rank", "bib", "birth_year", "jump_rank")) {
       as.integer(col)
     # numeric columns
-    } else if (name %in% c("fis_points", "total_points", "score")) {
+    } else if (name %in% c("fis_points", "total_points", "score",
+                           "distance", "points")) {
       parse_number(col)
     # athlete's name
     } else if (name == "name") {
