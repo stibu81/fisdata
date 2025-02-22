@@ -1,6 +1,6 @@
 Package: fisdata
 Title: Query Data From the FIS Web Page
-Version: 0.0.0.9014
+Version: 0.0.0.9015
 Authors@R: 
   person("Stefan", "Lanz", , "slanz1137@gmail.com", role = c("aut", "cre"))
 Description: Query data from the web site of the International Ski and
@@ -30,5 +30,6 @@ Imports:
 Suggests: 
     roxygen2,
     spelling,
+    withr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

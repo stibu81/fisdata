@@ -764,3 +764,155 @@
       48      -224. 
       49      -227. 
 
+# query_race() works for a snowbard halfpipe event
+
+    Code
+      print(laax_sb, width = Inf, n = Inf)
+    Output
+      # A tibble: 45 x 9
+          rank   bib fis_code name                   birth_year nation score
+         <int> <int> <chr>    <chr>                       <int> <chr>  <dbl>
+       1     1     2 9040117  James Scotty                 1994 AUS    95.75
+       2     2     4 9300799  Hirano Ruka                  2002 JPN    93.75
+       3     3     3 9300658  Hirano Ayumu                 1998 JPN    87   
+       4     4     1 9300752  Totsuka Yuto                 2001 JPN    85.25
+       5     5     5 9300976  Shigeno Shuichiro            2005 JPN    81.25
+       6     6    10 9410071  Melville Ives Campbell       2006 NZL    78.75
+       7     7     9 9530715  Josey Chase                  1995 USA    70   
+       8     8    11 9510239  Burgener Patrick             1994 SUI    60.75
+       9     9     7 9301010  Yamada Ryusei                2006 JPN    37.25
+      10    10     8 9531741  Barbieri Alessandro          2008 USA    33.75
+      11    11    16 1124985  Wang Ziyang                  2003 CHN    16.25
+      12    12     6 9320213  Lee Chaeun                   2006 KOR     7.75
+      13    13    18 9301117  Murakami Konosuke            2009 JPN    82.5 
+      14    14    19 9510510  Hasler Jonas                 2006 SUI    80.75
+      15    15    22 9320241  Kim Geonhui                  2008 KOR    78.25
+      16    16    23 9530811  Wachendorfer Ryan            1996 USA    76   
+      17    17    45 9510223  Podladtchikov Iouri          1988 SUI    75.25
+      18    18    27 9531115  Bowman Joshua                1998 USA    74.25
+      19    19    28 9200190  Lechner Florian              2005 AUT    70.25
+      20    20    12 9320235  Lee Jio                      2008 KOR    69.75
+      21    21    15 7535030  Vito Iii Louis Philip        1988 ITA    69.25
+      22    22    29 9510455  Biele Gian Andrin            2003 SUI    62.25
+      23    23    13 9531295  Wolle Jason                  1999 USA    61.25
+      24    24    30 9510542  Zuercher Mischa              2008 SUI    60   
+      25    25    26 9200133  Lechner Christoph            2000 GER    57.5 
+      26    26    40 1084977  Teixeira Augustinho          2005 BRA    53.5 
+      27    27    43 9120149  Zhang Xinhao                 2007 CHN    53.25
+      28    28    31 9531572  Ullah Siddhartha             2006 GBR    52.5 
+      29    29    34 9320198  Kim Kangsan                  2004 KOR    50.5 
+      30    30    39 9510559  Saraiva Leonardo             2009 SUI    46.75
+      31    31    42 9100953  Pershad Kiran                2000 CAN    44.5 
+      32    32    41 9290295  Gennero Lorenzo              1997 ITA    44   
+      33    33    37 1124970  Fan Xiaobing                 2001 CHN    42.75
+      34    34    32 9531837  Wild Aaron                   2009 GBR    42.25
+      35    35    33 9101134  Vo Ryan                      2004 CAN    40   
+      36    36    21 9101051  Gill Liam                    2003 CAN    37.75
+      37    37    35 9560193  Stante Tit                   1998 SLO    35.75
+      38    38    36 9531746  Cowan Taitten                2008 CHI    33.5 
+      39    39    44 1124957  Gu Ao                        1999 CHN    30.75
+      40    40    24 9531230  Foster Lucas                 1999 USA    26.75
+      41    41    38 9120150  Ren Chongshuo                2008 CHN    26.25
+      42    42    17 9531125  Blackwell Chase              1999 USA    25.25
+      43    43    20 9531687  Avallone Noah                2007 USA    20   
+      44    44    14 9531364  Okesson Joey                 2002 USA    17.25
+      45    45    25 9300940  Kikuchihara Koyata           2004 JPN    14.5 
+         fis_points cup_points
+              <dbl>      <dbl>
+       1     1000          100
+       2      828.5         80
+       3      693.6         60
+       4      587.3         50
+       5      503.3         45
+       6      436.5         40
+       7      383.3         36
+       8      340.6         32
+       9      306.1         29
+      10      278           26
+      11      254.8         24
+      12      235.5         22
+      13      219.3         20
+      14      205.3         18
+      15      193.2         16
+      16      182.5         15
+      17      173           14
+      18      164.2         13
+      19      156.2         12
+      20      148.7         11
+      21      141.6         10
+      22      134.8          9
+      23      128.2          8
+      24      121.9          7
+      25      115.7          6
+      26      109.6          5
+      27      103.6          4
+      28       97.7          3
+      29       91.8          2
+      30       86            1
+      31       80.2          0
+      32       74.4          0
+      33       68.6          0
+      34       62.9          0
+      35       57.2          0
+      36       51.5          0
+      37       45.8          0
+      38       40.1          0
+      39       34.4          0
+      40       28.7          0
+      41       23            0
+      42       17.3          0
+      43       11.6          0
+      44        6            0
+      45        0.3          0
+
+# query_race() works for a freestyle ski cross event
+
+    Code
+      print(craigleith_sc, width = Inf, n = Inf)
+    Output
+      # A tibble: 20 x 9
+          rank   bib fis_code name                     birth_year nation qual_time
+         <int> <int> <chr>    <chr>                         <int> <chr>  <Period> 
+       1     1     1 2526373  Smith Fanny                    1992 SUI    49.9S    
+       2     2     4 2532937  Hoffos Courtney                1997 CAN    50.28S   
+       3     3     7 2527689  Thompson Marielle              1992 CAN    50.47S   
+       4     4     3 2534674  Schmidt Hannah                 1994 CAN    50.24S   
+       5     5     5 2526015  Ofner Katrin                   1990 AUT    50.29S   
+       6     6     6 2537303  Grillet Aubert Jade            1997 FRA    50.39S   
+       7     7    10 2529562  Sherret India                  1996 CAN    50.55S   
+       8     8    16 2533149  Gantenbein Talina              1998 SUI    51.03S   
+       9     9     8 2532843  Tansley Antoinette             1997 CAN    50.5S    
+      10    10    11 2531978  Phelan Brittany                1991 CAN    50.61S   
+      11    11    12 2537873  Galli Jole                     1995 ITA    50.89S   
+      12    12    15 2531251  Mcewen Abby                    1996 CAN    50.96S   
+      13    13     9 2532679  Gairns Tiana                   1998 CAN    50.53S   
+      14    14    13 2538024  Holzmann Johanna               1995 GER    50.93S   
+      15    15    14 2534134  Cousin Sixtine                 1999 SUI    50.95S   
+      16    16     2 2529528  Berger Sabbatel Marielle       1990 FRA    50.21S   
+      17    17    36 2534895  Foedermayr Christina           2001 AUT    51.15S   
+      18    18    33 2533798  Lack Saskja                    2000 SUI    51.24S   
+      19    19    35 2527841  Kucerova Nikol                 1989 CZE    51.42S   
+      20    20    37 2532106  Chore Zoe                      1998 CAN    51.68S   
+         fis_points cup_points
+              <dbl>      <dbl>
+       1       1000        100
+       2        800         80
+       3        600         60
+       4        500         50
+       5        450         45
+       6        400         40
+       7        360         36
+       8        320         32
+       9        290         29
+      10        260         26
+      11        240         24
+      12        220         22
+      13        200         20
+      14        180         18
+      15        160         16
+      16        150         15
+      17        140         14
+      18        130         13
+      19        120         12
+      20        110         11
+

@@ -1,4 +1,5 @@
 library(dplyr, warn.conflicts = FALSE)
+library(withr)
 
 test_that("get_races_url() works with valid inputs", {
   cuche <- tibble(name = "Cuche Didier",
@@ -429,6 +430,95 @@ test_that("query_race() works for a ski jumping event", {
   expect_equal(attr(vancouver_jp, "url"), get_races_url())
 
   expect_snapshot(print(vancouver_jp, width = Inf, n = Inf))
+})
+
+
+test_that("query_race() works for a snowbard halfpipe event", {
+  # snowboard uses points, not time. The column is named "score", not "points"
+  local_mocked_bindings(
+    get_races_url = function(...) test_path("data", "race_sb_hp.html.gz")
+  )
+  result <- tibble(athlete = "Burgener Patrick",
+                   place = "Laax",
+                   sector = "SB",
+                   race_id = "22735")
+  laax_sb <- query_race(result)
+
+  expect_s3_class(laax_sb, "tbl_df")
+
+  expected_names <- c("rank", "bib", "fis_code", "name", "birth_year",
+                      "nation", "score", "fis_points", "cup_points")
+  expect_named(laax_sb, expected_names)
+
+  expected_types <- c("integer", "integer", "character", "character",
+                      "integer", "character", "double", "double", "double")
+  for (i in seq_along(expected_types)) {
+    expect_type(laax_sb[[expected_names[i]]], expected_types[i])
+  }
+
+  expect_in(laax_sb$rank, 1:nrow(laax_sb))
+  expect_in(diff(laax_sb$rank), 0:2)
+  expect_in(laax_sb$bib, 1:max(laax_sb$bib))
+  expect_match(laax_sb$fis_code, "^\\d+$")
+  expect_in(laax_sb$birth_year, 1900:2100)
+  expect_in(laax_sb$nation, nations$code)
+  expect_gte(min(laax_sb$score), 0)
+  # because there is a qualification and a final run, there is a single point
+  # in the ranking, where the score jups up to a higher value. In all other
+  # cases, score should decrease from one rank to the next.
+  expect_lte(max(sort(diff(laax_sb$score), decreasing = TRUE)[-1]), 0)
+
+  expect_equal(attr(laax_sb, "url"), get_races_url())
+
+  # score is given with four significant digits => make sure all digits are
+  # printed to the snapshot
+  local_options(list(pillar.sigfig = 4))
+
+  expect_snapshot(print(laax_sb, width = Inf, n = Inf))
+})
+
+
+test_that("query_race() works for a freestyle ski cross event", {
+  # similar to AL, brand and diff_time missing, time is called qual_time
+  local_mocked_bindings(
+    get_races_url = function(...) test_path("data", "race_fs_cross.html.gz")
+  )
+  result <- tibble(athlete = "Smith Fanny",
+                   place = "Craigleith",
+                   sector = "FS",
+                   race_id = "15223")
+  craigleith_sc <- query_race(result)
+
+  expect_s3_class(craigleith_sc, "tbl_df")
+
+  expected_names <- c("rank", "bib", "fis_code", "name", "birth_year",
+                      "nation", "qual_time", "fis_points", "cup_points")
+  expect_named(craigleith_sc, expected_names)
+
+  expected_types <- c("integer", "integer", "character", "character",
+                      "integer", "character",
+                      "Period", "double", "double")
+  for (i in seq_along(expected_types)) {
+    if (expected_types[i] == "Period") {
+      expect_s4_class(craigleith_sc[[expected_names[i]]], expected_types[i])
+    } else {
+      expect_type(craigleith_sc[[expected_names[i]]], expected_types[i])
+    }
+  }
+
+  expect_in(craigleith_sc$rank, 1:nrow(craigleith_sc))
+  expect_in(diff(craigleith_sc$rank), 1)
+  expect_in(craigleith_sc$bib, 1:max(craigleith_sc$bib))
+  expect_match(craigleith_sc$fis_code, "^\\d+$")
+  expect_in(craigleith_sc$birth_year, 1900:2100)
+  expect_in(craigleith_sc$nation, nations$code)
+  expect_gte(min(craigleith_sc$qual_time), 0)
+  expect_in(craigleith_sc$fis_points, (1:100) * 10)
+  expect_in(craigleith_sc$cup_points, 1:100)
+
+  expect_equal(attr(craigleith_sc, "url"), get_races_url())
+
+  expect_snapshot(print(craigleith_sc, width = Inf, n = Inf))
 })
 
 

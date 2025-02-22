@@ -24,9 +24,11 @@ get_race_column_names <- function(html, error_call = rlang::caller_env()) {
     "run 1" = "run1",
     "run 2" = "run2",
     "tot. time" = "total_time",
+    "qual. time" = "qual_time",
     "diff. time" = "diff_time",
     "tot. points" = "total_points",
     "diff. points" = "diff_points",
+    "score" = "score",
     "fis points" = "fis_points",
     "cup points" = "cup_points"
   )
@@ -87,13 +89,13 @@ process_race_column <- function(name, data) {
   col_out <- if (name %in% c("rank", "bib", "birth_year")) {
       as.integer(col)
     # numeric columns
-    } else if (name %in% c("fis_points", "total_points")) {
+    } else if (name %in% c("fis_points", "total_points", "score")) {
       parse_number(col)
     # athlete's name
     } else if (name == "name") {
         stringr::str_to_title(col)
     # race time
-    } else if (name %in% c("time", "run1", "run2", "total_time")) {
+    } else if (name %in% c("time", "run1", "run2", "total_time", "qual_time")) {
       parse_race_time(col)
     # time difference
     } else if (name %in% c("diff_time")) {
