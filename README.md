@@ -43,14 +43,6 @@ information for Didier Cuche:
 ``` r
 library(fisdata)
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 
 cuche <- query_athletes("cuche", "didier")
 cuche %>% 
@@ -61,7 +53,7 @@ cuche %>%
 #> 1 FALSE  510030   Cuche Didier SUI    AL     Head  11795
 ```
 
-The result includes the Competitor-ID, which is required as input in
+The result includes the `competitor_id`, which is required as input in
 order to query an athlete’s results.
 
 With the object returned by `query_athletes()`, it is now possible to
@@ -89,8 +81,8 @@ cuche_res %>%
 #> # ℹ 293 more rows
 ```
 
-The result includes the Race-ID, which is required as input in order to
-query the full results of a race.
+The result includes the `race_id`, which is required as input in order
+to query the full results of a race.
 
 By extracting one of the races from the table, one can now obtain the
 full results for that race. The following code gets the full result for

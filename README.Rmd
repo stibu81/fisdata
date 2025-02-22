@@ -51,7 +51,7 @@ that are usually not known to the user, it is generally easiest to start a
 query by finding an athlete. For example, the following call gets the
 information for Didier Cuche:
 
-```{r}
+```{r message=FALSE}
 library(fisdata)
 library(dplyr)
 
@@ -60,7 +60,7 @@ cuche %>%
   select(active:nation, sector, brand, competitor_id)
 ```
 
-The result includes the Competitor-ID, which is required as input in order
+The result includes the `competitor_id`, which is required as input in order
 to query an athlete's results.
 
 With the object returned by `query_athletes()`, it is now possible to query
@@ -74,7 +74,7 @@ cuche_res %>%
   select(athlete:place, category:rank, race_id)
 ```
 
-The result includes the Race-ID, which is required as input in order
+The result includes the `race_id`, which is required as input in order
 to query the full results of a race.
 
 By extracting one of the races from the table, one can now obtain the full
@@ -111,7 +111,7 @@ fisdata is able to handle the results of many common types of races but it is
 expected to fail for some types that are not yet covered. For example,
 it usually cannot handle team races:
 
-```{r error = TRUE}
+```{r error=TRUE}
 query_athletes("von allmen", "franjo") %>% 
   query_results(category = "WSC") %>% 
   filter(discipline == "Team Combined") %>% 
