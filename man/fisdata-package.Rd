@@ -8,6 +8,13 @@
 \description{
 Query data from the web site of the International Ski and Snowboard Federation FIS (\url{https://www.fis-ski.com}).
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://stibu81.github.io/fisdata/}
+}
+
+}
 \author{
 \strong{Maintainer}: Stefan Lanz \email{slanz1137@gmail.com}
 
