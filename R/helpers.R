@@ -57,7 +57,9 @@ replace_special_chars <- function(x) {
         # ú, ü
         "\u00fa" = "u", "\u00fc" = "ue",
         # ž
-        "\u017e" = "z"
+        "\u017e" = "z",
+        # spaces must be URL encoded
+        "\\s+" = "%20%"
       )
     )
 }

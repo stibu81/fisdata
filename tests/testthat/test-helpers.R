@@ -38,6 +38,10 @@ test_that("replace_special_chars() works", {
     c("a", "a", "a", "ae", "ae", "c", "c", "c", "d", "e", "e", "e", "e", "i",
       "n", "o", "o", "o", "oe", "oe", "s", "ss", "u", "ue", "z")
   )
+  expect_equal(
+    replace_special_chars(c("Von Allmen", "Von\tAllmen", "Von  Allmen")),
+    rep("von%20%allmen", 3)
+  )
 })
 
 

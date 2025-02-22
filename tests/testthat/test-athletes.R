@@ -31,6 +31,13 @@ test_that("get_athletes_url() works with valid inputs", {
            "birthyear=1995,1997&skiclub=&skis=stoeckli&nationcode=&",
            "fiscode=&status=&search=true")
   )
+  expect_equal(
+    get_athletes_url("Von Allmen", "Franjo"),
+    paste0("https://www.fis-ski.com/DB/general/biographies.html?",
+           "lastname=von%20%allmen&firstname=franjo&sectorcode=&",
+           "gendercode=&birthyear=&skiclub=&skis=&nationcode=&fiscode=&",
+           "status=&search=true")
+  )
 })
 
 
