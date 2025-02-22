@@ -991,3 +991,112 @@
       31        30 17M 31.3S 3M 47.9S 
       32        27 17M 56.3S 4M 12.9S 
 
+# query_race() works for a speed skiing world cup race
+
+    Code
+      print(grandvalira_ss, width = Inf, n = Inf)
+    Output
+      # A tibble: 49 x 10
+          rank   bib fis_code name                 birth_year nation n_runs  speed
+         <int> <int> <chr>    <chr>                     <int> <chr>   <int>  <dbl>
+       1     1     4 510089   May Philippe               1970 SUI         1 199.56
+       2     2     6 190130   Montes Bastien             1985 FRA         1 198.71
+       3     3    15 7039     Origone Simone             1979 ITA         1 198.44
+       4     4    13 7178     Schrottshammer Klaus       1979 AUT         1 198.12
+       5     5    14 7463     Kramer Manuel              1989 AUT         1 196.49
+       6     6     5 7078     Origone Ivan               1987 ITA         1 195.52
+       7     7    11 7049     Adarraga Ricardo           1965 ESP         1 195.32
+       8     8     3 7194     Eigenmann Reto             1970 SUI         1 194.35
+       9     9     8 7391     Giacomelli Emilio          1984 ITA         1 193.98
+      10    10     7 7491     Bekes Michal               1989 SVK         1 193.56
+      11    11     1 7043     Montes Jimmy               1987 FRA         1 193.39
+      12    12    18 7250     Vandendries Joost          1971 BEL         1 193.08
+      13    13     2 7295     Farrell Jan                1983 GBR         1 192.7 
+      14    14    12 7278     Backlund Erik              1993 SWE         1 192.56
+      15    15     9 7461     Raab Daniel                1997 AUT         1 192.34
+      16    16    27 290009   Renaldo Antonio            1961 ITA         1 191.9 
+      17    17    16 7436     Ribbegardh Carl            1974 SWE         1 191.45
+      18    18    10 7424     Sanchez Juan Carlos        1993 ESP         1 190.43
+      19    19    21 7243     Mabit Emmeric              1993 FRA         1 187.88
+      20    20    25 7110     Sage Mathieu               1973 FRA         1 186.78
+      21    21    23 7065     Prihoda Michal             1968 CZE         1 185.05
+      22    22    24 7483     Yatsunami Tomoyuki         1977 JPN         1 184.52
+      23    23    17 7350     Manrique Eduard            1985 ESP         1 182.72
+      24    24    20 7440     Karjalainen Rauli          1946 USA         1 181.64
+      25    25    42 7210     Meichtry Gregory           1977 SUI         1 181.46
+      26    26    19 7206     Jechoux Tommy              1993 FRA         1 181.23
+      27    27    26 7400     Donat Nicolas              1966 FRA         1 178.41
+      28    28    39 7328     Amann Marc                 1994 GER         1 178.1 
+      29    29    48 7327     Schoell Daniel             1982 GER         1 177.97
+      30    30    47 7460     Henzler Oliver             1983 GER         1 177.61
+      31    31    38 7088     Beskow Lars                1969 SWE         1 177.55
+      32    32    41 7406     Urban Petr                 1979 CZE         1 177.34
+      33    33    43 510085   Goumoens Michel            1968 SUI         1 177.33
+      34    34    65 7441     Portal Ugo                 1998 FRA         1 177.06
+      35    35    49 7481     Mika Jeffrey               1963 USA         1 176.83
+      36    36    22 7422     Riviera Maxime             1978 SUI         1 176.65
+      37    37    52 7522     Thiercelin Lionel          1966 FRA         1 176.58
+      38    38    67 7512     Thiercelin Killian         2000 FRA         1 175.92
+      39    39    40 7466     Foldyna Edvard             1989 CZE         1 175.81
+      40    40    66 7524     Echantillon Yoan           1999 FRA         1 175.52
+      41    41    54 7500     Bernardet Benjamin         1982 FRA         1 175.25
+      42    42    50 7294     Portal Robin               1995 FRA         1 174.08
+      43    43    62 7502     Brunnberg Jonantan         2000 SWE         1 173.22
+      44    44    45 7416     Toche Sebastien            1995 FRA         1 173.01
+      45    45    63 7490     Garcia Alvaro              1999 ESP         1 172.67
+      46    46    61 7485     Martinez Tom               1999 FRA         1 172.07
+      47    47    51 7517     Tanazawa Hiroyoshi         1957 JPN         1 168.04
+      48    48    64 7478     Jechoux Axel               1999 FRA         1 166.41
+      49    49    44 7417     Jaques Robert              1962 SUI         1 164.29
+         diff_speed fis_points
+              <dbl>      <dbl>
+       1       0          0   
+       2      -0.85       6.42
+       3      -1.12       8.47
+       4      -1.44      10.9 
+       5      -3.07      23.44
+       6      -4.04      30.99
+       7      -4.24      32.56
+       8      -5.21      40.21
+       9      -5.58      43.15
+      10      -6         46.5 
+      11      -6.17      47.86
+      12      -6.48      50.34
+      13      -6.86      53.4 
+      14      -7         54.53
+      15      -7.22      56.31
+      16      -7.66      59.87
+      17      -8.11      63.54
+      18      -9.13      71.92
+      19     -11.68      93.25
+      20     -12.78     102.63
+      21     -14.51     117.62
+      22     -15.04     122.26
+      23     -16.84     138.24
+      24     -17.92     147.99
+      25     -18.1      100   
+      26     -18.33     151.71
+      27     -21.15     177.82
+      28     -21.46     128.3 
+      29     -21.59     129.42
+      30     -21.95     132.52
+      31     -22.01     133.03
+      32     -22.22     134.85
+      33     -22.23     134.93
+      34     -22.5      180   
+      35     -22.73     139.28
+      36     -22.91     194.54
+      37     -22.98     141.45
+      38     -23.64     189.72
+      39     -23.75     148.21
+      40     -24.04     193.16
+      41     -24.31     153.15
+      42     -25.48     163.59
+      43     -26.34     213.25
+      44     -26.55     173.26
+      45     -26.89     218.14
+      46     -27.49     223.5 
+      47     -31.52     219.79
+      48     -33.15     276   
+      49     -35.27     256.77
+

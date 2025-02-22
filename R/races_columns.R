@@ -38,6 +38,9 @@ get_race_column_names <- function(html, error_call = rlang::caller_env()) {
     "diff. points" = "diff_points",
     "jump rank" = "jump_rank",
     "score" = "score",
+    "nb. of runs" = "n_runs",
+    "km/h" = "speed",
+    "diff. km/h" = "diff_speed",
     "fis points" = "fis_points",
     "cup points" = "cup_points"
   )
@@ -95,11 +98,12 @@ process_race_column <- function(name, data) {
   # process the column based on the column name
 
   # integer columns
-  col_out <- if (name %in% c("rank", "bib", "birth_year", "jump_rank")) {
+  col_out <- if (name %in% c("rank", "bib", "birth_year", "jump_rank",
+                             "n_runs")) {
       as.integer(col)
     # numeric columns
     } else if (name %in% c("fis_points", "total_points", "score",
-                           "distance", "points")) {
+                           "distance", "points", "speed")) {
       parse_number(col)
     # athlete's name
     } else if (name == "name") {
@@ -115,7 +119,7 @@ process_race_column <- function(name, data) {
       i_zero <- stringr::str_detect(col, "^\\+", negate = TRUE)
       replace(col, i_zero, "+0.00") %>%
         parse_race_time()
-    } else if (name %in% c("diff_points")) {
+    } else if (name %in% c("diff_points", "diff_speed")) {
       # for the winner, diff_points is set to the winning points. If others have
       # finished with the same time, the column contains "&nbsp". All other times
       # start with a "-", so replace those that don't by "0"

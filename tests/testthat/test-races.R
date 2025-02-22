@@ -583,6 +583,46 @@ test_that("query_race() works for a nordic combined world cup race", {
 })
 
 
+test_that("query_race() works for a speed skiing world cup race", {
+  # ranking by speed
+  local_mocked_bindings(
+    get_races_url = function(...) test_path("data", "race_ss_wc.html.gz")
+  )
+  result <- tibble(athlete = "May Philippe",
+                   place = "Grandvalira",
+                   sector = "SS",
+                   race_id = "393")
+  grandvalira_ss <- query_race(result)
+
+  expect_s3_class(grandvalira_ss, "tbl_df")
+
+  expected_names <- c("rank", "bib", "fis_code", "name", "birth_year", "nation",
+                      "n_runs", "speed", "diff_speed", "fis_points")
+  expect_named(grandvalira_ss, expected_names)
+
+  expected_types <- c("integer", "integer", "character", "character", "integer",
+                      "character", "integer", "double", "double", "double")
+  for (i in seq_along(expected_types)) {
+    expect_type(grandvalira_ss[[!!expected_names[i]]], expected_types[i])
+  }
+
+  expect_in(grandvalira_ss$rank, 1:nrow(grandvalira_ss))
+  expect_in(diff(grandvalira_ss$rank), 1)
+  expect_in(grandvalira_ss$bib, 1:max(grandvalira_ss$bib))
+  expect_match(grandvalira_ss$fis_code, "^\\d+$")
+  expect_in(grandvalira_ss$birth_year, 1900:2100)
+  expect_in(grandvalira_ss$nation, nations$code)
+
+  expect_equal(attr(grandvalira_ss, "url"), get_races_url())
+
+  # speed is given with five significant digits => make sure all digits are
+  # printed to the snapshot
+  local_options(list(pillar.sigfig = 5))
+
+  expect_snapshot(print(grandvalira_ss, width = Inf, n = Inf))
+})
+
+
 test_that("query_race() works for empty result", {
   local_mocked_bindings(
     get_races_url = function(...) test_path("data", "race_empty.html.gz")
