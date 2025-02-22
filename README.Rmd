@@ -30,6 +30,92 @@ You can install the development version of fisdata from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("pak")
-pak::pak("stibu81/fisdata")
+# install.packages("remotes")
+remotes::install_github("stibu81/fisdata")
 ```
+
+## Available Querying Functions
+
+fisdata currently offers three functions to query different types of data:
+
+* `query_athletes()`: query athletes by name and other attributes and obtain
+  a table of matching athletes.
+* `query_results()`: query all race results for a single athlete.
+* `query_race()`: obtain the full results for a single race.
+
+
+## Running a Query
+
+Since athletes are identified by a Competitor-ID and races by a Race-ID
+that are usually not known to the user, it is generally easiest to start a
+query by finding an athlete. For example, the following call gets the
+information for Didier Cuche:
+
+```{r}
+library(fisdata)
+library(dplyr)
+
+cuche <- query_athletes("cuche", "didier")
+cuche %>% 
+  select(active:nation, sector, brand, competitor_id)
+```
+
+The result includes the Competitor-ID, which is required as input in order
+to query an athlete's results.
+
+With the object returned by `query_athletes()`, it is now possible to query
+all the race result of an athlete. Note that `query_results()` must be called
+with a single athlete. The following query only obtains the results in
+downhill races:
+
+```{r}
+cuche_res <- query_results(cuche, discipline = "DH")
+cuche_res %>% 
+  select(athlete:place, category:rank, race_id)
+```
+
+The result includes the Race-ID, which is required as input in order
+to query the full results of a race.
+
+By extracting one of the races from the table, one can now obtain the full
+results for that race. The following code gets the full result for Didier
+Cuche's last victory in Wengen:
+
+```{r}
+wengen_res <- cuche_res %>% 
+  filter(place == "Wengen", rank == 1) %>% 
+  head(n = 1) %>%
+  query_race()
+wengen_res
+```
+
+Note that the objects created by the querying functions always include the
+URL that was downloaded. This URL can be obtained as follows:
+
+```{r}
+show_url(cuche_res)
+```
+
+You can copy this address into a browser in order to see the same data as
+they are presented on the FIS web site. To make this as easy as possible,
+`show_url()` automatically copies the URL into the clip board, when called
+from an interactive R session.
+
+
+## Known Limitations
+
+Querying athletes and results is expected to work for all sectors and
+disciplines. Querying races, however, is more difficult, since different types
+of races have their results rendered in different form on the FIS web site.
+fisdata is able to handle the results of many common types of races but it is
+expected to fail for some types that are not yet covered. For example,
+it usually cannot handle team races:
+
+```{r error = TRUE}
+query_athletes("von allmen", "franjo") %>% 
+  query_results(category = "WSC") %>% 
+  filter(discipline == "Team Combined") %>% 
+  query_race()
+```
+
+
