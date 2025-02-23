@@ -5,23 +5,34 @@
 \alias{categories}
 \title{Table of Codes for Categories}
 \format{
-A data frame with 38 rows and
+A data frame with 97 rows and
 2 variables:
 \describe{
-\item{code}{code of the category consisting of two to four capital letters
-or (in one case) digits.}
-\item{description}{clear text name of the category}
+\item{code}{code of the category. Most consist of two to four capital
+letters, but some are longer (up to 8 letters) or contain digits.}
+\item{description}{clear text description of the category}
 }
 }
 \usage{
 categories
 }
 \description{
-This dataset contains the codes for many of the race categories for which
-data can be obtained from the FIS webpage. Note that due to the structure of
-the site, it is not possible to guarantee that the table of code is complete.
-There may be other codes that are as of yet missing.
-These codes can be used to filter
-for a specific category in \code{\link[=query_results]{query_results()}}.
+This dataset contains the codes for the race categories for which
+data can be obtained from the FIS webpage.
+These codes can be used to filter for a specific category
+in \code{\link[=query_results]{query_results()}}.
+}
+\details{
+The categories are ordered as follows:
+\itemize{
+\item Olympic Games
+\item World Championships
+\item World Cups
+\item Other Cups (excluding Youth & Masters)
+\item Everything else
+}
+
+The latter two groups involve many categories that are ordered
+alphabetically by the code within the group.
 }
 \keyword{datasets}

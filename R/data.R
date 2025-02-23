@@ -45,20 +45,29 @@
 
 #' Table of Codes for Categories
 #'
-#' This dataset contains the codes for many of the race categories for which
-#' data can be obtained from the FIS webpage. Note that due to the structure of
-#' the site, it is not possible to guarantee that the table of code is complete.
-#' There may be other codes that are as of yet missing.
-#' These codes can be used to filter
-#' for a specific category in [query_results()].
+#' This dataset contains the codes for the race categories for which
+#' data can be obtained from the FIS webpage.
+#' These codes can be used to filter for a specific category
+#' in [query_results()].
 #'
 #' @format A data frame with `r nrow(categories)` rows and
 #'  `r ncol(categories)` variables:
 #' \describe{
-#' \item{code}{code of the category consisting of two to four capital letters
-#' or (in one case) digits.}
-#' \item{description}{clear text name of the category}
+#' \item{code}{code of the category. Most consist of two to four capital
+#' letters, but some are longer (up to 8 letters) or contain digits.}
+#' \item{description}{clear text description of the category}
 #' }
+#'
+#' @details
+#' The categories are ordered as follows:
+#' * Olympic Games
+#' * World Championships
+#' * World Cups
+#' * Other Cups (excluding Youth & Masters)
+#' * Everything else
+#'
+#' The latter two groups involve many categories that are ordered
+#' alphabetically by the code within the group.
 #'
 #' @keywords datasets
 

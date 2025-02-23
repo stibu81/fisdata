@@ -1,59 +1,44 @@
-# prepare table of categories This data has been manually extracted from
-# https://www.fis-ski.com/DB/general/biographies.html as follows:
-# * list athletes for a sector
-# * click on one of them to see his profile and select the tab results
-#   (https://www.fis-ski.com/DB/general/athlete-biography.html).
-# * select a category from the dropdown "Category"
-# * run the search
-# * read the code for the category from the url. It is the parameter to
-#   "categorycode", e.g. "&categorycode=EC"
-# * repeat for all categories from the drop down
-# * try other athletes from the same sector and check whether there are
-#   other categories in the dropdown.
-# * repeate with the next disicpline
-# Obviously, this procedure does not guarantee that all available categories
-# are found.
+# prepare table of categories
 
-categories <- tibble::tribble(
-    ~"code",       ~"description",
-    "WC",          "World Cup",
-    "OWG",         "Olympic Winter Games",
-    "WSC",         "World Championships",
-    "EC",          "European Cup",
-    "NAC",         "Nor-Am Cup",
-    "ANC",         "Australian New Zealand Cup",
-    "SAC",         "South American Cup",
-    "FEC",         "Far East Cup",
-    "NC",          "National Championships",
-    "SFWC",        "Ski-Flying World Championships",
-    "COC",         "Continental Cup",
-    "WJC",         "Junior World Championships",
-    "U23",         "U23 World Championships",
-    "TRA",         "Training",
-    "SWC",         "Stage World Cup",
-    "GP",          "Grand Prix",
-    "UVS",         "Universiade",
-    "UNI",         "University",
-    "ECP",         "European Cup Premium",
-    "JUN",         "Junior",
-    "JUC",         "Junior Cup",
-    "YOG",         "Youth Olympic Winter Games",
-    "NJC",         "National Junior Championships",
-    "NJR",         "National Junior Race",
-    "EYOF",        "European Youth Olympic Festival",
-    "CIT",         "FIS Citizen Race",
-    "OPN",         "Open",
-    "FC",          "FIS Cup",
-    "FIS",         "FIS",
-    "ENL",         "Entry League FIS",
-    "MA",          "Masters",
-    "FMC",         "FIS Masters Cup",
-    "WCM",         "FIS World Criterium Masters AL",
-    "OPA",         "Alpen Cup",
-    "WCQ",         "World Cup Qualification",
-    "PR",          "Provisional Round",
-    "CHI",         "Children",
-    "EXI",         "Exhibition"
-  )
+library(rvest)
+library(dplyr)
+library(stringr)
+library(waldo)
+
+url <- "https://www.fis-ski.com/DB/general/calendar-results.html"
+
+html <- read_html(url)
+options <- html %>%
+  html_element("select#categorycode") %>%
+  html_elements("option")
+categories <- tibble(
+    code = html_attr(options, "value"),
+    description = html_text(options)
+  ) %>%
+  filter(code != "") %>%
+  mutate(description = str_squish(description))
+
+# CIT has CIT as description, which is not useful. => clarify
+categories$description[categories$code == "CIT"] <- "FIS Citizen Race"
+
+# move important events to the top:
+# Olympic Games, World Championships, World Cups, other cups, everything else
+categories <- categories %>%
+  mutate(prio = case_match(code, "OWG" ~ 1, "PWG" ~ 2,
+                           "WSC" ~ 3, "SFWC" ~ 4, "ROLWSC" ~ 5,
+                           "WC" ~ 6, "COM" ~ 7, "ROLWC" ~ 8,
+                           .default = 100)) %>%
+  # try to mark allt the other cups, excluding youth events, masters,
+  # and qualifications
+  mutate(prio = if_else(
+    prio == 100 & str_detect(description, "Cup") &
+      !str_detect(description, "Junior|Youth|Masters|Qualification"),
+      10, prio
+  )) %>%
+  arrange(prio, code) %>%
+  select(-prio)
+
+# compare with the current version of the table in the package
+compare(categories, fisdata::categories)
 
 usethis::use_data(categories, overwrite = TRUE)
