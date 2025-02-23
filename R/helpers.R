@@ -124,3 +124,16 @@ standardise_colnames <- function(x) {
     stringr::str_remove_all("_(?=\\d)")
 }
 
+
+# in events, the genders that are competing are contained in a single string
+# format this to a more readable format.
+
+parse_gender_list <- function(x) {
+  x %>%
+    stringr::str_split("\n") %>%
+    purrr::map_chr(
+      \(y) intersect(y, c("M", "W")) %>%
+        sort() %>%
+        paste0(collapse = " / ")
+    )
+}

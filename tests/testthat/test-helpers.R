@@ -86,3 +86,11 @@ test_that("standardise_colnames() works", {
     c("abc", "abc", "run1", "diff_time", "run2", "fis_points")
   )
 })
+
+
+test_that("parse_gender_list() works", {
+  expect_equal(
+    parse_gender_list(c("AL\nW\nM", "AL\nW", "AL\nM", "AL\nW\nM")),
+    c("M / W", "W", "M", "M / W")
+  )
+})

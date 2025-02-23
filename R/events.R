@@ -117,7 +117,12 @@ extract_events <- function(url) {
     dplyr::bind_rows() %>%
     dplyr::mutate(event_id = event_ids)
 
-  events_df
+  # prepare output data
+  # * split date range into two dates
+  # * split event_details into categories and disciplines
+  # * convert genders to a list
+  events_df %>%
+    dplyr::mutate(genders = parse_gender_list(.data$genders))
 }
 
 
