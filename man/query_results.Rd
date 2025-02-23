@@ -25,7 +25,7 @@ support special characters, but many are handled automatically
 (see 'Details').}
 
 \item{discipline}{abbreviation for the discipline, e.g., "DH" for
-"Downhill".}
+"Downhill". See the dataset \link{disciplines} for possible values.}
 }
 \value{
 A tibble with the following columns: \code{athlete}, \code{date}, \code{place}, \code{nation},

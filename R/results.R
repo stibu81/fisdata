@@ -18,7 +18,7 @@
 #'  support special characters, but many are handled automatically
 #'  (see 'Details').
 #' @param discipline abbreviation for the discipline, e.g., "DH" for
-#'  "Downhill".
+#'  "Downhill". See the dataset [disciplines] for possible values.
 #'
 #' @details
 #' The API does not support special character in the field `place`.
