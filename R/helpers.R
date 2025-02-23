@@ -137,3 +137,86 @@ parse_gender_list <- function(x) {
         paste0(collapse = " / ")
     )
 }
+
+
+# event dates are given as a character representing a date range in one of
+# the following forms:
+# * 28 Dec-06 Jan 2024
+# * 20 Jan-01 Feb 2024
+# * 21-22 Feb 2024
+# * 30 Oct 2023
+# For events in the current season, the year is missing.
+
+parse_event_dates <- function(x) {
+
+  # 1. Remove line breaks
+  x1 <- stringr::str_remove_all(x, "\n")
+
+  # 2. Handle the cases with missing year:
+  #    * if today is between Jan-Jun:
+  #      * if date is Jan-Jun => current year
+  #      * if date is Jul-Dec => previous year
+  #    * if today is between Jul-Dec:
+  #      * if date is Jan-Jun => next year
+  #      * if date is Jul-Dec => current year
+  choy <- get_current_half_of_the_year()
+  m1 <- "(Jan|Feb|Mar|Apr|May|Jun)$"
+  m2 <- "(Jul|Aug|Sep|Oct|Nov|Dec)$"
+  x2 <- dplyr::case_when(
+    stringr::str_detect(x1, m1) ~ paste(x1, sum(choy) - 1),
+    stringr::str_detect(x1, m2) ~ paste(x1, sum(choy) - 2),
+    .default = x1
+  )
+
+  # 3. If there is no month in front of the dash, copy the month from after
+  #    the dash
+  x3 <- dplyr::case_when(
+    stringr::str_detect(x2, "\\d-") ~
+      stringr::str_replace(
+        x2, "-",
+        paste0(" ", stringr::str_extract(x2, "-\\d+ *(\\w{3})", group = 1), "-")
+      ),
+    .default = x2
+  )
+
+  # 4. Add the year to the date in front of the dash. The difficulty here is
+  #    that the range may go over new year.
+  years <- stringr::str_extract(x3, "\\d{4}") %>% as.numeric()
+  x4 <- dplyr::case_when(
+    # a range that includes new year
+    stringr::str_detect(x3, "(Nov|Dec)-\\d+ *(Jan|Feb)") ~
+      stringr::str_replace(
+        x3, "-",
+        paste0(" ", years - 1, "-")
+      ),
+    stringr::str_detect(x3, "\\w-") ~
+      # a range that does not include new year
+      stringr::str_replace(
+        x3, "-",
+        paste0(" ", years, "-")
+      ),
+    .default = x3
+  )
+
+  # 5. If there is no dash, double the day
+  x5 <- dplyr::if_else(
+    !stringr::str_detect(x4, "-"),
+    paste0(x4, "-", x4),
+    x4
+  )
+
+  # split and parse the dates
+  dates <- stringr::str_split(x5, "-")
+  dplyr::tibble(start_date = purrr::map_chr(dates, getElement, 1),
+                       end_date = purrr::map_chr(dates, getElement, 2)) %>%
+    dplyr::mutate(dplyr::across(dplyr::everything(), lubridate::dmy))
+}
+
+
+# get the current year and half of the year
+
+get_current_half_of_the_year <- function() {
+  today <- lubridate::today()
+  c(lubridate::year(today),
+    if (lubridate::month(today) <= 6) 1 else 2)
+}

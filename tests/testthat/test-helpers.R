@@ -1,5 +1,5 @@
 library(lubridate, warn.conflicts = FALSE)
-
+library(dplyr, warn.conflicts = FALSE)
 
 test_that("show_url() works", {
   local_mocked_bindings(
@@ -93,4 +93,64 @@ test_that("parse_gender_list() works", {
     parse_gender_list(c("AL\nW\nM", "AL\nW", "AL\nM", "AL\nW\nM")),
     c("M / W", "W", "M", "M / W")
   )
+})
+
+
+test_that("get_current_half_of_the_year() works", {
+  local_mocked_bindings(
+    today = function() as.Date("2023-03-07"),
+    .package = "lubridate"
+  )
+  expect_equal(get_current_half_of_the_year(), c(2023, 1))
+
+  local_mocked_bindings(
+    today = function() as.Date("2020-06-30"),
+    .package = "lubridate"
+  )
+  expect_equal(get_current_half_of_the_year(), c(2020, 1))
+
+  local_mocked_bindings(
+    today = function() as.Date("2021-11-07"),
+    .package = "lubridate"
+  )
+  expect_equal(get_current_half_of_the_year(), c(2021, 2))
+
+  local_mocked_bindings(
+    today = function() as.Date("2020-07-01"),
+    .package = "lubridate"
+  )
+  expect_equal(get_current_half_of_the_year(), c(2020, 2))
+})
+
+
+test_that("parse_event_dates() works", {
+  test_dates <- c(
+    # date ranges with year
+    "28 Dec-\n06 Jan 2024", "20 Jan-\n01 Feb 2024", "18-20 Oct 2023",
+    "30 Oct 2023",
+    # date ranges without year
+    "28 Dec-\n06 Jan", "20 Jan-\n01 Feb", "18-20 Oct", "30 Oct")
+
+  # test during the first half of the year
+  local_mocked_bindings(
+    get_current_half_of_the_year = function() c(2025, 1)
+  )
+
+  expected <- tibble(
+    start_date = as.Date(
+      c("2023-12-28", "2024-01-20", "2023-10-18", "2023-10-30",
+        "2024-12-28", "2025-01-20", "2024-10-18", "2024-10-30")
+    ),
+    end_date = as.Date(
+      c("2024-01-06", "2024-02-01", "2023-10-20", "2023-10-30",
+        "2025-01-06", "2025-02-01", "2024-10-20", "2024-10-30")
+    )
+  )
+  expect_equal(parse_event_dates(test_dates), expected)
+
+  # test during the second half of the year
+  local_mocked_bindings(
+    get_current_half_of_the_year = function() c(2024, 2)
+  )
+  expect_equal(parse_event_dates(test_dates), expected)
 })
