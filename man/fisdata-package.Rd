@@ -12,6 +12,7 @@ Query data from the web site of the International Ski and Snowboard Federation F
 Useful links:
 \itemize{
   \item \url{https://stibu81.github.io/fisdata/}
+  \item Report bugs at \url{https://github.com/stibu81/fisdata/issues}
 }
 
 }
