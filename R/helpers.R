@@ -220,7 +220,9 @@ parse_event_dates <- function(x) {
 # Split this int two columns and use "/" as separator.
 
 parse_event_details <- function(x) {
-  ed_split <- x %>% stringr::str_split("\n")
+  ed_split <- x %>%
+    stringr::str_split("\n") %>%
+    purrr::map(\(x) if (length(x) == 1) c(x, "") else x)
 
   dplyr::tibble(
       categories = purrr::map_chr(ed_split, getElement, 1),

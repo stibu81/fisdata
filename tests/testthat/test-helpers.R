@@ -165,3 +165,13 @@ test_that("parse_event_details() works", {
   )
   expect_equal(parse_event_details(event_details), expected)
 })
+
+
+test_that("parse_event_details() works for an empty string", {
+  event_details <- c("TRA • FIS\n8xDH 4xSG", "")
+  expected <- tibble(
+    categories = c("TRA / FIS", ""),
+    disciplines = c("8xDH / 4xSG", "")
+  )
+  expect_equal(parse_event_details(event_details), expected)
+})
