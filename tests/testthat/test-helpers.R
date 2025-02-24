@@ -154,3 +154,14 @@ test_that("parse_event_dates() works", {
   )
   expect_equal(parse_event_dates(test_dates), expected)
 })
+
+
+test_that("parse_event_details() works", {
+  event_details <- c("TRA • FIS\n8xDH 4xSG", "FWTP\n2xSB 2xSK",
+                     "EC • QUA\n8xPSL", "NJR\n4xSL")
+  expected <- tibble(
+    categories = c("TRA / FIS", "FWTP", "EC / QUA", "NJR"),
+    disciplines = c("8xDH / 4xSG", "2xSB / 2xSK", "8xPSL", "4xSL")
+  )
+  expect_equal(parse_event_details(event_details), expected)
+})

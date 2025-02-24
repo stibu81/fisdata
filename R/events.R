@@ -118,7 +118,8 @@ extract_events <- function(url) {
     dplyr::mutate(event_id = event_ids)
 
   # parse the event date range
-  event_dates = parse_event_dates(events_df$date)
+  event_dates <- parse_event_dates(events_df$date)
+  event_details <- parse_event_details(events_df$event_details)
 
   # prepare output data
   # * split date range into two dates
@@ -129,7 +130,11 @@ extract_events <- function(url) {
     dplyr::mutate(start_date = event_dates$start_date,
                   end_date = event_dates$end_date,
                   .before = "date") %>%
-    dplyr::select(-"date")
+    dplyr::select(-"date") %>%
+    dplyr::mutate(categories = !!event_details$categories,
+                  disciplines = !!event_details$disciplines,
+                  .before = "genders") %>%
+    dplyr::select(-"event_details")
 }
 
 

@@ -208,8 +208,36 @@ parse_event_dates <- function(x) {
   # split and parse the dates
   dates <- stringr::str_split(x5, "-")
   dplyr::tibble(start_date = purrr::map_chr(dates, getElement, 1),
-                       end_date = purrr::map_chr(dates, getElement, 2)) %>%
+                end_date = purrr::map_chr(dates, getElement, 2)) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), lubridate::dmy))
+}
+
+
+# event details are given as a character string of the following form:
+# TRA • FIS\n8xDH 4xSG
+# The first line conains the categories, the second line the disciplines
+# with a multiplier for the number of races.
+# Split this int two columns and use "/" as separator.
+
+parse_event_details <- function(x) {
+  ed_split <- x %>% stringr::str_split("\n")
+
+  dplyr::tibble(
+      categories = purrr::map_chr(ed_split, getElement, 1),
+      disciplines = purrr::map_chr(ed_split, getElement, 2)
+    ) %>%
+    dplyr::mutate(
+      categories = stringr::str_replace_all(
+          .data$categories,
+          "\\s+\u2022\\s+",
+          " / "
+        ),
+      disciplines = stringr::str_replace_all(
+          .data$disciplines,
+          " +",
+          " / "
+        )
+    )
 }
 
 
