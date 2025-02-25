@@ -159,7 +159,7 @@ parse_event_dates <- function(x) {
   #    * if today is between Jul-Dec:
   #      * if date is Jan-Jun => next year
   #      * if date is Jul-Dec => current year
-  choy <- get_current_half_of_the_year()
+  choy <- get_half_of_the_year_at_date(lubridate::today())
   m1 <- "(Jan|Feb|Mar|Apr|May|Jun)$"
   m2 <- "(Jul|Aug|Sep|Oct|Nov|Dec)$"
   x2 <- dplyr::case_when(
@@ -245,10 +245,9 @@ parse_event_details <- function(x) {
 
 # get the current year and half of the year
 
-get_current_half_of_the_year <- function() {
-  today <- lubridate::today()
-  c(lubridate::year(today),
-    if (lubridate::month(today) <= 6) 1 else 2)
+get_half_of_the_year_at_date <- function(date = lubridate::today()) {
+  c(lubridate::year(date),
+    if (lubridate::month(date) <= 6) 1 else 2)
 }
 
 

@@ -97,30 +97,11 @@ test_that("parse_gender_list() works", {
 })
 
 
-test_that("get_current_half_of_the_year() works", {
-  local_mocked_bindings(
-    today = function() as.Date("2023-03-07"),
-    .package = "lubridate"
-  )
-  expect_equal(get_current_half_of_the_year(), c(2023, 1))
-
-  local_mocked_bindings(
-    today = function() as.Date("2020-06-30"),
-    .package = "lubridate"
-  )
-  expect_equal(get_current_half_of_the_year(), c(2020, 1))
-
-  local_mocked_bindings(
-    today = function() as.Date("2021-11-07"),
-    .package = "lubridate"
-  )
-  expect_equal(get_current_half_of_the_year(), c(2021, 2))
-
-  local_mocked_bindings(
-    today = function() as.Date("2020-07-01"),
-    .package = "lubridate"
-  )
-  expect_equal(get_current_half_of_the_year(), c(2020, 2))
+test_that("get_half_of_the_year_at_date() works", {
+  expect_equal(get_half_of_the_year_at_date(as.Date("2023-03-07")), c(2023, 1))
+  expect_equal(get_half_of_the_year_at_date(as.Date("2020-06-30")), c(2020, 1))
+  expect_equal(get_half_of_the_year_at_date(as.Date("2021-11-07")), c(2021, 2))
+  expect_equal(get_half_of_the_year_at_date(as.Date("2020-07-01")), c(2020, 2))
 })
 
 
@@ -140,7 +121,7 @@ test_that("parse_event_dates() works", {
 
   # test during the first half of the year
   local_mocked_bindings(
-    get_current_half_of_the_year = function() c(2025, 1)
+    get_half_of_the_year_at_date = function(x) c(2025, 1)
   )
 
   expected <- tibble(
@@ -157,7 +138,7 @@ test_that("parse_event_dates() works", {
 
   # test during the second half of the year
   local_mocked_bindings(
-    get_current_half_of_the_year = function() c(2024, 2)
+    get_half_of_the_year_at_date = function(x) c(2024, 2)
   )
   expect_equal(parse_event_dates(test_dates), expected)
 })
