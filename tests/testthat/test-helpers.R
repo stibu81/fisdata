@@ -123,6 +123,12 @@ test_that("get_current_half_of_the_year() works", {
 })
 
 
+test_that("get_season_at_date() works", {
+  expect_equal(get_season_at_date(as.Date("2025-04-06")), 2025)
+  expect_equal(get_season_at_date(as.Date("2024-10-15")), 2025)
+})
+
+
 test_that("parse_event_dates() works", {
   test_dates <- c(
     # date ranges with year
@@ -175,3 +181,4 @@ test_that("parse_event_details() works for an empty string", {
   )
   expect_equal(parse_event_details(event_details), expected)
 })
+

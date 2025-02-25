@@ -2,7 +2,8 @@
 #'
 #' @param selection which events should be returned: past events, where results
 #'  are available ("results") or upcoming events ("upcoming") or both ("all")?
-#' @param date date at which the event takes place.
+#' @param date date at which the event takes place. This must either be a
+#'  `Date` or `POSIXct` object or a string in the format "%Y-%m-%d".
 #' @inheritParams query_athletes
 #' @inheritParams query_results
 #'
@@ -56,6 +57,14 @@ get_events_url <- function(selection = c("all", "results", "upcoming"),
 
   # gender is output as "F", but queried as "W"
   if (gender == "F") gender <- "W"
+
+  # bring the date to standard format
+  # for the date filter to work, also the season must be set explicitly
+  if (!identical(date, "")) {
+    date <- as.Date(date)
+    season <- get_season_at_date(date)
+    date <- format(date, "%d.%m.%Y")
+  }
 
   # if an invalid sector is used, the FIS-page returns results for all sectors.
   # to avoid this, catch invalid sectors here.

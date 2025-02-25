@@ -250,3 +250,12 @@ get_current_half_of_the_year <- function() {
   c(lubridate::year(today),
     if (lubridate::month(today) <= 6) 1 else 2)
 }
+
+
+get_season_at_date <- function(date = lubridate::today()) {
+  if (lubridate::month(date) <= 6) {
+    lubridate::year(date)
+  } else {
+    lubridate::year(date) + 1
+  }
+}

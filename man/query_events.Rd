@@ -37,7 +37,8 @@ support special characters, but many are handled automatically
 \item{season}{year when the season ended, i.e., 2020 stands for the season
 2019/2020. It is not possible to filter for multiple seasons at once.}
 
-\item{date}{date at which the event takes place.}
+\item{date}{date at which the event takes place. This must either be a
+\code{Date} or \code{POSIXct} object or a string in the format "\%Y-\%m-\%d".}
 }
 \value{
 A tibble.
