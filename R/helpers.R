@@ -259,3 +259,14 @@ get_season_at_date <- function(date = lubridate::today()) {
     lubridate::year(date) + 1
   }
 }
+
+
+# determine if events were cancelled
+is_cancelled <- function(table_rows) {
+  status <- table_rows %>%
+    rvest::html_elements("div.status") %>%
+    rvest::html_elements("span.status__item[title$='ancelled']") %>%
+    rvest::html_attr("title")
+
+  status == "Cancelled"
+}

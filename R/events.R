@@ -131,10 +131,12 @@ extract_events <- function(url) {
   event_details <- parse_event_details(events_df$event_details)
 
   # prepare output data
+  # * add column "cancelled"
   # * split date range into two dates
   # * split event_details into categories and disciplines
   # * convert genders to a list
   events_df %>%
+    dplyr::mutate(cancelled = is_cancelled(table_rows), .after = "genders") %>%
     dplyr::mutate(genders = parse_gender_list(.data$genders)) %>%
     dplyr::mutate(start_date = event_dates$start_date,
                   end_date = event_dates$end_date,

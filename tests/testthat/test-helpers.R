@@ -1,5 +1,6 @@
 library(lubridate, warn.conflicts = FALSE)
 library(dplyr, warn.conflicts = FALSE)
+library(rvest)
 
 test_that("show_url() works", {
   local_mocked_bindings(
@@ -182,3 +183,8 @@ test_that("parse_event_details() works for an empty string", {
   expect_equal(parse_event_details(event_details), expected)
 })
 
+
+test_that("is_cancelled() works", {
+  html <- read_html(test_path("data", "events_2025_02_01.html.gz"))
+  expect_equal(which(is_cancelled(html)), c(17, 25, 38, 42, 46, 62))
+})
