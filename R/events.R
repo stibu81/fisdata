@@ -115,9 +115,11 @@ extract_events <- function(url) {
     purrr::map(
       function(a) {
         # live events have an additional entry with the date of the event
-        # that must be removed. Because also the location appears with the
-        # marker "live" after it, we must also add the year to the pattern
-        a <- stringr::str_subset(a, "\\d{4}\nlive$", negate = TRUE)
+        # that must be removed. If present, it is the second entry and it
+        # ends with "\nlive". We cannot simply use the pattern to identify
+        # this entry, because there is also an entry with the place followed
+        # by "\nlive".
+        if (stringr::str_detect(a[2], "\nlive$")) a <- a[-2]
         a <- a[-c(1, 3, 5, 10)]
         a %>%
           tibble::as_tibble_row(.name_repair = "minimal") %>%
