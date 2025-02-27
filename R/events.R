@@ -2,8 +2,13 @@
 #'
 #' @param selection which events should be returned: past events, where results
 #'  are available ("results") or upcoming events ("upcoming") or both ("all")?
+#' @param month numeric giving the month of the year to filter for. The month
+#'  is only considered when also season is given. Not that the season runs
+#'  from July to June, such that, say, month 11 in season 2025 is translated
+#'  to November 2024.
 #' @param date date at which the event takes place. This must either be a
-#'  `Date` or `POSIXct` object or a string in the format "%Y-%m-%d".
+#'  `Date` or `POSIXct` object or a string in the format "%Y-%m-%d". If `date`
+#'   is used, `season` and `month` are ignored.
 #' @inheritParams query_athletes
 #' @inheritParams query_results
 #'
@@ -27,10 +32,11 @@ query_events <- function(selection = c("all", "results", "upcoming"),
                          gender = "",
                          place = "",
                          season = "",
+                         month = "",
                          date = "") {
 
   url <- get_events_url(selection, sector, category, discipline, gender,
-                        place, season, date)
+                        place, season, month, date)
 
   events <- extract_events(url)
 
@@ -49,6 +55,7 @@ get_events_url <- function(selection = c("all", "results", "upcoming"),
                            gender = "",
                            place = "",
                            season = "",
+                           month = "",
                            date = "",
                            error_call = rlang::caller_env()) {
 
@@ -64,6 +71,15 @@ get_events_url <- function(selection = c("all", "results", "upcoming"),
     date <- as.Date(date)
     season <- get_season_at_date(date)
     date <- format(date, "%d.%m.%Y")
+  # when date is not given, use month if combined with season
+  } else {
+    if (!identical(month, "") & !identical(season, "")) {
+      month <- if (month <= 6) {
+        paste(month,season, sep = "-")
+      } else {
+        paste(month,season - 1, sep = "-")
+      }
+    }
   }
 
   # if an invalid sector is used, the FIS-page returns results for all sectors.
@@ -78,7 +94,7 @@ get_events_url <- function(selection = c("all", "results", "upcoming"),
     "eventselection={selection}&place={replace_special_chars(place)}",
     "&sectorcode={sector}&seasoncode={season}&categorycode={category}&",
     "disciplinecode={discipline}&gendercode={gender}&racedate={date}&",
-    "racecodex=&nationcode="
+    "racecodex=&nationcode=&seasonmonth={month}"
   )
 }
 
