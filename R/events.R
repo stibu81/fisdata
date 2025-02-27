@@ -103,9 +103,9 @@ get_events_url <- function(selection = c("all", "results", "upcoming"),
   } else {
     if (!identical(month, "") & !identical(season, "")) {
       month <- if (month <= 6) {
-        paste(month,season, sep = "-")
+        paste(formatC(month, width = 2, flag = "0"), season, sep = "-")
       } else {
-        paste(month,season - 1, sep = "-")
+        paste(formatC(month, width = 2, flag = "0"), season - 1, sep = "-")
       }
     }
   }
