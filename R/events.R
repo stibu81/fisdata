@@ -136,7 +136,11 @@ extract_events <- function(url) {
 
   # if there are no rows, return an empty table
   empty_df <- get_empty_events_df()
-  if (length(table_rows) == 0) {
+  has_no_events <- table_rows %>%
+    rvest::html_text2() %>%
+    stringr::str_detect("No events found") %>%
+    any()
+  if (length(table_rows) == 0 | has_no_events) {
     return(empty_df)
   }
 
@@ -197,14 +201,15 @@ extract_events <- function(url) {
 
 get_empty_events_df <- function() {
   tibble::tibble(
-    date_from = as.Date(character()),
-    date_to = as.Date(character()),
+    start_date = as.Date(character()),
+    end_date = as.Date(character()),
     place = character(),
     nation = character(),
     sector = character(),
-    categories = list(),
-    disciplines = list(),
-    genders = list(),
+    categories = character(),
+    disciplines = character(),
+    genders = character(),
+    cancelled = logical(),
     event_id = character()
   )
 }

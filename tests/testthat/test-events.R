@@ -146,3 +146,34 @@ test_that("query_events() works when there is a live event", {
 
   expect_snapshot(print(events_live, width = Inf, n = Inf))
 })
+
+
+test_that("query_events() works with empty results", {
+  local_mocked_bindings(
+    get_events_url = function(...) test_path("data", "events_empty.html.gz")
+  )
+  empty <- query_events(sector = "SB", place = "Wengen")
+  expect_s3_class(empty, "tbl_df")
+  expect_equal(nrow(empty), 0)
+
+  expected_names <- c("start_date", "end_date", "place", "nation", "sector",
+                      "categories", "disciplines", "genders", "cancelled",
+                      "event_id")
+  expect_named(empty, expected_names)
+
+  expected_types <- rep("character", length(expected_names)) %>%
+    replace(c(1, 2, 9), c("Date", "Date", "logical"))
+  for (i in seq_along(expected_types)) {
+     if (expected_types[i] == "Date") {
+        expect_s3_class(empty[[expected_names[i]]], expected_types[i])
+      } else {
+        expect_type(empty[[expected_names[i]]], expected_types[i])
+      }
+  }
+
+  expect_equal(attr(empty, "url"), get_events_url())
+})
+
+
+# empty:
+#
