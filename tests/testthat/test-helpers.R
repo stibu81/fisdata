@@ -166,6 +166,6 @@ test_that("parse_event_details() works for an empty string", {
 
 
 test_that("is_cancelled() works", {
-  html <- read_html(test_path("data", "events_2025_02_01.html.gz"))
+  html <- read_html(test_path("data", "events_20250201.html.gz"))
   expect_equal(which(is_cancelled(html)), c(17, 25, 38, 42, 46, 62))
 })
