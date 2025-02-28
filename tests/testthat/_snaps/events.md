@@ -212,3 +212,20 @@
       66 57230   
       67 56981   
 
+# query_events() works when there is a live event
+
+    Code
+      print(events_live, width = Inf, n = Inf)
+    Output
+      # A tibble: 3 x 10
+        start_date end_date   place         nation sector categories disciplines
+        <date>     <date>     <chr>         <chr>  <chr>  <chr>      <chr>      
+      1 2025-02-20 2025-02-23 Crans Montana SUI    AL     TRA / WC   3xDH / SG  
+      2 2025-02-21 2025-02-23 Sestriere     ITA    AL     WC         SL / 2xGS  
+      3 2025-02-26 2025-03-02 Kvitfjell     NOR    AL     TRA / WC   4xDH / SG  
+        genders cancelled event_id
+        <chr>   <lgl>     <chr>   
+      1 M       FALSE     55603   
+      2 W       FALSE     55604   
+      3 W       FALSE     55605   
+
