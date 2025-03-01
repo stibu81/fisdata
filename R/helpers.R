@@ -124,3 +124,148 @@ standardise_colnames <- function(x) {
     stringr::str_remove_all("_(?=\\d)")
 }
 
+
+# in events, the genders that are competing are contained in a single string
+# format this to a more readable format.
+
+parse_gender_list <- function(x) {
+  x %>%
+    stringr::str_split("\n") %>%
+    purrr::map_chr(
+      \(y) intersect(y, c("M", "W")) %>%
+        sort() %>%
+        paste0(collapse = " / ")
+    )
+}
+
+
+# event dates are given as a character representing a date range in one of
+# the following forms:
+# * 28 Dec-06 Jan 2024
+# * 20 Jan-01 Feb 2024
+# * 21-22 Feb 2024
+# * 30 Oct 2023
+# For events in the current season, the year is missing.
+
+parse_event_dates <- function(x) {
+
+  # 1. Remove line breaks
+  x1 <- stringr::str_remove_all(x, "\n")
+
+  # 2. Handle the cases with missing year:
+  #    * if today is between Jan-Jun:
+  #      * if date is Jan-Jun => current year
+  #      * if date is Jul-Dec => previous year
+  #    * if today is between Jul-Dec:
+  #      * if date is Jan-Jun => next year
+  #      * if date is Jul-Dec => current year
+  choy <- get_half_of_the_year_at_date(lubridate::today())
+  m1 <- "(Jan|Feb|Mar|Apr|May|Jun)$"
+  m2 <- "(Jul|Aug|Sep|Oct|Nov|Dec)$"
+  x2 <- dplyr::case_when(
+    stringr::str_detect(x1, m1) ~ paste(x1, sum(choy) - 1),
+    stringr::str_detect(x1, m2) ~ paste(x1, sum(choy) - 2),
+    .default = x1
+  )
+
+  # 3. If there is no month in front of the dash, copy the month from after
+  #    the dash
+  x3 <- dplyr::case_when(
+    stringr::str_detect(x2, "\\d-") ~
+      stringr::str_replace(
+        x2, "-",
+        paste0(" ", stringr::str_extract(x2, "-\\d+ *(\\w{3})", group = 1), "-")
+      ),
+    .default = x2
+  )
+
+  # 4. Add the year to the date in front of the dash. The difficulty here is
+  #    that the range may go over new year.
+  years <- stringr::str_extract(x3, "\\d{4}") %>% as.numeric()
+  x4 <- dplyr::case_when(
+    # a range that includes new year
+    stringr::str_detect(x3, "(Nov|Dec)-\\d+ *(Jan|Feb)") ~
+      stringr::str_replace(
+        x3, "-",
+        paste0(" ", years - 1, "-")
+      ),
+    stringr::str_detect(x3, "\\w-") ~
+      # a range that does not include new year
+      stringr::str_replace(
+        x3, "-",
+        paste0(" ", years, "-")
+      ),
+    .default = x3
+  )
+
+  # 5. If there is no dash, double the day
+  x5 <- dplyr::if_else(
+    !stringr::str_detect(x4, "-"),
+    paste0(x4, "-", x4),
+    x4
+  )
+
+  # split and parse the dates
+  dates <- stringr::str_split(x5, "-")
+  dplyr::tibble(start_date = purrr::map_chr(dates, getElement, 1),
+                end_date = purrr::map_chr(dates, getElement, 2)) %>%
+    dplyr::mutate(dplyr::across(dplyr::everything(), lubridate::dmy))
+}
+
+
+# event details are given as a character string of the following form:
+# TRA • FIS\n8xDH 4xSG
+# The first line conains the categories, the second line the disciplines
+# with a multiplier for the number of races.
+# Split this int two columns and use "/" as separator.
+
+parse_event_details <- function(x) {
+  ed_split <- x %>%
+    stringr::str_split("\n") %>%
+    purrr::map(\(x) if (length(x) == 1) c(x, "") else x)
+
+  dplyr::tibble(
+      categories = purrr::map_chr(ed_split, getElement, 1),
+      disciplines = purrr::map_chr(ed_split, getElement, 2)
+    ) %>%
+    dplyr::mutate(
+      categories = stringr::str_replace_all(
+          .data$categories,
+          "\\s+\u2022\\s+",
+          " / "
+        ),
+      disciplines = stringr::str_replace_all(
+          .data$disciplines,
+          " +",
+          " / "
+        )
+    )
+}
+
+
+# get the current year and half of the year
+
+get_half_of_the_year_at_date <- function(date = lubridate::today()) {
+  c(lubridate::year(date),
+    if (lubridate::month(date) <= 6) 1 else 2)
+}
+
+
+get_season_at_date <- function(date = lubridate::today()) {
+  if (lubridate::month(date) <= 6) {
+    lubridate::year(date)
+  } else {
+    lubridate::year(date) + 1
+  }
+}
+
+
+# determine if events were cancelled
+is_cancelled <- function(table_rows) {
+  status <- table_rows %>%
+    rvest::html_elements("div.status") %>%
+    rvest::html_elements("span.status__item[title$='ancelled']") %>%
+    rvest::html_attr("title")
+
+  status == "Cancelled"
+}

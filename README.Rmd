@@ -36,12 +36,13 @@ remotes::install_github("stibu81/fisdata")
 
 ## Available Querying Functions
 
-fisdata currently offers three functions to query different types of data:
+fisdata currently offers four functions to query different types of data:
 
 * `query_athletes()`: query athletes by name and other attributes and obtain
   a table of matching athletes.
 * `query_results()`: query all race results for a single athlete.
 * `query_race()`: obtain the full results for a single race.
+* `query_events()`: query events by date, place, and other attributes.
 
 
 ## Running a Query
