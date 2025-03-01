@@ -55,6 +55,48 @@ query_race <- function(result) {
 }
 
 
+# ensure that only one result is passed on to the processing in query_race()
+ensure_one_result <- function(result, error_call = rlang::caller_env()) {
+
+  # result may be a list => make sure it is a tibble
+  result <- dplyr::as_tibble(result)
+
+  # if there are no athletes, abort
+  if (nrow(result) == 0) {
+    cli::cli_abort(
+      c("x" = "No result was passed to argument 'result'.",
+        "i" = "Pass exactly one result."),
+      call = error_call
+    )
+  }
+
+  # if there are multiple rows, warn and only keep the first one
+  if (nrow(result) > 1) {
+    result <- result[1, ]
+    cli::cli_warn(
+      c("!" = "Multiple results were passed to argument 'result'.",
+        "i" = "Only results for the first one ({result$discipline}, {result$place}) are returned."),
+      call = error_call
+    )
+  }
+
+  result
+
+}
+
+
+get_races_url <- function(result) {
+
+  race_id <- result$race_id
+  sector <- result$sector
+
+  glue::glue(
+    "{fis_db_url}/results.html?",
+    "sectorcode={sector}&raceid={race_id}"
+  )
+}
+
+
 extract_race <- function(url, error_call = rlang::caller_env()) {
 
   html <- rvest::read_html(url)
@@ -103,48 +145,6 @@ extract_race <- function(url, error_call = rlang::caller_env()) {
     ) %>%
     purrr::set_names(out_names) %>%
     dplyr::as_tibble()
-}
-
-
-# ensure that only one result is passed on to the processing in query_race()
-ensure_one_result <- function(result, error_call = rlang::caller_env()) {
-
-  # result may be a list => make sure it is a tibble
-  result <- dplyr::as_tibble(result)
-
-  # if there are no athletes, abort
-  if (nrow(result) == 0) {
-    cli::cli_abort(
-      c("x" = "No result was passed to argument 'result'.",
-        "i" = "Pass exactly one result."),
-      call = error_call
-    )
-  }
-
-  # if there are multiple rows, warn and only keep the first one
-  if (nrow(result) > 1) {
-    result <- result[1, ]
-    cli::cli_warn(
-      c("!" = "Multiple results were passed to argument 'result'.",
-        "i" = "Only results for the first one ({result$discipline}, {result$place}) are returned."),
-      call = error_call
-    )
-  }
-
-  result
-
-}
-
-
-get_races_url <- function(result) {
-
-  race_id <- result$race_id
-  sector <- result$sector
-
-  glue::glue(
-    "{fis_db_url}/results.html?",
-    "sectorcode={sector}&raceid={race_id}"
-  )
 }
 
 
