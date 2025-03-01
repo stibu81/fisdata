@@ -1,0 +1,145 @@
+#' Query Competitions
+#'
+#' @param event a list or data frame with fields/columns `event_id` and
+#'  `sector` that describe a *single* event. The easiest way to create
+#'  such a data frame is through the function [query_events()]. This function
+#'  can return multiple events, but `query_events()` only returns the
+#'  results for one event If multiple events are passed, only the first
+#'  one will be used.
+#'
+#' @export
+
+query_competitions <- function(event) {
+
+  event <- ensure_one_event(event)
+
+  url <- get_competitions_url(event)
+  competitions <- extract_competitions(url) %>%
+    dplyr::mutate(sector = event$sector, .after = "competition")
+
+  attr(competitions, "url") <- url
+
+  competitions
+
+}
+
+
+# ensure that only one event is passed on to the processing
+# in query_competitions()
+ensure_one_event <- function(event, error_call = rlang::caller_env()) {
+
+  # event may be a list => make sure it is a tibble
+  event <- dplyr::as_tibble(event)
+
+  # if there are no events, abort
+  if (nrow(event) == 0) {
+    cli::cli_abort(
+      c("x" = "No event was passed to argument 'event'.",
+        "i" = "Pass exactly one event"),
+      call = error_call
+    )
+  }
+
+  # if there are multiple rows, warn and only keep the first one
+  if (nrow(event) > 1) {
+    event <- event[1, ]
+    cli::cli_warn(
+      c("!" = "Multiple events were passed to argument 'event'.",
+        "i" = "Only results for the first one ({event$place}) are returned."),
+      call = error_call
+    )
+  }
+
+  event
+
+}
+
+
+get_competitions_url <- function(event) {
+
+  event_id <- event$event_id
+  sector <- event$sector
+
+  glue::glue(
+    "{fis_db_url}/event-details.html?",
+    "sectorcode={sector}&eventid={event_id}"
+  )
+}
+
+
+extract_competitions <- function(url) {
+
+  table_rows <- url %>%
+    rvest::read_html() %>%
+    rvest::html_element(css = "div.table__body") %>%
+    rvest::html_elements(css = "div.table-row")
+
+  # if there are no rows, return an empty table
+  empty_df <- get_empty_competitions_df()
+  if (length(table_rows) == 0) {
+    return(empty_df)
+  }
+
+  # here, simply extracting the text from the containers does not work.
+  # So, we first extract the containers here.
+  containers <- table_rows %>%
+    rvest::html_elements(css = "div.container")
+
+  # extract date and time separately, because date-time is empty for cancelled
+  # race
+  date <- containers %>%
+    rvest::html_element("div.timezone-date") %>%
+    rvest::html_attr("data-date") %>%
+    as.Date()
+  time <- containers %>%
+    rvest::html_element("div.timezone-date") %>%
+    rvest::html_attr("data-time") %>%
+    dplyr::if_else(. == "", NA_character_, .)
+
+  competition_types <- containers %>%
+    rvest::html_element("div.clip") %>%
+      rvest::html_text2()
+
+  categories <- containers %>%
+    rvest::html_element("div.g-row") %>%
+    rvest::html_element("a.g-sm-8") %>%
+    rvest::html_element("div.g-row") %>%
+    rvest::html_element("div.g-xs-12") %>%
+    rvest::html_text2()
+
+  gender <- containers %>%
+    rvest::html_element("div.gender__item") %>%
+    rvest::html_text2()
+
+  # the race-id is required in order to query the results of the race
+  # it is only contained in the link
+  race_ids <- containers %>%
+    rvest::html_element("a") %>%
+    rvest::html_attr("href") %>%
+    stringr::str_extract("raceid=(\\d+)", group = 1)
+
+  # create data frame
+  dplyr::tibble(
+    date = date,
+    time = time,
+    competition = competition_types,
+    category = categories,
+    gender = gender,
+    cancelled = is_cancelled(table_rows),
+    race_id = race_ids
+  )
+}
+
+
+get_empty_competitions_df <- function() {
+  tibble::tibble(
+    date = as.Date(character()),
+    time = character(),
+    competition = character(),
+    sector = character(),
+    category = character(),
+    gender = character(),
+    cancelled = logical(),
+    race_id = character()
+  )
+}
