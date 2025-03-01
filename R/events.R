@@ -45,6 +45,7 @@
 #' query_events(sector = "JP", discipline = "LH", season = 2021)
 #'
 #' # query cross country events on 2023-03-07
+#' query_events(sector = "CC", date = "2023-03-07")
 #'
 #' # calling query_events() without any argument returns all events from the
 #' # current month
