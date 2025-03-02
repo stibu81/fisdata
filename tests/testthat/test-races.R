@@ -52,7 +52,7 @@ test_that("query_race() works for an alpine skiing world cup race", {
     if (expected_types[i] == "Period") {
       expect_s4_class(wengen_dh[[expected_names[i]]], expected_types[i])
     } else {
-      expect_type(wengen_dh[[expected_names[i]]], expected_types[i])
+      expect_type(wengen_dh[[!!expected_names[i]]], expected_types[i])
     }
   }
 
@@ -108,7 +108,7 @@ test_that(
       if (expected_types[i] == "Period") {
         expect_s4_class(chuenis_gs[[expected_names[i]]], expected_types[i])
       } else {
-        expect_type(chuenis_gs[[expected_names[i]]], expected_types[i])
+        expect_type(chuenis_gs[[!!expected_names[i]]], expected_types[i])
       }
     }
 
@@ -161,7 +161,7 @@ test_that("query_race() works for an alpine skiing parallel race", {
   expected_types <- c("integer", "integer", "character", "character",
                       "integer", "character", "double")
   for (i in seq_along(expected_types)) {
-    expect_type(chamonix_par[[expected_names[i]]], expected_types[i])
+    expect_type(chamonix_par[[!!expected_names[i]]], expected_types[i])
   }
 
   expect_in(chamonix_par$rank, 1:nrow(chamonix_par))
@@ -206,7 +206,7 @@ test_that(
       if (expected_types[i] == "Period") {
         expect_s4_class(wsc_dh[[expected_names[i]]], expected_types[i])
       } else {
-        expect_type(wsc_dh[[expected_names[i]]], expected_types[i])
+        expect_type(wsc_dh[[!!expected_names[i]]], expected_types[i])
       }
     }
 
@@ -258,7 +258,7 @@ test_that("query_race() works for an alpine skiing downhill training", {
     if (expected_types[i] == "Period") {
       expect_s4_class(wengen_training[[expected_names[i]]], expected_types[i])
     } else {
-      expect_type(wengen_training[[expected_names[i]]], expected_types[i])
+      expect_type(wengen_training[[!!expected_names[i]]], expected_types[i])
     }
   }
 
@@ -308,7 +308,7 @@ test_that("query_race() works for a cross-country world cup race", {
     if (expected_types[i] == "Period") {
       expect_s4_class(oslo_cc[[expected_names[i]]], expected_types[i])
     } else {
-      expect_type(oslo_cc[[expected_names[i]]], expected_types[i])
+      expect_type(oslo_cc[[!!expected_names[i]]], expected_types[i])
     }
   }
 
@@ -362,7 +362,7 @@ test_that("query_race() works for a telemark world cup race", {
     if (expected_types[i] == "Period") {
       expect_s4_class(samoens_tm[[expected_names[i]]], expected_types[i])
     } else {
-      expect_type(samoens_tm[[expected_names[i]]], expected_types[i])
+      expect_type(samoens_tm[[!!expected_names[i]]], expected_types[i])
     }
   }
 
@@ -407,7 +407,7 @@ test_that("query_race() works for a ski jumping event", {
   expected_types <- c("integer", "integer", "character", "character",
                       "integer", "character", "double", "double")
   for (i in seq_along(expected_types)) {
-    expect_type(vancouver_jp[[expected_names[i]]], expected_types[i])
+    expect_type(vancouver_jp[[!!expected_names[i]]], expected_types[i])
   }
 
   expect_in(vancouver_jp$rank, 1:nrow(vancouver_jp))
@@ -453,7 +453,7 @@ test_that("query_race() works for a snowbard halfpipe event", {
   expected_types <- c("integer", "integer", "character", "character",
                       "integer", "character", "double", "double", "double")
   for (i in seq_along(expected_types)) {
-    expect_type(laax_sb[[expected_names[i]]], expected_types[i])
+    expect_type(laax_sb[[!!expected_names[i]]], expected_types[i])
   }
 
   expect_in(laax_sb$rank, 1:nrow(laax_sb))
@@ -502,7 +502,7 @@ test_that("query_race() works for a freestyle ski cross event", {
     if (expected_types[i] == "Period") {
       expect_s4_class(craigleith_sc[[expected_names[i]]], expected_types[i])
     } else {
-      expect_type(craigleith_sc[[expected_names[i]]], expected_types[i])
+      expect_type(craigleith_sc[[!!expected_names[i]]], expected_types[i])
     }
   }
 
@@ -546,7 +546,7 @@ test_that("query_race() works for a nordic combined world cup race", {
     if (expected_types[i] == "Period") {
       expect_s4_class(lillehammer_nk[[expected_names[i]]], expected_types[i])
     } else {
-      expect_type(lillehammer_nk[[expected_names[i]]], expected_types[i])
+      expect_type(lillehammer_nk[[!!expected_names[i]]], expected_types[i])
     }
   }
 
@@ -641,7 +641,7 @@ test_that("query_race() works for empty result", {
   expected_types <- c("integer", "integer", "character",
                       "character", "integer", "character")
   for (i in seq_along(expected_types)) {
-    expect_type(empty[[expected_names[i]]], expected_types[i])
+    expect_type(empty[[!!expected_names[i]]], expected_types[i])
   }
 
   expect_equal(attr(empty, "url"), get_races_url())

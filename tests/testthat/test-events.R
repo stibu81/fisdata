@@ -67,9 +67,9 @@ test_that("query_events() works with events from many sectors", {
     replace(c(1, 2, 9), c("Date", "Date", "logical"))
   for (i in seq_along(expected_types)) {
      if (expected_types[i] == "Date") {
-        expect_s3_class(events_20250201[[expected_names[i]]], expected_types[i])
+        expect_s3_class(events_20250201[[!!expected_names[i]]], expected_types[i])
       } else {
-        expect_type(events_20250201[[expected_names[i]]], expected_types[i])
+        expect_type(events_20250201[[!!expected_names[i]]], expected_types[i])
       }
   }
 
@@ -114,9 +114,9 @@ test_that("query_events() works when there is a live event", {
     replace(c(1, 2, 9), c("Date", "Date", "logical"))
   for (i in seq_along(expected_types)) {
      if (expected_types[i] == "Date") {
-        expect_s3_class(events_live[[expected_names[i]]], expected_types[i])
+        expect_s3_class(events_live[[!!expected_names[i]]], expected_types[i])
       } else {
-        expect_type(events_live[[expected_names[i]]], expected_types[i])
+        expect_type(events_live[[!!expected_names[i]]], expected_types[i])
       }
   }
 
@@ -165,9 +165,9 @@ test_that("query_events() works with empty results", {
     replace(c(1, 2, 9), c("Date", "Date", "logical"))
   for (i in seq_along(expected_types)) {
      if (expected_types[i] == "Date") {
-        expect_s3_class(empty[[expected_names[i]]], expected_types[i])
+        expect_s3_class(empty[[!!expected_names[i]]], expected_types[i])
       } else {
-        expect_type(empty[[expected_names[i]]], expected_types[i])
+        expect_type(empty[[!!expected_names[i]]], expected_types[i])
       }
   }
 
