@@ -2,15 +2,15 @@
 #'
 #' Query all the competitions, i.e., individual races, for a given event.
 #'
-#' @param event a list or data frame with fields/columns `event_id` and
-#'  `sector` that describe a *single* event. The easiest way to create
-#'  such a data frame is through the function [query_events()]. This function
-#'  can return multiple events, but `query_events()` only returns the
-#'  results for one event If multiple events are passed, only the first
-#'  one will be used.
+#' @param event a list or data frame with fields/columns `event_id`,
+#'  `sector` and `place` that describe a *single* event. The easiest way to
+#'  create such a data frame is through the function [query_events()].
+#'  This function can return multiple events, but `query_events()` only
+#'  returns the results for one event If multiple events are passed, only
+#'  the first one will be used.
 #'
 #' @returns
-#' A tibble with at least the following columns: `date`, `time`, `competition`,
+#' A tibble with the following columns: `place`, `date`, `time`, `competition`,
 #' `sector`, `category`, `gender`, and `race_id`.
 #'
 #' @examples
@@ -31,7 +31,8 @@ query_competitions <- function(event) {
 
   url <- get_competitions_url(event)
   competitions <- extract_competitions(url) %>%
-    dplyr::mutate(sector = event$sector, .after = "competition")
+    dplyr::mutate(sector = event$sector, .after = "competition") %>%
+    dplyr::mutate(place = event$place, .before = "date")
 
   attr(competitions, "url") <- url
 

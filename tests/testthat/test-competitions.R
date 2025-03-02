@@ -34,12 +34,12 @@ test_that("query_competitions() works for an apline skiing event", {
 
   expect_s3_class(competitions, "tbl_df")
 
-  expected_names <- c("date", "time", "competition", "sector", "category",
-                      "gender", "cancelled", "race_id")
+  expected_names <- c("place", "date", "time", "competition", "sector",
+                      "category", "gender", "cancelled", "race_id")
   expect_named(competitions, expected_names)
 
-  expected_types <- rep("character", 8) %>%
-    replace(c(1, 7), c("Date", "logical"))
+  expected_types <- rep("character", 9) %>%
+    replace(c(2, 8), c("Date", "logical"))
   for (i in seq_along(expected_types)) {
     if (expected_types[i] == "Date") {
         expect_s3_class(competitions[[expected_names[i]]], expected_types[i])
@@ -73,12 +73,12 @@ test_that("query_competitions() works for a ski jumping event", {
 
   expect_s3_class(competitions, "tbl_df")
 
-  expected_names <- c("date", "time", "competition", "sector", "category",
-                      "gender", "cancelled", "race_id")
+  expected_names <- c("place", "date", "time", "competition", "sector",
+                      "category", "gender", "cancelled", "race_id")
   expect_named(competitions, expected_names)
 
-  expected_types <- rep("character", 8) %>%
-    replace(c(1, 7), c("Date", "logical"))
+  expected_types <- rep("character", 9) %>%
+    replace(c(2, 8), c("Date", "logical"))
   for (i in seq_along(expected_types)) {
     if (expected_types[i] == "Date") {
         expect_s3_class(competitions[[expected_names[i]]], expected_types[i])
@@ -112,12 +112,12 @@ test_that("query_competitions() works for a cross-country event", {
 
   expect_s3_class(competitions, "tbl_df")
 
-  expected_names <- c("date", "time", "competition", "sector", "category",
-                      "gender", "cancelled", "race_id")
+  expected_names <- c("place", "date", "time", "competition", "sector",
+                      "category", "gender", "cancelled", "race_id")
   expect_named(competitions, expected_names)
 
-  expected_types <- rep("character", 8) %>%
-    replace(c(1, 7), c("Date", "logical"))
+  expected_types <- rep("character", 9) %>%
+    replace(c(2, 8), c("Date", "logical"))
   for (i in seq_along(expected_types)) {
     if (expected_types[i] == "Date") {
         expect_s3_class(competitions[[expected_names[i]]], expected_types[i])
@@ -146,18 +146,18 @@ test_that("query_competitions() works for empty result", {
   local_mocked_bindings(
     get_competitions_url = function(...) test_path("data", "competitions_empty.html.gz")
   )
-  event <- tibble(sector = "AL", race_id = 35678943)
+  event <- tibble(sector = "AL", place = "Wengen", race_id = 35678943)
   empty <- query_competitions(event)
 
   expect_s3_class(empty, "tbl_df")
   expect_equal(nrow(empty), 0)
 
-  expected_names <- c("date", "time", "competition", "sector", "category",
-                      "gender", "cancelled", "race_id")
+  expected_names <- c("place", "date", "time", "competition", "sector",
+                      "category", "gender", "cancelled", "race_id")
   expect_named(empty, expected_names)
 
-  expected_types <- rep("character", 8) %>%
-    replace(c(1, 7), c("Date", "logical"))
+  expected_types <- rep("character", 9) %>%
+    replace(c(2, 8), c("Date", "logical"))
   for (i in seq_along(expected_types)) {
     if (expected_types[i] == "Date") {
         expect_s3_class(empty[[expected_names[i]]], expected_types[i])
