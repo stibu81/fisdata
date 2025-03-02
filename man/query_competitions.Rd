@@ -14,6 +14,21 @@ can return multiple events, but \code{query_events()} only returns the
 results for one event If multiple events are passed, only the first
 one will be used.}
 }
+\value{
+A tibble with at least the following columns: \code{date}, \code{time}, \code{competition},
+\code{sector}, \code{category}, \code{gender}, and \code{race_id}.
+}
 \description{
-Query Competitions
+Query all the competitions, i.e., individual races, for a given event.
+}
+\examples{
+\dontrun{
+# find the Wengen alpine skiing races from the season 2024/2025
+wengen_2025 <- query_events(sector = "AL", place = "wengen",
+                            category = "WC", season = 2025)
+
+# get all the races that took place during the event
+query_competitions(wengen_2025)
+}
+
 }

@@ -47,5 +47,4 @@ odermatt_res[1, ]
 query_race(odermatt_res[1, ])
 }
 
-
 }

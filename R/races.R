@@ -39,7 +39,6 @@
 #' query_race(odermatt_res[1, ])
 #' }
 #'
-#'
 #' @export
 
 query_race <- function(result) {
