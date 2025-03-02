@@ -77,19 +77,13 @@ test_that("query_events() works with events from many sectors", {
   expect_gte(min(events_20250201$end_date), date)
   expect_in(events_20250201$nation, nations$code)
   expect_in(events_20250201$sector, sectors$code)
-  expect_true(
-    all(str_detect(events_20250201$categories, "^[A-Z]{2,5}( / [A-Z]{2,5})*$"))
-  )
-  expect_true(
-    all(
-      str_detect(
-        events_20250201$disciplines,
-        "^([0-9]{1,2}x)?[A-Za-z0-9]{2,6}( / ([0-9]{1,2}x)?[A-Za-z0-9]{2,6})*$"
-      )
-    )
+  expect_match(events_20250201$categories, "^[A-Z]{2,5}( / [A-Z]{2,5})*$")
+  expect_match(
+    events_20250201$disciplines,
+    "^([0-9]{1,2}x)?[A-Za-z0-9]{2,6}( / ([0-9]{1,2}x)?[A-Za-z0-9]{2,6})*$"
   )
   expect_in(events_20250201$genders, c("M", "W", "M / W"))
-  expect_true(all(str_detect(events_20250201$event_id, "^[0-9]+$")))
+  expect_match(events_20250201$event_id, "^[0-9]+$")
 
   expect_equal(attr(events_20250201, "url"), get_events_url())
 
@@ -128,19 +122,13 @@ test_that("query_events() works when there is a live event", {
   )
   expect_in(events_live$nation, nations$code)
   expect_in(events_live$sector, "AL")
-  expect_true(
-    all(str_detect(events_live$categories, "^[A-Z]{2,5}( / [A-Z]{2,5})*$"))
-  )
-  expect_true(
-    all(
-      str_detect(
-        events_live$disciplines,
-        "^([0-9]{1,2}x)?[A-Za-z0-9]{2,6}( / ([0-9]{1,2}x)?[A-Za-z0-9]{2,6})*$"
-      )
-    )
+  expect_match(events_live$categories, "^[A-Z]{2,5}( / [A-Z]{2,5})*$")
+  expect_match(
+    events_live$disciplines,
+    "^([0-9]{1,2}x)?[A-Za-z0-9]{2,6}( / ([0-9]{1,2}x)?[A-Za-z0-9]{2,6})*$"
   )
   expect_in(events_live$genders, c("M", "W", "M / W"))
-  expect_true(all(str_detect(events_live$event_id, "^[0-9]+$")))
+  expect_match(events_live$event_id, "^[0-9]+$")
 
   expect_equal(attr(events_live, "url"), get_events_url())
 
@@ -173,7 +161,3 @@ test_that("query_events() works with empty results", {
 
   expect_equal(attr(empty, "url"), get_events_url())
 })
-
-
-# empty:
-#
