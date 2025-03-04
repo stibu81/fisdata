@@ -63,9 +63,9 @@ test_that(
       replace(c(2, 8:10), c("Date", "integer", "double", "double"))
     for (i in seq_along(expected_types)) {
       if (expected_types[i] == "Date") {
-        expect_s3_class(dh[[expected_names[i]]], expected_types[i])
+        expect_s3_class(dh[[!!expected_names[i]]], expected_types[i])
       } else {
-        expect_type(dh[[expected_names[i]]], expected_types[i])
+        expect_type(dh[[!!expected_names[i]]], expected_types[i])
       }
     }
 
@@ -113,9 +113,9 @@ test_that(
       replace(c(2, 8:10), c("Date", "integer", "double", "double"))
     for (i in seq_along(expected_types)) {
       if (expected_types[i] == "Date") {
-        expect_s3_class(tra[[expected_names[i]]], expected_types[i])
+        expect_s3_class(tra[[!!expected_names[i]]], expected_types[i])
       } else {
-        expect_type(tra[[expected_names[i]]], expected_types[i])
+        expect_type(tra[[!!expected_names[i]]], expected_types[i])
       }
     }
 
@@ -164,9 +164,9 @@ test_that(
       replace(c(2, 8:10), c("Date", "integer", "double", "double"))
     for (i in seq_along(expected_types)) {
       if (expected_types[i] == "Date") {
-        expect_s3_class(wsc[[expected_names[i]]], expected_types[i])
+        expect_s3_class(wsc[[!!expected_names[i]]], expected_types[i])
       } else {
-        expect_type(wsc[[expected_names[i]]], expected_types[i])
+        expect_type(wsc[[!!expected_names[i]]], expected_types[i])
       }
     }
 
@@ -210,9 +210,9 @@ test_that(
       replace(c(2, 8:10), c("Date", "integer", "double", "double"))
     for (i in seq_along(expected_types)) {
       if (expected_types[i] == "Date") {
-        expect_s3_class(empty[[expected_names[i]]], expected_types[i])
+        expect_s3_class(empty[[!!expected_names[i]]], expected_types[i])
       } else {
-        expect_type(empty[[expected_names[i]]], expected_types[i])
+        expect_type(empty[[!!expected_names[i]]], expected_types[i])
       }
     }
 

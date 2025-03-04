@@ -4,15 +4,15 @@
 \alias{query_race}
 \title{Query Race}
 \usage{
-query_race(result)
+query_race(competition)
 }
 \arguments{
-\item{result}{a list or data frame with fields/columns \code{race_id} and
+\item{competition}{a list or data frame with fields/columns \code{race_id} and
 \code{sector} that describe a \emph{single} race. The easiest way to create
-such a data frame is through the function \code{\link[=query_results]{query_results()}}. This function
-can return multiple results, but \code{query_race()} only returns the
-results for one race. If multiple results are passed, only the first
-one will be used.}
+such a data frame is through the functions \code{\link[=query_results]{query_results()}} or
+\code{\link[=query_competitions]{query_competitions()}}. These functions can return multiple competitions,
+but \code{query_race()} only returns the results for one race.
+If multiple competitions are passed, only the first one will be used.}
 }
 \value{
 A tibble with at least the following columns: \code{rank}, \code{bib}, \code{fis_code},
@@ -45,7 +45,17 @@ odermatt_res[1, ]
 
 # get the full results for this race
 query_race(odermatt_res[1, ])
-}
 
+# Or we can start by querying for an event. The following finds the
+# competitions for Wengen 2025
+wengen2025 <- query_events(sector = "AL", place = "Wengen", season = 2025)
+wengen2025_competitions <- query_competitions(wengen2025)
+
+# get the full results for the downhill competition
+library(dplyr)
+wengen2025_competitions \%>\%
+  filter(competition == "Downhill") \%>\%
+  query_race()
+}
 
 }

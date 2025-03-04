@@ -43,6 +43,8 @@ fisdata currently offers four functions to query different types of data:
 * `query_results()`: query all race results for a single athlete.
 * `query_race()`: obtain the full results for a single race.
 * `query_events()`: query events by date, place, and other attributes.
+* `query_competitions()`: obtain all individual competitions that are
+  associated with an event.
 
 
 ## Running a Query
@@ -88,6 +90,33 @@ wengen_res <- cuche_res %>%
   head(n = 1) %>%
   query_race()
 wengen_res
+```
+
+Alternatively, you may start by querying for an event. This finds the
+Wengen races from the season 2024/25:
+
+```{r}
+wengen2025 <- query_events(sector = "AL", place = "wengen", season = 2025)
+wengen2025
+```
+
+The result includes the `event_id`, which is required as input in order
+to query all the competitions that took place during this event:
+
+```{r}
+wengen_races <- query_competitions(wengen2025)
+wengen_races
+```
+
+This table now allows to query for the full race results (similar to the output
+from `query_results()`). For example, the results for the Super G can be
+obtained as follows:
+
+```{r}
+sg_res <- wengen_races %>% 
+  filter(competition == "Super G") %>% 
+  query_race()
+sg_res
 ```
 
 Note that the objects created by the querying functions always include the

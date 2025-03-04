@@ -2,12 +2,12 @@
 #'
 #' Query full results for a race.
 #'
-#' @param result a list or data frame with fields/columns `race_id` and
+#' @param competition a list or data frame with fields/columns `race_id` and
 #'  `sector` that describe a *single* race. The easiest way to create
-#'  such a data frame is through the function [query_results()]. This function
-#'  can return multiple results, but `query_race()` only returns the
-#'  results for one race. If multiple results are passed, only the first
-#'  one will be used.
+#'  such a data frame is through the functions [query_results()] or
+#'  [`query_competitions()`]. These functions can return multiple competitions,
+#'  but `query_race()` only returns the results for one race.
+#'  If multiple competitions are passed, only the first one will be used.
 #'
 #' @details
 #' Different types of races may have very different way to display the results.
@@ -37,16 +37,26 @@
 #'
 #' # get the full results for this race
 #' query_race(odermatt_res[1, ])
-#' }
 #'
+#' # Or we can start by querying for an event. The following finds the
+#' # competitions for Wengen 2025
+#' wengen2025 <- query_events(sector = "AL", place = "Wengen", season = 2025)
+#' wengen2025_competitions <- query_competitions(wengen2025)
+#'
+#' # get the full results for the downhill competition
+#' library(dplyr)
+#' wengen2025_competitions %>%
+#'   filter(competition == "Downhill") %>%
+#'   query_race()
+#' }
 #'
 #' @export
 
-query_race <- function(result) {
+query_race <- function(competition) {
 
-  result <- ensure_one_result(result)
+  competition <- ensure_one_result(competition)
 
-  url <- get_races_url(result)
+  url <- get_races_url(competition)
   race <- extract_race(url)
 
   attr(race, "url") <- url
