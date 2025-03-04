@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">fisdata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,6 +72,8 @@
 <code><a href="reference/query_race.html">query_race()</a></code>: obtain the full results for a single race.</li>
 <li>
 <code><a href="reference/query_events.html">query_events()</a></code>: query events by date, place, and other attributes.</li>
+<li>
+<code><a href="reference/query_competitions.html">query_competitions()</a></code>: obtain all individual competitions that are associated with an event.</li>
 </ul>
 </div>
 <div class="section level2">
@@ -131,8 +133,51 @@
 <span><span class="co">#&gt;  9     8    11 50753    Kroell Klaus             1980 AUT    1M 51.79S 1.48S    </span></span>
 <span><span class="co">#&gt; 10    10    25 293006   Innerhofer Christ…       1984 ITA    1M 51.85S 1.54S    </span></span>
 <span><span class="co">#&gt; # ℹ 60 more rows</span></span></code></pre></div>
-<p>Note that the objects created by the querying functions always include the URL that was downloaded. This URL can be obtained as follows:</p>
+<p>Alternatively, you may start by querying for an event. This finds the Wengen races from the season 2024/25:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">wengen2025</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/query_events.html">query_events</a></span><span class="op">(</span>sector <span class="op">=</span> <span class="st">"AL"</span>, place <span class="op">=</span> <span class="st">"wengen"</span>, season <span class="op">=</span> <span class="fl">2025</span><span class="op">)</span></span>
+<span><span class="va">wengen2025</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 10</span></span>
+<span><span class="co">#&gt;   start_date end_date   place  nation sector categories disciplines    genders</span></span>
+<span><span class="co">#&gt;   &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;          &lt;chr&gt;  </span></span>
+<span><span class="co">#&gt; 1 2025-01-14 2025-01-19 Wengen SUI    AL     TRA / WC   4xDH / SL / SG M      </span></span>
+<span><span class="co">#&gt; # ℹ 2 more variables: cancelled &lt;lgl&gt;, event_id &lt;chr&gt;</span></span></code></pre></div>
+<p>The result includes the <code>event_id</code>, which is required as input in order to query all the competitions that took place during this event:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">wengen_races</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/query_competitions.html">query_competitions</a></span><span class="op">(</span><span class="va">wengen2025</span><span class="op">)</span></span>
+<span><span class="va">wengen_races</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 9</span></span>
+<span><span class="co">#&gt;   place  date       time  competition   sector category gender cancelled race_id</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;date&gt;     &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;  &lt;lgl&gt;     &lt;chr&gt;  </span></span>
+<span><span class="co">#&gt; 1 Wengen 2025-01-14 12:30 Downhill Tra… AL     TRA      M      FALSE     122804 </span></span>
+<span><span class="co">#&gt; 2 Wengen 2025-01-15 12:30 Downhill Tra… AL     TRA      M      FALSE     122805 </span></span>
+<span><span class="co">#&gt; 3 Wengen 2025-01-16 &lt;NA&gt;  Downhill Tra… AL     TRA      M      TRUE      122806 </span></span>
+<span><span class="co">#&gt; 4 Wengen 2025-01-17 12:30 Super G       AL     WC       M      FALSE     122807 </span></span>
+<span><span class="co">#&gt; 5 Wengen 2025-01-18 12:45 Downhill      AL     WC       M      FALSE     122808 </span></span>
+<span><span class="co">#&gt; 6 Wengen 2025-01-19 10:15 Slalom        AL     WC       M      FALSE     122809</span></span></code></pre></div>
+<p>This table now allows to query for the full race results (similar to the output from <code><a href="reference/query_results.html">query_results()</a></code>). For example, the results for the Super G can be obtained as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sg_res</span> <span class="op">&lt;-</span> <span class="va">wengen_races</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">competition</span> <span class="op">==</span> <span class="st">"Super G"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="reference/query_race.html">query_race</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">sg_res</span></span>
+<span><span class="co">#&gt; # A tibble: 47 × 11</span></span>
+<span><span class="co">#&gt;     rank   bib fis_code name         brand birth_year nation time      diff_time</span></span>
+<span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;      &lt;int&gt; &lt;chr&gt;  &lt;Period&gt;  &lt;Period&gt; </span></span>
+<span><span class="co">#&gt;  1     1     3 512471   Von Allmen … Head        2001 SUI    1M 47.65S 0S       </span></span>
+<span><span class="co">#&gt;  2     2     6 53980    Kriechmayr … Head        1991 AUT    1M 47.75S 0.1S     </span></span>
+<span><span class="co">#&gt;  3     3    11 512038   Rogentin St… Fisc…       1994 SUI    1M 48.23S 0.58S    </span></span>
+<span><span class="co">#&gt;  4     4     1 104531   Crawford Ja… Head        1997 CAN    1M 48.27S 0.62S    </span></span>
+<span><span class="co">#&gt;  5     5     9 291459   Paris Domin… Nord…       1989 ITA    1M 48.28S 0.63S    </span></span>
+<span><span class="co">#&gt;  6     6     8 990081   Casse Mattia Ross…       1990 ITA    1M 48.57S 0.92S    </span></span>
+<span><span class="co">#&gt;  7     7    13 512269   Odermatt Ma… Stoe…       1997 SUI    1M 48.69S 1.04S    </span></span>
+<span><span class="co">#&gt;  8     8    16 104537   Alexander C… Ross…       1997 CAN    1M 48.78S 1.13S    </span></span>
+<span><span class="co">#&gt;  9     9     2 512408   Monney Alex… Stoe…       2000 SUI    1M 48.92S 1.27S    </span></span>
+<span><span class="co">#&gt; 10    10    26 54628    Feurstein L… Head        2001 AUT    1M 48.97S 1.32S    </span></span>
+<span><span class="co">#&gt; # ℹ 37 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 2 more variables: fis_points &lt;dbl&gt;, cup_points &lt;dbl&gt;</span></span></code></pre></div>
+<p>Note that the objects created by the querying functions always include the URL that was downloaded. This URL can be obtained as follows:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/show_url.html">show_url</a></span><span class="op">(</span><span class="va">cuche_res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; https://www.fis-ski.com/DB/general/athlete-biography.html?sectorcode=AL&amp;seasoncode=&amp;competitorid=11795&amp;type=result&amp;categorycode=&amp;sort=&amp;place=&amp;disciplinecode=DH&amp;position=&amp;limit=2000</span></span></code></pre></div>
 <p>You can copy this address into a browser in order to see the same data as they are presented on the FIS web site. To make this as easy as possible, <code><a href="reference/show_url.html">show_url()</a></code> automatically copies the URL into the clip board, when called from an interactive R session.</p>
@@ -141,7 +186,7 @@
 <h2 id="known-limitations">Known Limitations<a class="anchor" aria-label="anchor" href="#known-limitations"></a>
 </h2>
 <p>Querying athletes and results is expected to work for all sectors and disciplines. Querying races, however, is more difficult, since different types of races have their results rendered in different form on the FIS web site. fisdata is able to handle the results of many common types of races but it is expected to fail for some types that are not yet covered. For example, it usually cannot handle team races:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/query_athletes.html">query_athletes</a></span><span class="op">(</span><span class="st">"von allmen"</span>, <span class="st">"franjo"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/query_results.html">query_results</a></span><span class="op">(</span>category <span class="op">=</span> <span class="st">"WSC"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">discipline</span> <span class="op">==</span> <span class="st">"Team Combined"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
