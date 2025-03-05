@@ -40,7 +40,7 @@ test_that("query_competitions() works for an apline skiing event", {
 
   expected_types <- rep("character", 9) %>%
     replace(c(2, 8), c("Date", "logical"))
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Date") {
         expect_s3_class(competitions[[expected_names[i]]], expected_types[i])
       } else {
@@ -79,7 +79,7 @@ test_that("query_competitions() works for a ski jumping event", {
 
   expected_types <- rep("character", 9) %>%
     replace(c(2, 8), c("Date", "logical"))
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Date") {
         expect_s3_class(competitions[[expected_names[i]]], expected_types[i])
       } else {
@@ -118,7 +118,7 @@ test_that("query_competitions() works for a cross-country event", {
 
   expected_types <- rep("character", 9) %>%
     replace(c(2, 8), c("Date", "logical"))
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Date") {
         expect_s3_class(competitions[[expected_names[i]]], expected_types[i])
       } else {
@@ -158,7 +158,7 @@ test_that("query_competitions() works for empty result", {
 
   expected_types <- rep("character", 9) %>%
     replace(c(2, 8), c("Date", "logical"))
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Date") {
         expect_s3_class(empty[[expected_names[i]]], expected_types[i])
       } else {

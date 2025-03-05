@@ -61,7 +61,7 @@ test_that(
 
     expected_types <- rep("character", 11) %>%
       replace(c(2, 8:10), c("Date", "integer", "double", "double"))
-    for (i in seq_along(expected_types)) {
+    for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Date") {
         expect_s3_class(dh[[!!expected_names[i]]], expected_types[i])
       } else {
@@ -111,7 +111,7 @@ test_that(
 
     expected_types <- rep("character", 11) %>%
       replace(c(2, 8:10), c("Date", "integer", "double", "double"))
-    for (i in seq_along(expected_types)) {
+    for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Date") {
         expect_s3_class(tra[[!!expected_names[i]]], expected_types[i])
       } else {
@@ -162,7 +162,7 @@ test_that(
 
     expected_types <- rep("character", 11) %>%
       replace(c(2, 8:10), c("Date", "integer", "double", "double"))
-    for (i in seq_along(expected_types)) {
+    for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Date") {
         expect_s3_class(wsc[[!!expected_names[i]]], expected_types[i])
       } else {
@@ -208,7 +208,7 @@ test_that(
 
     expected_types <- rep("character", 11) %>%
       replace(c(2, 8:10), c("Date", "integer", "double", "double"))
-    for (i in seq_along(expected_types)) {
+    for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Date") {
         expect_s3_class(empty[[!!expected_names[i]]], expected_types[i])
       } else {

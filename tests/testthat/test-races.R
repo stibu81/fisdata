@@ -48,7 +48,7 @@ test_that("query_race() works for an alpine skiing world cup race", {
   expected_types <- c("integer", "integer", "character", "character",
                       "character", "integer", "character",
                       "Period", "Period", "double", "double")
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Period") {
       expect_s4_class(wengen_dh[[expected_names[i]]], expected_types[i])
     } else {
@@ -104,7 +104,7 @@ test_that(
     expected_types <- c("integer", "integer", "character", "character",
                         "character", "integer", "character",
                         rep("Period", 4), "double", "double")
-    for (i in seq_along(expected_types)) {
+    for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Period") {
         expect_s4_class(chuenis_gs[[expected_names[i]]], expected_types[i])
       } else {
@@ -160,7 +160,7 @@ test_that("query_race() works for an alpine skiing parallel race", {
 
   expected_types <- c("integer", "integer", "character", "character",
                       "integer", "character", "double")
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     expect_type(chamonix_par[[!!expected_names[i]]], expected_types[i])
   }
 
@@ -202,7 +202,7 @@ test_that(
     expected_types <- c("integer", "integer", "character",
                         "character", "integer", "character",
                         "Period", "Period", "double")
-    for (i in seq_along(expected_types)) {
+    for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Period") {
         expect_s4_class(wsc_dh[[expected_names[i]]], expected_types[i])
       } else {
@@ -254,7 +254,7 @@ test_that("query_race() works for an alpine skiing downhill training", {
   expected_types <- c("integer", "integer", "character", "character",
                       "character", "integer", "character",
                       "Period", "Period")
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Period") {
       expect_s4_class(wengen_training[[expected_names[i]]], expected_types[i])
     } else {
@@ -304,7 +304,7 @@ test_that("query_race() works for a cross-country world cup race", {
   expected_types <- c("integer", "integer", "character", "character",
                       "integer", "character",
                       "Period", "Period", "double")
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Period") {
       expect_s4_class(oslo_cc[[expected_names[i]]], expected_types[i])
     } else {
@@ -358,7 +358,7 @@ test_that("query_race() works for a telemark world cup race", {
   expected_types <- c("integer", "integer", "character", "character",
                       "integer", "character",
                       "Period", "Period", "double")
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Period") {
       expect_s4_class(samoens_tm[[expected_names[i]]], expected_types[i])
     } else {
@@ -406,7 +406,7 @@ test_that("query_race() works for a ski jumping event", {
 
   expected_types <- c("integer", "integer", "character", "character",
                       "integer", "character", "double", "double")
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     expect_type(vancouver_jp[[!!expected_names[i]]], expected_types[i])
   }
 
@@ -452,7 +452,7 @@ test_that("query_race() works for a snowbard halfpipe event", {
 
   expected_types <- c("integer", "integer", "character", "character",
                       "integer", "character", "double", "double", "double")
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     expect_type(laax_sb[[!!expected_names[i]]], expected_types[i])
   }
 
@@ -498,7 +498,7 @@ test_that("query_race() works for a freestyle ski cross event", {
   expected_types <- c("integer", "integer", "character", "character",
                       "integer", "character",
                       "Period", "double", "double")
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Period") {
       expect_s4_class(craigleith_sc[[expected_names[i]]], expected_types[i])
     } else {
@@ -542,7 +542,7 @@ test_that("query_race() works for a nordic combined world cup race", {
   expected_types <- c("integer", "integer", "character", "character", "integer",
                       "character", "double", "double", "integer",
                       "Period", "Period")
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Period") {
       expect_s4_class(lillehammer_nk[[expected_names[i]]], expected_types[i])
     } else {
@@ -602,7 +602,7 @@ test_that("query_race() works for a speed skiing world cup race", {
 
   expected_types <- c("integer", "integer", "character", "character", "integer",
                       "character", "integer", "double", "double", "double")
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     expect_type(grandvalira_ss[[!!expected_names[i]]], expected_types[i])
   }
 
@@ -642,7 +642,7 @@ test_that("query_race() works when only start list is published", {
 
   expected_types <- c("integer", "integer", "character", "character",
                       "character", "integer", "character")
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     expect_type(start_list[[!!expected_names[i]]], expected_types[i])
   }
 
@@ -675,7 +675,7 @@ test_that("query_race() works for empty result", {
 
   expected_types <- c("integer", "integer", "character",
                       "character", "integer", "character")
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
     expect_type(empty[[!!expected_names[i]]], expected_types[i])
   }
 

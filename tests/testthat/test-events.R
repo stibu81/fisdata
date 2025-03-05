@@ -65,7 +65,7 @@ test_that("query_events() works with events from many sectors", {
 
   expected_types <- rep("character", length(expected_names)) %>%
     replace(c(1, 2, 9), c("Date", "Date", "logical"))
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
      if (expected_types[i] == "Date") {
         expect_s3_class(events_20250201[[!!expected_names[i]]], expected_types[i])
       } else {
@@ -106,7 +106,7 @@ test_that("query_events() works when there is a live event", {
 
   expected_types <- rep("character", length(expected_names)) %>%
     replace(c(1, 2, 9), c("Date", "Date", "logical"))
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
      if (expected_types[i] == "Date") {
         expect_s3_class(events_live[[!!expected_names[i]]], expected_types[i])
       } else {
@@ -162,7 +162,7 @@ test_that("query_events() works with empty results", {
 
   expected_types <- rep("character", length(expected_names)) %>%
     replace(c(1, 2, 9), c("Date", "Date", "logical"))
-  for (i in seq_along(expected_types)) {
+  for (i in seq_along(expected_names)) {
      if (expected_types[i] == "Date") {
         expect_s3_class(empty[[!!expected_names[i]]], expected_types[i])
       } else {
