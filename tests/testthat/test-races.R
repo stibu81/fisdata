@@ -623,6 +623,41 @@ test_that("query_race() works for a speed skiing world cup race", {
 })
 
 
+test_that("query_race() works when only start list is published", {
+  local_mocked_bindings(
+    get_races_url = function(...) test_path("data", "race_start_list.html.gz")
+  )
+  competition <- tibble(
+    place = "Kvitfjell",
+    sector = "AL",
+    race_id = "123746"
+  )
+  start_list <- query_race(competition)
+
+  expect_s3_class(start_list, "tbl_df")
+
+  expected_names <- c("order", "bib", "fis_code", "name", "brand",
+                      "birth_year", "nation")
+  expect_named(start_list, expected_names)
+
+  expected_types <- c("integer", "integer", "character", "character",
+                      "character", "integer", "character")
+  for (i in seq_along(expected_types)) {
+    expect_type(start_list[[!!expected_names[i]]], expected_types[i])
+  }
+
+  expect_equal(start_list$order, 1:nrow(start_list))
+  expect_equal(start_list$bib, 1:nrow(start_list))
+  expect_match(start_list$fis_code, "^\\d+$")
+  expect_in(start_list$birth_year, 1900:2100)
+  expect_in(start_list$nation, nations$code)
+
+  expect_equal(attr(start_list, "url"), get_races_url())
+
+  expect_snapshot(print(start_list, width = Inf, n = Inf))
+})
+
+
 test_that("query_race() works for empty result", {
   local_mocked_bindings(
     get_races_url = function(...) test_path("data", "race_empty.html.gz")

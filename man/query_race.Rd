@@ -15,7 +15,8 @@ but \code{query_race()} only returns the results for one race.
 If multiple competitions are passed, only the first one will be used.}
 }
 \value{
-A tibble with at least the following columns: \code{rank}, \code{bib}, \code{fis_code},
+A tibble with at least the following columns: \code{rank} (or \code{order}, if only
+the start list has been published), \code{bib}, \code{fis_code},
 \code{name}, \code{birth_year}, and \code{nation}. Depending on the type of race, there are
 additional columns like \code{time}, \code{run1}, \code{run2}, \code{total_time}, \code{diff_time},
 \code{fis_points}, and \code{cup_points}.

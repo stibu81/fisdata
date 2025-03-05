@@ -21,6 +21,7 @@ get_race_column_names <- function(html, error_call = rlang::caller_env()) {
 
   translation_table <- c(
     "rank" = "rank",
+    "order" = "order",
     "bib" = "bib",
     "fis code" = "fis_code",
     "athlete" = "name",
@@ -98,7 +99,7 @@ process_race_column <- function(name, data) {
   # process the column based on the column name
 
   # integer columns
-  col_out <- if (name %in% c("rank", "bib", "birth_year", "jump_rank",
+  col_out <- if (name %in% c("rank", "order", "bib", "birth_year", "jump_rank",
                              "n_runs")) {
       as.integer(col)
     # numeric columns

@@ -1100,3 +1100,84 @@
       48     -33.15     276   
       49     -35.27     256.77
 
+# query_race() works when only start list is published
+
+    Code
+      print(start_list, width = Inf, n = Inf)
+    Output
+      # A tibble: 72 x 7
+         order   bib fis_code name                     brand     birth_year nation
+         <int> <int> <chr>    <chr>                    <chr>          <int> <chr> 
+       1     1     1 54371    Babinsky Stefan          Head            1996 AUT   
+       2     2     2 422310   Sejersted Adrian Smiseth Atomic          1994 NOR   
+       3     3     3 512038   Rogentin Stefan          Fischer         1994 SUI   
+       4     4     4 53975    Hemetsberger Daniel      Fischer         1991 AUT   
+       5     5     5 54609    Eichberger Stefan        Head            2000 AUT   
+       6     6     6 561310   Hrobat Miha              Atomic          1995 SLO   
+       7     7     7 194858   Allegre Nils             Salomon         1994 FRA   
+       8     8     8 291459   Paris Dominik            Nordica         1989 ITA   
+       9     9     9 6530104  Bennett Bryce            Fischer         1992 USA   
+      10    10    10 511896   Murisier Justin          Head            1992 SUI   
+      11    11    11 512269   Odermatt Marco           Stoeckli        1997 SUI   
+      12    12    12 104531   Crawford James           Head            1997 CAN   
+      13    13    13 512408   Monney Alexis            Stoeckli        2000 SUI   
+      14    14    14 512471   Von Allmen Franjo        Head            2001 SUI   
+      15    15    15 53980    Kriechmayr Vincent       Head            1991 AUT   
+      16    16    16 990081   Casse Mattia             Rossignol       1990 ITA   
+      17    17    17 6530319  Cochran-Siegle Ryan      Head            1992 USA   
+      18    18    18 180877   Lehto Elian              Fischer         2000 FIN   
+      19    19    19 194167   Muzaton Maxence          Rossignol       1990 FRA   
+      20    20    20 6291625  Schieder Florian         Atomic          1995 ITA   
+      21    21    21 54005    Striedinger Otmar        Salomon         1991 AUT   
+      22    22    22 934643   Goldberg Jared           Rossignol       1991 USA   
+      23    23    23 104272   Seger Brodie             Atomic          1995 CAN   
+      24    24    24 51215    Baumann Romed            Salomon         1986 GER   
+      25    25    25 192746   Theaux Adrien            Salomon         1984 FRA   
+      26    26    26 6190176  Bailet Matthieu          Head            1996 FRA   
+      27    27    27 293006   Innerhofer Christof      Rossignol       1984 ITA   
+      28    28    28 512281   Roesti Lars              Stoeckli        1998 SUI   
+      29    29    29 512228   Kohler Marco             Stoeckli        1997 SUI   
+      30    30    30 561255   Cater Martin             Salomon         1992 SLO   
+      31    31    31 54445    Haaser Raphael           Fischer         1997 AUT   
+      32    32    32 104468   Read Jeffrey             Atomic          1997 CAN   
+      33    33    33 6531520  Morse Sam                Fischer         1996 USA   
+      34    34    34 512549   Hiltbrand Livio          FISCHER         2003 SUI   
+      35    35    35 501987   Monsen Felix             Atomic          1994 SWE   
+      36    36    36 151238   Zabystran Jan            Kaestle         1998 CZE   
+      37    37    37 6532123  Negomir Kyle             Atomic          1998 USA   
+      38    38    38 54481    Traninger Manuel         Atomic          1998 AUT   
+      39    39    39 6292783  Molteni Nicolo           Head            1998 ITA   
+      40    40    40 930024   Maple Wiley              Atomic          1990 USA   
+      41    41    41 561397   Naralocnik Nejc          Atomic          1999 SLO   
+      42    42    42 54733    Wieser Vincent           Salomon         2002 AUT   
+      43    43    43 422707   Moeller Fredrik          Atomic          2000 NOR   
+      44    44    44 512527   Miggiano Alessio         Head            2002 SUI   
+      45    45    45 6293831  Franzoni Giovanni        Rossignol       2001 ITA   
+      46    46    46 110324   Von Appen Henrik         Head            1994 CHI   
+      47    47    47 203096   Vogt Luis                Rossignol       2002 GER   
+      48    48    48 54538    Rieser Stefan            Atomic          1999 AUT   
+      49    49    49 54438    Ploier Andreas           Fischer         1997 AUT   
+      50    50    50 6293445  Alliod Benjamin Jacques  Rossignol       2000 ITA   
+      51    51    51 350095   Pfiffner Marco           Salomon         1994 LIE   
+      52    52    52 512362   Torrent Christophe       Rossignol       1999 SUI   
+      53    53    53 512410   Zulauf Gael              Fischer         2000 SUI   
+      54    54    54 54812    Haas Matteo              Salomon         2004 AUT   
+      55    55    55 6190556  Caillot Ken              Atomic          1998 FRA   
+      56    56    56 6294638  Perathoner Max           Salomon         2003 ITA   
+      57    57    57 6190459  Alphand Sam              Rossignol       1997 FRA   
+      58    58    58 54628    Feurstein Lukas          Head            2001 AUT   
+      59    59    59 6191134  Gamel Seigneur Charles   Rossignol       2002 FRA   
+      60    60    60 561435   Aznoh Rok                Atomic          2002 SLO   
+      61    61    61 6532793  Smith Jack               Rossignol       2001 USA   
+      62    62    62 6293164  Franzoso Matteo          Atomic          1999 ITA   
+      63    63    63 6191056  Ducros Leo               Atomic          2001 FRA   
+      64    64    64 422851   Sellaeg Simen            Head            2003 NOR   
+      65    65    65 54774    Endstrasser Felix        Fischer         2003 AUT   
+      66    66    66 6100011  Lessard Raphael          Head            2001 CAN   
+      67    67    67 422793   Buer Jonas               -               2001 NOR   
+      68    68    68 54732    Tritscher Luis           Head            2002 AUT   
+      69    69    69 30488    Gravier Tiziano          Head            2002 ARG   
+      70    70    70 6532084  Radamus River            Rossignol       1998 USA   
+      71    71    71 6190687  Loriot Florian           Rossignol       1998 FRA   
+      72    72    72 422278   Windingstad Rasmus       Atomic          1993 NOR   
+

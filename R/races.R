@@ -20,7 +20,8 @@
 #' team races in alpine skiing).
 #'
 #' @returns
-#' A tibble with at least the following columns: `rank`, `bib`, `fis_code`,
+#' A tibble with at least the following columns: `rank` (or `order`, if only
+#' the start list has been published), `bib`, `fis_code`,
 #' `name`, `birth_year`, and `nation`. Depending on the type of race, there are
 #' additional columns like `time`, `run1`, `run2`, `total_time`, `diff_time`,
 #' `fis_points`, and `cup_points`.
