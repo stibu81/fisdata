@@ -136,6 +136,17 @@ test_that("query_events() works when there is a live event", {
 })
 
 
+test_that("query_current_events() works", {
+  local_mocked_bindings(
+    get_events_url = function(...) test_path("data", "events_20250201.html.gz")
+  )
+  events_current <- query_current_events()
+  expect_equal(events_current, query_events())
+
+  expect_equal(attr(events_current, "url"), get_events_url())
+})
+
+
 test_that("query_events() works with empty results", {
   local_mocked_bindings(
     get_events_url = function(...) test_path("data", "events_empty.html.gz")

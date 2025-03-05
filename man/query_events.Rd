@@ -2,6 +2,7 @@
 % Please edit documentation in R/events.R
 \name{query_events}
 \alias{query_events}
+\alias{query_current_events}
 \title{Query Events}
 \usage{
 query_events(
@@ -14,6 +15,15 @@ query_events(
   season = "",
   month = "",
   date = ""
+)
+
+query_current_events(
+  selection = c("all", "results", "upcoming"),
+  sector = "",
+  category = "",
+  discipline = "",
+  gender = "",
+  place = ""
 )
 }
 \arguments{
@@ -58,6 +68,9 @@ with any value in that field will be returned. In order to reduce the number
 of results, the FIS page automatically restricts the results to one season
 or even one month, if only few filters are used (see 'Details').
 Filtering is case-insensitive and for \code{place}, string matching is partial.
+
+\code{query_current_events()} queries for currently running events and is
+equivalent to calling \code{query_events()} with today's date.
 }
 \details{
 The API does not support special character in the field \code{place}.

@@ -2,6 +2,7 @@
 
 export(query_athletes)
 export(query_competitions)
+export(query_current_events)
 export(query_events)
 export(query_race)
 export(query_results)

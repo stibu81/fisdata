@@ -1,10 +1,14 @@
 #' Query Events
 #'
+#' @description
 #' Query events using various filters. Omitting a filter means that events
 #' with any value in that field will be returned. In order to reduce the number
 #' of results, the FIS page automatically restricts the results to one season
 #' or even one month, if only few filters are used (see 'Details').
 #' Filtering is case-insensitive and for `place`, string matching is partial.
+#'
+#' `query_current_events()` queries for currently running events and is
+#' equivalent to calling `query_events()` with today's date.
 #'
 #' @param selection which events should be returned: past events, where results
 #'  are available ("results") or upcoming events ("upcoming") or both ("all")?
@@ -74,6 +78,25 @@ query_events <- function(selection = c("all", "results", "upcoming"),
 
   events
 
+}
+
+
+#' @rdname query_events
+#' @export
+
+query_current_events <- function(selection = c("all", "results", "upcoming"),
+                                 sector = "",
+                                 category = "",
+                                 discipline = "",
+                                 gender = "",
+                                 place = "") {
+  query_events(selection = selection,
+               sector = sector,
+               category = category,
+               discipline = discipline,
+               gender = gender,
+               place = place,
+               date = lubridate::today())
 }
 
 
