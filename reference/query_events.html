@@ -3,11 +3,15 @@
 with any value in that field will be returned. In order to reduce the number
 of results, the FIS page automatically restricts the results to one season
 or even one month, if only few filters are used (see 'Details').
-Filtering is case-insensitive and for place, string matching is partial."><meta property="og:description" content="Query events using various filters. Omitting a filter means that events
+Filtering is case-insensitive and for place, string matching is partial.
+query_current_events() queries for currently running events and is
+equivalent to calling query_events() with today's date."><meta property="og:description" content="Query events using various filters. Omitting a filter means that events
 with any value in that field will be returned. In order to reduce the number
 of results, the FIS page automatically restricts the results to one season
 or even one month, if only few filters are used (see 'Details').
-Filtering is case-insensitive and for place, string matching is partial."></head><body>
+Filtering is case-insensitive and for place, string matching is partial.
+query_current_events() queries for currently running events and is
+equivalent to calling query_events() with today's date."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -46,6 +50,8 @@ with any value in that field will be returned. In order to reduce the number
 of results, the FIS page automatically restricts the results to one season
 or even one month, if only few filters are used (see 'Details').
 Filtering is case-insensitive and for <code>place</code>, string matching is partial.</p>
+<p><code>query_current_events()</code> queries for currently running events and is
+equivalent to calling <code>query_events()</code> with today's date.</p>
     </div>
 
     <div class="section level2">
@@ -60,6 +66,15 @@ Filtering is case-insensitive and for <code>place</code>, string matching is par
 <span>  season <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  month <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  date <span class="op">=</span> <span class="st">""</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">query_current_events</span><span class="op">(</span></span>
+<span>  selection <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"results"</span>, <span class="st">"upcoming"</span><span class="op">)</span>,</span>
+<span>  sector <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  category <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  discipline <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  gender <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  place <span class="op">=</span> <span class="st">""</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
