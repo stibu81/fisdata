@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fisdata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,9 +58,10 @@ If multiple competitions are passed, only the first one will be used.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A tibble with at least the following columns: <code>rank</code> (or <code>order</code>, if only
 the start list has been published), <code>bib</code>, <code>fis_code</code>,
-<code>name</code>, <code>birth_year</code>, and <code>nation</code>. Depending on the type of race, there are
-additional columns like <code>time</code>, <code>run1</code>, <code>run2</code>, <code>total_time</code>, <code>diff_time</code>,
-<code>fis_points</code>, and <code>cup_points</code>.</p>
+<code>name</code>, <code>birth_year</code>, <code>nation</code>, <code>sector</code>, and <code>competitor_id</code>.
+Depending on the type of race, there are additional columns like
+<code>time</code>, <code>run1</code>, <code>run2</code>, <code>total_time</code>, <code>diff_time</code>, <code>fis_points</code>,
+and <code>cup_points</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -95,9 +96,14 @@ team races in alpine skiing).</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get the full results for the downhill competition</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">wengen2025_competitions</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="va">wengen2025_res</span> <span class="op">&lt;-</span> <span class="va">wengen2025_competitions</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">competition</span> <span class="op">==</span> <span class="st">"Downhill"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">query_race</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">wengen2025_res</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># each entry of the race results can be used to get that athletes full</span></span></span>
+<span class="r-in"><span><span class="co"># results.</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="query_results.html">query_results</a></span><span class="op">(</span><span class="va">wengen2025_res</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
