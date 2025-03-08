@@ -17,9 +17,10 @@ If multiple competitions are passed, only the first one will be used.}
 \value{
 A tibble with at least the following columns: \code{rank} (or \code{order}, if only
 the start list has been published), \code{bib}, \code{fis_code},
-\code{name}, \code{birth_year}, and \code{nation}. Depending on the type of race, there are
-additional columns like \code{time}, \code{run1}, \code{run2}, \code{total_time}, \code{diff_time},
-\code{fis_points}, and \code{cup_points}.
+\code{name}, \code{birth_year}, \code{nation}, \code{sector}, and \code{competitor_id}.
+Depending on the type of race, there are additional columns like
+\code{time}, \code{run1}, \code{run2}, \code{total_time}, \code{diff_time}, \code{fis_points},
+and \code{cup_points}.
 }
 \description{
 Query full results for a race.
@@ -54,9 +55,14 @@ wengen2025_competitions <- query_competitions(wengen2025)
 
 # get the full results for the downhill competition
 library(dplyr)
-wengen2025_competitions \%>\%
+wengen2025_res <- wengen2025_competitions \%>\%
   filter(competition == "Downhill") \%>\%
   query_race()
+ wengen2025_res
+
+# each entry of the race results can be used to get that athletes full
+# results.
+query_results(wengen2025_res[1, ])
 }
 
 }

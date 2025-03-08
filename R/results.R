@@ -6,7 +6,8 @@
 #'
 #' @param athlete a list or data frame with fields/columns `competitor_id` and
 #'  `sector` that describe a *single* athlete. The easiest way to create
-#'  such a data frame is through the function [query_athletes()]. This function
+#'  such a data frame is through the functions [query_athletes()] or
+#'  [query_race()]. These functions
 #'  can return multiple athletes, but `query_results()` only returns the
 #'  results for one athlete. If multiple athletes are passed, only the first
 #'  one will be used.

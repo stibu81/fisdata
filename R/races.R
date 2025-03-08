@@ -22,9 +22,10 @@
 #' @returns
 #' A tibble with at least the following columns: `rank` (or `order`, if only
 #' the start list has been published), `bib`, `fis_code`,
-#' `name`, `birth_year`, and `nation`. Depending on the type of race, there are
-#' additional columns like `time`, `run1`, `run2`, `total_time`, `diff_time`,
-#' `fis_points`, and `cup_points`.
+#' `name`, `birth_year`, `nation`, `sector`, and `competitor_id`.
+#' Depending on the type of race, there are additional columns like
+#' `time`, `run1`, `run2`, `total_time`, `diff_time`, `fis_points`,
+#' and `cup_points`.
 #'
 #' @examples
 #' \dontrun{
@@ -46,9 +47,14 @@
 #'
 #' # get the full results for the downhill competition
 #' library(dplyr)
-#' wengen2025_competitions %>%
+#' wengen2025_res <- wengen2025_competitions %>%
 #'   filter(competition == "Downhill") %>%
 #'   query_race()
+#'  wengen2025_res
+#'
+#' # each entry of the race results can be used to get that athletes full
+#' # results.
+#' query_results(wengen2025_res[1, ])
 #' }
 #'
 #' @export
@@ -58,7 +64,8 @@ query_race <- function(competition) {
   competition <- ensure_one_result(competition)
 
   url <- get_races_url(competition)
-  race <- extract_race(url)
+  race <- extract_race(url) %>%
+    dplyr::mutate(sector = competition$sector, .before = "competitor_id")
 
   attr(race, "url") <- url
 
@@ -155,7 +162,8 @@ extract_race <- function(url, error_call = rlang::caller_env()) {
       \(name) process_race_column(name, race_df)
     ) %>%
     purrr::set_names(out_names) %>%
-    dplyr::as_tibble()
+    dplyr::as_tibble() %>%
+    dplyr::mutate(competitor_id = competitor_ids)
 }
 
 
@@ -167,5 +175,6 @@ get_empty_race_df <- function() {
     name = character(),
     birth_year = integer(),
     nation = character(),
+    competitor_id = character()
   )
 }

@@ -42,12 +42,12 @@ test_that("query_race() works for an alpine skiing world cup race", {
 
   expected_names <- c("rank", "bib", "fis_code", "name", "brand",
                       "birth_year", "nation", "time", "diff_time",
-                      "fis_points", "cup_points")
+                      "fis_points", "cup_points", "sector", "competitor_id")
   expect_named(wengen_dh, expected_names)
 
   expected_types <- c("integer", "integer", "character", "character",
-                      "character", "integer", "character",
-                      "Period", "Period", "double", "double")
+                      "character", "integer", "character", "Period",
+                      "Period", "double", "double", "character", "character")
   for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Period") {
       expect_s4_class(wengen_dh[[expected_names[i]]], expected_types[i])
@@ -74,6 +74,8 @@ test_that("query_race() works for an alpine skiing world cup race", {
   expect_gte(min(diff(wengen_dh$fis_points)), 0)
   expect_in(wengen_dh$cup_points, 0:100)
   expect_in(-diff(wengen_dh$cup_points), 0:20)
+  expect_in(wengen_dh$sector, sectors$code)
+  expect_match(wengen_dh$competitor_id, "^\\d+$")
 
   expect_equal(attr(wengen_dh, "url"), get_races_url())
 
@@ -98,12 +100,13 @@ test_that(
 
     expected_names <- c("rank", "bib", "fis_code", "name", "brand",
                         "birth_year", "nation", "run1", "run2", "total_time",
-                        "diff_time", "fis_points", "cup_points")
+                        "diff_time", "fis_points", "cup_points",
+                        "sector", "competitor_id")
     expect_named(chuenis_gs, expected_names)
 
     expected_types <- c("integer", "integer", "character", "character",
-                        "character", "integer", "character",
-                        rep("Period", 4), "double", "double")
+                        "character", "integer", "character", rep("Period", 4),
+                        "double", "double", "character", "character")
     for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Period") {
         expect_s4_class(chuenis_gs[[expected_names[i]]], expected_types[i])
@@ -133,6 +136,8 @@ test_that(
     expect_gte(min(diff(chuenis_gs$fis_points)), 0)
     expect_in(chuenis_gs$cup_points, 0:100)
     expect_in(-diff(chuenis_gs$cup_points), 0:20)
+    expect_in(chuenis_gs$sector, sectors$code)
+    expect_match(chuenis_gs$competitor_id, "^\\d+$")
 
     expect_equal(attr(chuenis_gs, "url"), get_races_url())
 
@@ -155,11 +160,12 @@ test_that("query_race() works for an alpine skiing parallel race", {
   expect_s3_class(chamonix_par, "tbl_df")
 
   expected_names <- c("rank", "bib", "fis_code", "name",
-                      "birth_year", "nation", "cup_points")
+                      "birth_year", "nation", "cup_points", "sector",
+                      "competitor_id")
   expect_named(chamonix_par, expected_names)
 
-  expected_types <- c("integer", "integer", "character", "character",
-                      "integer", "character", "double")
+  expected_types <- c("integer", "integer", "character", "character", "integer",
+                      "character", "double", "character", "character")
   for (i in seq_along(expected_names)) {
     expect_type(chamonix_par[[!!expected_names[i]]], expected_types[i])
   }
@@ -172,6 +178,8 @@ test_that("query_race() works for an alpine skiing parallel race", {
   expect_in(chamonix_par$nation, nations$code)
   expect_in(chamonix_par$cup_points, 0:100)
   expect_in(-diff(chamonix_par$cup_points), 0:20)
+  expect_in(chamonix_par$sector, sectors$code)
+  expect_match(chamonix_par$competitor_id, "^\\d+$")
 
   expect_equal(attr(chamonix_par, "url"), get_races_url())
 
@@ -196,12 +204,12 @@ test_that(
 
     expected_names <- c("rank", "bib", "fis_code", "name",
                         "birth_year", "nation", "time", "diff_time",
-                        "fis_points")
+                        "fis_points", "sector", "competitor_id")
     expect_named(wsc_dh, expected_names)
 
     expected_types <- c("integer", "integer", "character",
                         "character", "integer", "character",
-                        "Period", "Period", "double")
+                        "Period", "Period", "double", "character", "character")
     for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Period") {
         expect_s4_class(wsc_dh[[expected_names[i]]], expected_types[i])
@@ -226,6 +234,8 @@ test_that(
     )
     expect_gte(min(wsc_dh$fis_points), 0)
     expect_gte(min(diff(wsc_dh$fis_points)), 0)
+    expect_in(wsc_dh$sector, sectors$code)
+    expect_match(wsc_dh$competitor_id, "^\\d+$")
 
     expect_equal(attr(wsc_dh, "url"), get_races_url())
 
@@ -248,12 +258,13 @@ test_that("query_race() works for an alpine skiing downhill training", {
   expect_s3_class(wengen_training, "tbl_df")
 
   expected_names <- c("rank", "bib", "fis_code", "name", "brand",
-                      "birth_year", "nation", "time", "diff_time")
+                      "birth_year", "nation", "time", "diff_time",
+                      "sector", "competitor_id")
   expect_named(wengen_training, expected_names)
 
   expected_types <- c("integer", "integer", "character", "character",
                       "character", "integer", "character",
-                      "Period", "Period")
+                      "Period", "Period", "character", "character")
   for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Period") {
       expect_s4_class(wengen_training[[expected_names[i]]], expected_types[i])
@@ -277,6 +288,8 @@ test_that("query_race() works for an alpine skiing downhill training", {
     ),
     1e-12
   )
+  expect_in(wengen_training$sector, sectors$code)
+  expect_match(wengen_training$competitor_id, "^\\d+$")
 
   expect_equal(attr(wengen_training, "url"), get_races_url())
 
@@ -298,12 +311,13 @@ test_that("query_race() works for a cross-country world cup race", {
   expect_s3_class(oslo_cc, "tbl_df")
 
   expected_names <- c("rank", "bib", "fis_code", "name", "birth_year",
-                      "nation", "time", "diff_time", "fis_points")
+                      "nation", "time", "diff_time", "fis_points",
+                      "sector", "competitor_id")
   expect_named(oslo_cc, expected_names)
 
   expected_types <- c("integer", "integer", "character", "character",
                       "integer", "character",
-                      "Period", "Period", "double")
+                      "Period", "Period", "double", "character", "character")
   for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Period") {
       expect_s4_class(oslo_cc[[expected_names[i]]], expected_types[i])
@@ -331,6 +345,8 @@ test_that("query_race() works for a cross-country world cup race", {
     ),
     1e-12
   )
+  expect_in(oslo_cc$sector, sectors$code)
+  expect_match(oslo_cc$competitor_id, "^\\d+$")
 
   expect_equal(attr(oslo_cc, "url"), get_races_url())
 
@@ -352,12 +368,13 @@ test_that("query_race() works for a telemark world cup race", {
   expect_s3_class(samoens_tm, "tbl_df")
 
   expected_names <- c("rank", "bib", "fis_code", "name", "birth_year",
-                      "nation", "time", "diff_time", "fis_points")
+                      "nation", "time", "diff_time", "fis_points",
+                      "sector", "competitor_id")
   expect_named(samoens_tm, expected_names)
 
   expected_types <- c("integer", "integer", "character", "character",
                       "integer", "character",
-                      "Period", "Period", "double")
+                      "Period", "Period", "double", "character", "character")
   for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Period") {
       expect_s4_class(samoens_tm[[expected_names[i]]], expected_types[i])
@@ -380,6 +397,8 @@ test_that("query_race() works for a telemark world cup race", {
     ),
     1e-12
   )
+  expect_in(samoens_tm$sector, sectors$code)
+  expect_match(samoens_tm$competitor_id, "^\\d+$")
 
   expect_equal(attr(samoens_tm, "url"), get_races_url())
 
@@ -401,11 +420,12 @@ test_that("query_race() works for a ski jumping event", {
   expect_s3_class(vancouver_jp, "tbl_df")
 
   expected_names <- c("rank", "bib", "fis_code", "name", "birth_year",
-                      "nation", "total_points", "diff_points")
+                      "nation", "total_points", "diff_points",
+                      "sector", "competitor_id")
   expect_named(vancouver_jp, expected_names)
 
-  expected_types <- c("integer", "integer", "character", "character",
-                      "integer", "character", "double", "double")
+  expected_types <- c("integer", "integer", "character", "character", "integer",
+                      "character", "double", "double", "character", "character")
   for (i in seq_along(expected_names)) {
     expect_type(vancouver_jp[[!!expected_names[i]]], expected_types[i])
   }
@@ -418,7 +438,6 @@ test_that("query_race() works for a ski jumping event", {
   expect_in(vancouver_jp$nation, nations$code)
   expect_gte(min(vancouver_jp$total_points), 0)
   expect_lte(min(vancouver_jp$diff_points), 0)
-
   expect_lte(
     max(
       abs(vancouver_jp$total_points[-1] - vancouver_jp$total_points[1] -
@@ -426,6 +445,8 @@ test_that("query_race() works for a ski jumping event", {
     ),
     1e-12
   )
+  expect_in(vancouver_jp$sector, sectors$code)
+  expect_match(vancouver_jp$competitor_id, "^\\d+$")
 
   expect_equal(attr(vancouver_jp, "url"), get_races_url())
 
@@ -447,11 +468,13 @@ test_that("query_race() works for a snowbard halfpipe event", {
   expect_s3_class(laax_sb, "tbl_df")
 
   expected_names <- c("rank", "bib", "fis_code", "name", "birth_year",
-                      "nation", "score", "fis_points", "cup_points")
+                      "nation", "score", "fis_points", "cup_points",
+                      "sector", "competitor_id")
   expect_named(laax_sb, expected_names)
 
   expected_types <- c("integer", "integer", "character", "character",
-                      "integer", "character", "double", "double", "double")
+                      "integer", "character", "double", "double", "double",
+                      "character", "character")
   for (i in seq_along(expected_names)) {
     expect_type(laax_sb[[!!expected_names[i]]], expected_types[i])
   }
@@ -467,6 +490,8 @@ test_that("query_race() works for a snowbard halfpipe event", {
   # in the ranking, where the score jups up to a higher value. In all other
   # cases, score should decrease from one rank to the next.
   expect_lte(max(sort(diff(laax_sb$score), decreasing = TRUE)[-1]), 0)
+  expect_in(laax_sb$sector, sectors$code)
+  expect_match(laax_sb$competitor_id, "^\\d+$")
 
   expect_equal(attr(laax_sb, "url"), get_races_url())
 
@@ -492,12 +517,13 @@ test_that("query_race() works for a freestyle ski cross event", {
   expect_s3_class(craigleith_sc, "tbl_df")
 
   expected_names <- c("rank", "bib", "fis_code", "name", "birth_year",
-                      "nation", "qual_time", "fis_points", "cup_points")
+                      "nation", "qual_time", "fis_points", "cup_points",
+                      "sector", "competitor_id")
   expect_named(craigleith_sc, expected_names)
 
   expected_types <- c("integer", "integer", "character", "character",
                       "integer", "character",
-                      "Period", "double", "double")
+                      "Period", "double", "double", "character", "character")
   for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Period") {
       expect_s4_class(craigleith_sc[[expected_names[i]]], expected_types[i])
@@ -515,6 +541,8 @@ test_that("query_race() works for a freestyle ski cross event", {
   expect_gte(min(craigleith_sc$qual_time), 0)
   expect_in(craigleith_sc$fis_points, (1:100) * 10)
   expect_in(craigleith_sc$cup_points, 1:100)
+  expect_in(craigleith_sc$sector, sectors$code)
+  expect_match(craigleith_sc$competitor_id, "^\\d+$")
 
   expect_equal(attr(craigleith_sc, "url"), get_races_url())
 
@@ -536,12 +564,13 @@ test_that("query_race() works for a nordic combined world cup race", {
   expect_s3_class(lillehammer_nk, "tbl_df")
 
   expected_names <- c("rank", "bib", "fis_code", "name", "birth_year", "nation",
-                      "distance", "points", "jump_rank", "time", "diff_time")
+                      "distance", "points", "jump_rank", "time", "diff_time",
+                      "sector", "competitor_id")
   expect_named(lillehammer_nk, expected_names)
 
   expected_types <- c("integer", "integer", "character", "character", "integer",
                       "character", "double", "double", "integer",
-                      "Period", "Period")
+                      "Period", "Period", "character", "character")
   for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Period") {
       expect_s4_class(lillehammer_nk[[expected_names[i]]], expected_types[i])
@@ -572,6 +601,8 @@ test_that("query_race() works for a nordic combined world cup race", {
     ),
     1e-12
   )
+  expect_in(lillehammer_nk$sector, sectors$code)
+  expect_match(lillehammer_nk$competitor_id, "^\\d+$")
 
   expect_equal(attr(lillehammer_nk, "url"), get_races_url())
 
@@ -597,11 +628,13 @@ test_that("query_race() works for a speed skiing world cup race", {
   expect_s3_class(grandvalira_ss, "tbl_df")
 
   expected_names <- c("rank", "bib", "fis_code", "name", "birth_year", "nation",
-                      "n_runs", "speed", "diff_speed", "fis_points")
+                      "n_runs", "speed", "diff_speed", "fis_points",
+                      "sector", "competitor_id")
   expect_named(grandvalira_ss, expected_names)
 
   expected_types <- c("integer", "integer", "character", "character", "integer",
-                      "character", "integer", "double", "double", "double")
+                      "character", "integer", "double", "double", "double",
+                      "character", "character")
   for (i in seq_along(expected_names)) {
     expect_type(grandvalira_ss[[!!expected_names[i]]], expected_types[i])
   }
@@ -612,6 +645,8 @@ test_that("query_race() works for a speed skiing world cup race", {
   expect_match(grandvalira_ss$fis_code, "^\\d+$")
   expect_in(grandvalira_ss$birth_year, 1900:2100)
   expect_in(grandvalira_ss$nation, nations$code)
+  expect_in(grandvalira_ss$sector, sectors$code)
+  expect_match(grandvalira_ss$competitor_id, "^\\d+$")
 
   expect_equal(attr(grandvalira_ss, "url"), get_races_url())
 
@@ -637,11 +672,12 @@ test_that("query_race() works when only start list is published", {
   expect_s3_class(start_list, "tbl_df")
 
   expected_names <- c("order", "bib", "fis_code", "name", "brand",
-                      "birth_year", "nation")
+                      "birth_year", "nation", "sector", "competitor_id")
   expect_named(start_list, expected_names)
 
   expected_types <- c("integer", "integer", "character", "character",
-                      "character", "integer", "character")
+                      "character", "integer", "character", "character",
+                      "character")
   for (i in seq_along(expected_names)) {
     expect_type(start_list[[!!expected_names[i]]], expected_types[i])
   }
@@ -651,6 +687,8 @@ test_that("query_race() works when only start list is published", {
   expect_match(start_list$fis_code, "^\\d+$")
   expect_in(start_list$birth_year, 1900:2100)
   expect_in(start_list$nation, nations$code)
+  expect_in(start_list$sector, sectors$code)
+  expect_match(start_list$competitor_id, "^\\d+$")
 
   expect_equal(attr(start_list, "url"), get_races_url())
 
@@ -670,11 +708,11 @@ test_that("query_race() works for empty result", {
   expect_s3_class(empty, "tbl_df")
 
   expected_names <- c("rank", "bib", "fis_code", "name",
-                      "birth_year", "nation")
+                      "birth_year", "nation", "sector", "competitor_id")
   expect_named(empty, expected_names)
 
-  expected_types <- c("integer", "integer", "character",
-                      "character", "integer", "character")
+  expected_types <- c("integer", "integer", "character", "character",
+                      "integer", "character", "character", "character")
   for (i in seq_along(expected_names)) {
     expect_type(empty[[!!expected_names[i]]], expected_types[i])
   }
