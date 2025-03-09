@@ -6,6 +6,8 @@
 \alias{fisdata-package}
 \title{fisdata: Query Data From the FIS Web Page}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Query data from the web site of the International Ski and Snowboard Federation FIS (\url{https://www.fis-ski.com}).
 }
 \seealso{
