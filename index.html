@@ -6,6 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Query Data From the FIS Web Page • fisdata</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -13,6 +19,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Query Data From the FIS Web Page">
 <meta name="description" content="Query data from the web site of the International Ski and Snowboard Federation FIS (&lt;https://www.fis-ski.com&gt;).">
 <meta property="og:description" content="Query data from the web site of the International Ski and Snowboard Federation FIS (&lt;https://www.fis-ski.com&gt;).">
+<meta property="og:image" content="https://stibu81.github.io/fisdata/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -46,8 +53,11 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="fisdata-">fisdata <img src="../reference/figures/fisdata_logo.png" align="right" width="175"><a class="anchor" aria-label="anchor" href="#fisdata-"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="fisdata-">fisdata 
+<a class="anchor" aria-label="anchor" href="#fisdata-"></a>
+</h1>
+</div>
 <!-- badges: start -->
 
 <p>fisdata makes it easy to download data from the <a href="https://www.fis-ski.com" class="external-link">FIS webpage</a> into tibbles.</p>
@@ -66,9 +76,9 @@
 <p>The following are the relevant terms with an example value for each. Explanations for terms with obvious meaning are omitted.</p>
 <table class="table">
 <colgroup>
-<col width="16%">
-<col width="64%">
-<col width="19%">
+<col width="33%">
+<col width="33%">
+<col width="33%">
 </colgroup>
 <thead><tr class="header">
 <th>Term</th>
@@ -127,14 +137,25 @@
 <code><a href="reference/query_competitions.html">query_competitions()</a></code>: obtain all individual competitions that are associated with an event.</li>
 </ul>
 <p>Each function returns a tibble that contains instances of a given type as its rows. The following diagram shows the types of tables that can be created. Each node stands for a table with the label of the node indicating the type of objects contained in the table. Each arrow is labelled by the name of the function that returns the table that the arrow is pointing to. Some functions require an instance of another type as input, as indicated by the arrows. The two exceptions, <code><a href="reference/query_athletes.html">query_athletes()</a></code> and <code><a href="reference/query_events.html">query_events()</a></code> are thus the usual entry points to start a query.</p>
-<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-60fa7e262132a49b1314" style="width:100%;height:200px;"></div>
-<script type="application/json" data-for="htmlwidget-60fa7e262132a49b1314">{"x":{"diagram":"\ngraph LR;\nS1[ ]-->|\"query_athletes()\"|A(athletes);\nA-->|\"query_results()\"|AR(athlete<br>results);\nAR-->|\"query_race()\"|CR(competition<br>results);\n\nS2[ ]-->|\"query_events()\"|E(events);\nE-->|\"query_competitions()\"|C(competitions);\nC-->|\"query_race()\"|CR;\n\nCR-->|\"query_results()\"|AR;\n\nstyle S1 fill:#FFFFFF00, stroke:#FFFFFF00;\nstyle S2 fill:#FFFFFF00, stroke:#FFFFFF00;\n"},"evals":[],"jsHooks":[]}</script>
+<pre class="mermaid"><code>graph LR;
+S1[ ]--&gt;|"query_athletes()"|A(athletes);
+A--&gt;|"query_results()"|AR(athlete&lt;br&gt;results);
+AR--&gt;|"query_race()"|CR(competition&lt;br&gt;results);
+
+S2[ ]--&gt;|"query_events()"|E(events);
+E--&gt;|"query_competitions()"|C(competitions);
+C--&gt;|"query_race()"|CR;
+
+CR--&gt;|"query_results()"|AR;
+
+style S1 fill:#FFFFFF00, stroke:#FFFFFF00;
+style S2 fill:#FFFFFF00, stroke:#FFFFFF00;</code></pre>
 </div>
 <div class="section level2">
 <h2 id="running-a-query">Running a Query<a class="anchor" aria-label="anchor" href="#running-a-query"></a>
 </h2>
 <p>Since athletes are identified by a Competitor-ID and races by a Race-ID that are usually not known to the user, it is generally easiest to start a query by finding an athlete. For example, the following call gets the information for Didier Cuche:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stibu81.github.io/fisdata/">fisdata</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -147,7 +168,7 @@
 <span><span class="co">#&gt; 1 FALSE  510030   Cuche Didier SUI    AL     Head  11795</span></span></code></pre></div>
 <p>The result includes the <code>competitor_id</code>, which is required as input in order to query an athlete’s results.</p>
 <p>With the object returned by <code><a href="reference/query_athletes.html">query_athletes()</a></code>, it is now possible to query all the race result of an athlete. Note that <code><a href="reference/query_results.html">query_results()</a></code> must be called with a single athlete. The following query only obtains the results in downhill races:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cuche_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/query_results.html">query_results</a></span><span class="op">(</span><span class="va">cuche</span>, discipline <span class="op">=</span> <span class="st">"DH"</span><span class="op">)</span></span>
 <span><span class="va">cuche_res</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">athlete</span><span class="op">:</span><span class="va">place</span>, <span class="va">category</span><span class="op">:</span><span class="va">rank</span>, <span class="va">race_id</span><span class="op">)</span></span>
@@ -167,7 +188,7 @@
 <span><span class="co">#&gt; # ℹ 293 more rows</span></span></code></pre></div>
 <p>The result includes the <code>race_id</code>, which is required as input in order to query the full results of a race.</p>
 <p>By extracting one of the races from the table, one can now obtain the full results for that race. The following code gets the full result for Didier Cuche’s last victory in Wengen:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wengen_res</span> <span class="op">&lt;-</span> <span class="va">cuche_res</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">place</span> <span class="op">==</span> <span class="st">"Wengen"</span>, <span class="va">rank</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -189,7 +210,7 @@
 <span><span class="co">#&gt; 10    10    25 Innerhofer Christof       1984 ITA    1M 51.85S 1.54S    </span></span>
 <span><span class="co">#&gt; # ℹ 60 more rows</span></span></code></pre></div>
 <p>Alternatively, you may start by querying for an event. This finds the Wengen races from the season 2024/25:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wengen2025</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/query_events.html">query_events</a></span><span class="op">(</span>sector <span class="op">=</span> <span class="st">"AL"</span>, place <span class="op">=</span> <span class="st">"wengen"</span>, season <span class="op">=</span> <span class="fl">2025</span><span class="op">)</span></span>
 <span><span class="va">wengen2025</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">start_date</span><span class="op">:</span><span class="va">genders</span><span class="op">)</span></span>
@@ -198,7 +219,7 @@
 <span><span class="co">#&gt;   &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;          &lt;chr&gt;  </span></span>
 <span><span class="co">#&gt; 1 2025-01-14 2025-01-19 Wengen SUI    AL     TRA / WC   4xDH / SL / SG M</span></span></code></pre></div>
 <p>The result includes the <code>event_id</code>, which is required as input in order to query all the competitions that took place during this event:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wengen_races</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/query_competitions.html">query_competitions</a></span><span class="op">(</span><span class="va">wengen2025</span><span class="op">)</span></span>
 <span><span class="va">wengen_races</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">place</span><span class="op">:</span><span class="va">cancelled</span><span class="op">)</span></span>
@@ -212,7 +233,7 @@
 <span><span class="co">#&gt; 5 Wengen 2025-01-18 12:45 Downhill          AL     WC       M      FALSE    </span></span>
 <span><span class="co">#&gt; 6 Wengen 2025-01-19 10:15 Slalom            AL     WC       M      FALSE</span></span></code></pre></div>
 <p>This table now allows to query for the full race results (similar to the output from <code><a href="reference/query_results.html">query_results()</a></code>). For example, the results for the Super G can be obtained as follows:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sg_res</span> <span class="op">&lt;-</span> <span class="va">wengen_races</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">competition</span> <span class="op">==</span> <span class="st">"Super G"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/query_race.html">query_race</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -233,7 +254,7 @@
 <span><span class="co">#&gt; 10    10    26 Feurstein Lukas    Head           2001 AUT    1M 48.97S 1.32S    </span></span>
 <span><span class="co">#&gt; # ℹ 37 more rows</span></span></code></pre></div>
 <p>Note that the objects created by the querying functions always include the URL that was downloaded. This URL can be obtained as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/show_url.html">show_url</a></span><span class="op">(</span><span class="va">cuche_res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; https://www.fis-ski.com/DB/general/athlete-biography.html?sectorcode=AL&amp;seasoncode=&amp;competitorid=11795&amp;type=result&amp;categorycode=&amp;sort=&amp;place=&amp;disciplinecode=DH&amp;position=&amp;limit=2000</span></span></code></pre></div>
 <p>You can copy this address into a browser in order to see the same data as they are presented on the FIS web site. To make this as easy as possible, <code><a href="reference/show_url.html">show_url()</a></code> automatically copies the URL into the clip board, when called from an interactive R session.</p>
@@ -242,7 +263,7 @@
 <h2 id="known-limitations">Known Limitations<a class="anchor" aria-label="anchor" href="#known-limitations"></a>
 </h2>
 <p>Querying athletes and results is expected to work for all sectors and disciplines. Querying races, however, is more difficult, since different types of races have their results rendered in different form on the FIS web site. fisdata is able to handle the results of many common types of races but it is expected to fail for some types that are not yet covered. For example, it usually cannot handle team races:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/query_athletes.html">query_athletes</a></span><span class="op">(</span><span class="st">"von allmen"</span>, <span class="st">"franjo"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/query_results.html">query_results</a></span><span class="op">(</span>category <span class="op">=</span> <span class="st">"WSC"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">discipline</span> <span class="op">==</span> <span class="st">"Team Combined"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
