@@ -83,8 +83,8 @@ C-->|"query_race()"|CR;
 
 CR-->|"query_results()"|AR;
 
-style S1 fill:#FFFFFF, stroke:#FFFFFF;
-style S2 fill:#FFFFFF, stroke:#FFFFFF;
+style S1 fill:#FFFFFF00, stroke:#FFFFFF00;
+style S2 fill:#FFFFFF00, stroke:#FFFFFF00;
 ```
 
 ## Running a Query
