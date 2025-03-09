@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# fisdata <img src="man/figures/fisdata_logo.png" align="right" width="175" />
+# fisdata <a href="https://stibu81.github.io/fisdata/"><img src="man/figures/logo.png" align="right" width="175" alt="fisdata website" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/stibu81/fisdata/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stibu81/fisdata/actions/workflows/R-CMD-check.yaml)

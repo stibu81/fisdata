@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# fisdata <img src="man/figures/fisdata_logo.png" align="right" width="175" />
+# fisdata <a href="https://stibu81.github.io/fisdata/"><img src="man/figures/logo.png" align="right" width="175" alt="fisdata website" /></a>
 
 <!-- badges: start -->
 
