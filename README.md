@@ -23,6 +23,31 @@ You can install the development version of fisdata from
 remotes::install_github("stibu81/fisdata")
 ```
 
+## Terminology
+
+In order to use the functionality of this package and understand the
+results it returns, it is important to be familiar with its terminology.
+It follows mostly the terminology used on the FIS page. Other than the
+web page, it uses terms consistently and never uses the same term for
+different things.
+
+The following are the relevant terms with an example value for each.
+Explanations for terms with obvious meaning are omitted.
+
+| Term | Explanation | Examples |
+|----|----|----|
+| athlete |  | Didier Cuche, Lara Gut-Behrami |
+| sector | the major groups of disciplines | Alpine Skiing, Cross-Country |
+| discipline | a specific discipline | Downhill, Large Hill, Aerials |
+| brand | manufacturer of an athlete’s skis or snowboards | Stöckli, Head |
+| competition | a competition in a single discipline and sector | Wengen Downhill 2025 |
+| event | a set of one or more competitions in one or more disciplines taking place during one or more days in a specific location during a season | Wengen 2025 |
+
+When filtering for sector, discipline, or category, a code is used
+instead of the full description. See the datasets `sectors`,
+`disciplines`, and `categories`, respectively, for a list of available
+codes with a description.
+
 ## Available Querying Functions
 
 fisdata currently offers four functions to query different types of
@@ -30,11 +55,37 @@ data:
 
 - `query_athletes()`: query athletes by name and other attributes and
   obtain a table of matching athletes.
-- `query_results()`: query all race results for a single athlete.
-- `query_race()`: obtain the full results for a single race.
+- `query_results()`: query all competition results for a single athlete.
+- `query_race()`: get the full results for a single competition.
 - `query_events()`: query events by date, place, and other attributes.
 - `query_competitions()`: obtain all individual competitions that are
   associated with an event.
+
+Each function returns a tibble that contains instances of a given type
+as its rows. The following diagram shows the types of tables that can be
+created. Each node stands for a table with the label of the node
+indicating the type of objects contained in the table. Each arrow is
+labelled by the name of the function that returns the table that the
+arrow is pointing to. Some functions require an instance of another type
+as input, as indicated by the arrows. The two exceptions,
+`query_athletes()` and `query_events()` are thus the usual entry points
+to start a query.
+
+``` mermaid
+graph LR;
+S1[ ]-->|"query_athletes()"|A(athletes);
+A-->|"query_results()"|AR(athlete<br>results);
+AR-->|"query_race()"|CR(competition<br>results);
+
+S2[ ]-->|"query_events()"|E(events);
+E-->|"query_competitions()"|C(competitions);
+C-->|"query_race()"|CR;
+
+CR-->|"query_results()"|AR;
+
+style S1 fill:#FFFFFF, stroke:#FFFFFF;
+style S2 fill:#FFFFFF, stroke:#FFFFFF;
+```
 
 ## Running a Query
 
@@ -96,20 +147,21 @@ wengen_res <- cuche_res %>%
   filter(place == "Wengen", rank == 1) %>% 
   head(n = 1) %>%
   query_race()
-wengen_res
-#> # A tibble: 70 × 8
-#>     rank   bib fis_code name               birth_year nation time      diff_time
-#>    <int> <int> <chr>    <chr>                   <int> <chr>  <Period>  <Period> 
-#>  1     1    18 510030   Cuche Didier             1974 SUI    1M 50.31S 0S       
-#>  2     2    12 292514   Heel Werner              1982 ITA    1M 51.17S 0.86S    
-#>  3     3    15 511313   Janka Carlo              1986 SUI    1M 51.52S 1.21S    
-#>  4     4     1 560332   Jerman Andrej            1978 SLO    1M 51.58S 1.27S    
-#>  5     5     3 533866   Nyman Steven             1982 USA    1M 51.67S 1.36S    
-#>  6     6    14 51005    Scheiber Mario           1983 AUT    1M 51.76S 1.45S    
-#>  7     7    28 50858    Streitberger Georg       1981 AUT    1M 51.77S 1.46S    
-#>  8     8    16 50041    Walchhofer Michael       1975 AUT    1M 51.79S 1.48S    
-#>  9     8    11 50753    Kroell Klaus             1980 AUT    1M 51.79S 1.48S    
-#> 10    10    25 293006   Innerhofer Christ…       1984 ITA    1M 51.85S 1.54S    
+wengen_res %>% 
+  select(rank, bib, name:diff_time)
+#> # A tibble: 70 × 7
+#>     rank   bib name                birth_year nation time      diff_time
+#>    <int> <int> <chr>                    <int> <chr>  <Period>  <Period> 
+#>  1     1    18 Cuche Didier              1974 SUI    1M 50.31S 0S       
+#>  2     2    12 Heel Werner               1982 ITA    1M 51.17S 0.86S    
+#>  3     3    15 Janka Carlo               1986 SUI    1M 51.52S 1.21S    
+#>  4     4     1 Jerman Andrej             1978 SLO    1M 51.58S 1.27S    
+#>  5     5     3 Nyman Steven              1982 USA    1M 51.67S 1.36S    
+#>  6     6    14 Scheiber Mario            1983 AUT    1M 51.76S 1.45S    
+#>  7     7    28 Streitberger Georg        1981 AUT    1M 51.77S 1.46S    
+#>  8     8    16 Walchhofer Michael        1975 AUT    1M 51.79S 1.48S    
+#>  9     8    11 Kroell Klaus              1980 AUT    1M 51.79S 1.48S    
+#> 10    10    25 Innerhofer Christof       1984 ITA    1M 51.85S 1.54S    
 #> # ℹ 60 more rows
 ```
 
@@ -118,12 +170,12 @@ Wengen races from the season 2024/25:
 
 ``` r
 wengen2025 <- query_events(sector = "AL", place = "wengen", season = 2025)
-wengen2025
-#> # A tibble: 1 × 10
+wengen2025 %>% 
+  select(start_date:genders)
+#> # A tibble: 1 × 8
 #>   start_date end_date   place  nation sector categories disciplines    genders
 #>   <date>     <date>     <chr>  <chr>  <chr>  <chr>      <chr>          <chr>  
-#> 1 2025-01-14 2025-01-19 Wengen SUI    AL     TRA / WC   4xDH / SL / SG M      
-#> # ℹ 2 more variables: cancelled <lgl>, event_id <chr>
+#> 1 2025-01-14 2025-01-19 Wengen SUI    AL     TRA / WC   4xDH / SL / SG M
 ```
 
 The result includes the `event_id`, which is required as input in order
@@ -131,16 +183,17 @@ to query all the competitions that took place during this event:
 
 ``` r
 wengen_races <- query_competitions(wengen2025)
-wengen_races
-#> # A tibble: 6 × 9
-#>   place  date       time  competition   sector category gender cancelled race_id
-#>   <chr>  <date>     <chr> <chr>         <chr>  <chr>    <chr>  <lgl>     <chr>  
-#> 1 Wengen 2025-01-14 12:30 Downhill Tra… AL     TRA      M      FALSE     122804 
-#> 2 Wengen 2025-01-15 12:30 Downhill Tra… AL     TRA      M      FALSE     122805 
-#> 3 Wengen 2025-01-16 <NA>  Downhill Tra… AL     TRA      M      TRUE      122806 
-#> 4 Wengen 2025-01-17 12:30 Super G       AL     WC       M      FALSE     122807 
-#> 5 Wengen 2025-01-18 12:45 Downhill      AL     WC       M      FALSE     122808 
-#> 6 Wengen 2025-01-19 10:15 Slalom        AL     WC       M      FALSE     122809
+wengen_races %>% 
+  select(place:cancelled)
+#> # A tibble: 6 × 8
+#>   place  date       time  competition       sector category gender cancelled
+#>   <chr>  <date>     <chr> <chr>             <chr>  <chr>    <chr>  <lgl>    
+#> 1 Wengen 2025-01-14 12:30 Downhill Training AL     TRA      M      FALSE    
+#> 2 Wengen 2025-01-15 12:30 Downhill Training AL     TRA      M      FALSE    
+#> 3 Wengen 2025-01-16 <NA>  Downhill Training AL     TRA      M      TRUE     
+#> 4 Wengen 2025-01-17 12:30 Super G           AL     WC       M      FALSE    
+#> 5 Wengen 2025-01-18 12:45 Downhill          AL     WC       M      FALSE    
+#> 6 Wengen 2025-01-19 10:15 Slalom            AL     WC       M      FALSE
 ```
 
 This table now allows to query for the full race results (similar to the
@@ -151,22 +204,22 @@ can be obtained as follows:
 sg_res <- wengen_races %>% 
   filter(competition == "Super G") %>% 
   query_race()
-sg_res
-#> # A tibble: 47 × 11
-#>     rank   bib fis_code name         brand birth_year nation time      diff_time
-#>    <int> <int> <chr>    <chr>        <chr>      <int> <chr>  <Period>  <Period> 
-#>  1     1     3 512471   Von Allmen … Head        2001 SUI    1M 47.65S 0S       
-#>  2     2     6 53980    Kriechmayr … Head        1991 AUT    1M 47.75S 0.1S     
-#>  3     3    11 512038   Rogentin St… Fisc…       1994 SUI    1M 48.23S 0.58S    
-#>  4     4     1 104531   Crawford Ja… Head        1997 CAN    1M 48.27S 0.62S    
-#>  5     5     9 291459   Paris Domin… Nord…       1989 ITA    1M 48.28S 0.63S    
-#>  6     6     8 990081   Casse Mattia Ross…       1990 ITA    1M 48.57S 0.92S    
-#>  7     7    13 512269   Odermatt Ma… Stoe…       1997 SUI    1M 48.69S 1.04S    
-#>  8     8    16 104537   Alexander C… Ross…       1997 CAN    1M 48.78S 1.13S    
-#>  9     9     2 512408   Monney Alex… Stoe…       2000 SUI    1M 48.92S 1.27S    
-#> 10    10    26 54628    Feurstein L… Head        2001 AUT    1M 48.97S 1.32S    
+sg_res %>% 
+  select(rank, bib, name:diff_time)
+#> # A tibble: 47 × 8
+#>     rank   bib name               brand    birth_year nation time      diff_time
+#>    <int> <int> <chr>              <chr>         <int> <chr>  <Period>  <Period> 
+#>  1     1     3 Von Allmen Franjo  Head           2001 SUI    1M 47.65S 0S       
+#>  2     2     6 Kriechmayr Vincent Head           1991 AUT    1M 47.75S 0.1S     
+#>  3     3    11 Rogentin Stefan    Fischer        1994 SUI    1M 48.23S 0.58S    
+#>  4     4     1 Crawford James     Head           1997 CAN    1M 48.27S 0.62S    
+#>  5     5     9 Paris Dominik      Nordica        1989 ITA    1M 48.28S 0.63S    
+#>  6     6     8 Casse Mattia       Rossign…       1990 ITA    1M 48.57S 0.92S    
+#>  7     7    13 Odermatt Marco     Stoeckli       1997 SUI    1M 48.69S 1.04S    
+#>  8     8    16 Alexander Cameron  Rossign…       1997 CAN    1M 48.78S 1.13S    
+#>  9     9     2 Monney Alexis      Stoeckli       2000 SUI    1M 48.92S 1.27S    
+#> 10    10    26 Feurstein Lukas    Head           2001 AUT    1M 48.97S 1.32S    
 #> # ℹ 37 more rows
-#> # ℹ 2 more variables: fis_points <dbl>, cup_points <dbl>
 ```
 
 Note that the objects created by the querying functions always include

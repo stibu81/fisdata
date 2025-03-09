@@ -34,17 +34,69 @@ You can install the development version of fisdata from
 remotes::install_github("stibu81/fisdata")
 ```
 
+## Terminology
+
+In order to use the functionality of this package and understand the results
+it returns, it is important to be familiar with its terminology. It follows
+mostly the terminology used on the FIS page. Other than the web page, it uses
+terms consistently and never uses the same term for different things.
+
+The following are the relevant terms with an example value for each.
+Explanations for terms with obvious meaning are omitted.
+
+
+| Term        | Explanation                                      | Examples      |
+|-------------|--------------------------------------------------|---------------|
+| athlete     |                                                  | Didier Cuche, Lara Gut-Behrami  |
+| sector      | the major groups of disciplines                  | Alpine Skiing, Cross-Country |
+| discipline  | a specific discipline                            | Downhill, Large Hill, Aerials   |
+| brand       | manufacturer of an athlete's skis or snowboards | Stöckli, Head |
+| competition | a competition in a single discipline and sector | Wengen Downhill 2025 |
+| event       | a set of one or more competitions in one or more disciplines taking place during one or more days in a specific location during a season | Wengen 2025 | category    | type of the event                                 | World Cup, Olympic Winter Games |
+
+When filtering for sector, discipline, or category, a code is used instead of
+the full description. See the datasets `sectors`, `disciplines`, and 
+`categories`, respectively, for a list of available codes with a description.
+
+
 ## Available Querying Functions
 
 fisdata currently offers four functions to query different types of data:
 
 * `query_athletes()`: query athletes by name and other attributes and obtain
   a table of matching athletes.
-* `query_results()`: query all race results for a single athlete.
-* `query_race()`: obtain the full results for a single race.
+* `query_results()`: query all competition results for a single athlete.
+* `query_race()`: get the full results for a single competition.
 * `query_events()`: query events by date, place, and other attributes.
 * `query_competitions()`: obtain all individual competitions that are
   associated with an event.
+  
+  
+Each function returns a tibble that contains instances of a given type as its
+rows. The following diagram shows the types of tables that can be created.
+Each node stands for a table with the label of the node indicating the type
+of objects contained in the table. Each arrow is labelled by the name of the
+function that returns the table that the arrow is pointing to. Some functions
+require an instance of another type as input, as indicated by the arrows.
+The two exceptions, `query_athletes()` and `query_events()` are thus the usual
+entry points to start a query.
+
+```mermaid
+graph LR;
+S1[ ]-->|"query_athletes()"|A(athletes);
+A-->|"query_results()"|AR(athlete<br>results);
+AR-->|"query_race()"|CR(competition<br>results);
+
+S2[ ]-->|"query_events()"|E(events);
+E-->|"query_competitions()"|C(competitions);
+C-->|"query_race()"|CR;
+
+CR-->|"query_results()"|AR;
+
+style S1 fill:#FFFFFF, stroke:#FFFFFF;
+style S2 fill:#FFFFFF, stroke:#FFFFFF;
+```
+
 
 
 ## Running a Query
@@ -89,7 +141,8 @@ wengen_res <- cuche_res %>%
   filter(place == "Wengen", rank == 1) %>% 
   head(n = 1) %>%
   query_race()
-wengen_res
+wengen_res %>% 
+  select(rank, bib, name:diff_time)
 ```
 
 Alternatively, you may start by querying for an event. This finds the
@@ -97,7 +150,8 @@ Wengen races from the season 2024/25:
 
 ```{r}
 wengen2025 <- query_events(sector = "AL", place = "wengen", season = 2025)
-wengen2025
+wengen2025 %>% 
+  select(start_date:genders)
 ```
 
 The result includes the `event_id`, which is required as input in order
@@ -105,7 +159,8 @@ to query all the competitions that took place during this event:
 
 ```{r}
 wengen_races <- query_competitions(wengen2025)
-wengen_races
+wengen_races %>% 
+  select(place:cancelled)
 ```
 
 This table now allows to query for the full race results (similar to the output
@@ -116,7 +171,8 @@ obtained as follows:
 sg_res <- wengen_races %>% 
   filter(competition == "Super G") %>% 
   query_race()
-sg_res
+sg_res %>% 
+  select(rank, bib, name:diff_time)
 ```
 
 Note that the objects created by the querying functions always include the
