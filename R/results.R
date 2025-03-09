@@ -39,7 +39,7 @@
 #' # in order to query an athletes results, we first
 #' # have to obtain the competitor id, which is
 #' # required for the query. This can be conveniently
-#' done with `query_athletes()`.
+#' # done with query_athletes().
 #' odermatt <- query_athletes("odermatt", "marco")
 #'
 #' # get all of his results
