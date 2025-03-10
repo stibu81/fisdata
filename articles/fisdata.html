@@ -133,7 +133,7 @@ a list of available codes with a description.</p>
 <div class="section level2">
 <h2 id="available-querying-functions">Available Querying Functions<a class="anchor" aria-label="anchor" href="#available-querying-functions"></a>
 </h2>
-<p>fisdata currently offers four functions to query different types of
+<p>fisdata offers the following functions to query different types of
 data:</p>
 <ul>
 <li>
@@ -162,7 +162,7 @@ as input, as indicated by the arrows. The two exceptions,
 <code><a href="../reference/query_athletes.html">query_athletes()</a></code> and <code><a href="../reference/query_events.html">query_events()</a></code> are thus
 the usual entry points to start a query.</p>
 <div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:200px;"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"diagram":"\ngraph LR;\nS1[ ]-->|\"query_athletes()\"|A(athletes);\nA-->|\"query_results()\"|AR(athlete<br>results);\nAR-->|\"query_race()\"|CR(competition<br>results);\n\nS2[ ]-->|\"query_events()\"|E(events);\nE-->|\"query_competitions()\"|C(competitions);\nC-->|\"query_race()\"|CR;\n\nCR-->|\"query_results()\"|AR;\n\nstyle S1 fill:#FFFFFF00, stroke:#FFFFFF00;\nstyle S2 fill:#FFFFFF00, stroke:#FFFFFF00;\n"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"diagram":"\ngraph LR\nS1[ ]-->|\"query_athletes()\"|A(athletes)\nA-->|\"query_results()\"|AR(athlete<br>results)\nAR-->|\"query_race()\"|CR(competition<br>results)\n\nS2[ ]-->|\"query_events()\"|E(events)\nE-->|\"query_competitions()\"|C(competitions)\nC-->|\"query_race()\"|CR\n\nCR-->|\"query_results()\"|AR\n\nclassDef hiddenNode fill:#FFFFFF00,stroke:#FFFFFF00\nclass S1,S2 hiddenNode\nclassDef dataNode fill:#fffbd6,stroke:#fcaf16,color:#002395\nclass A,AR,CR,E,C,CR dataNode\n"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level2">
 <h2 id="running-a-query">Running a Query<a class="anchor" aria-label="anchor" href="#running-a-query"></a>
