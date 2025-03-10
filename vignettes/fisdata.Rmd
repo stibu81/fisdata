@@ -47,7 +47,7 @@ the full description. See the datasets `sectors`, `disciplines`, and
 
 ## Available Querying Functions
 
-fisdata currently offers four functions to query different types of data:
+fisdata offers the following functions to query different types of data:
 
 * `query_athletes()`: query athletes by name and other attributes and obtain
   a table of matching athletes.
