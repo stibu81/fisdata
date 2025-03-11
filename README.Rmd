@@ -64,7 +64,7 @@ query_athletes("cuche", "didier") %>%
   select(athlete:place, category:rank, cup_points)
 ```
 
-Use `query_events()` and `query_competitions()` and `query_race()` to get
+Use `query_events()`, `query_competitions()` and `query_race()` to get
 the full results of the Wengen Downhill in 2025:
 
 ```{r}

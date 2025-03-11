@@ -65,8 +65,8 @@ query_athletes("cuche", "didier") %>%
 #> # ℹ 293 more rows
 ```
 
-Use `query_events()` and `query_competitions()` and `query_race()` to
-get the full results of the Wengen Downhill in 2025:
+Use `query_events()`, `query_competitions()` and `query_race()` to get
+the full results of the Wengen Downhill in 2025:
 
 ``` r
 query_events(sector = "AL", place = "wengen", season = 2025) %>% 
