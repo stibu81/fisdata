@@ -1,8 +1,8 @@
 ---
-title: "fisdata"
+title: "Introduction to fisdata"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{fisdata}
+  %\VignetteIndexEntry{Introduction to fisdata}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
