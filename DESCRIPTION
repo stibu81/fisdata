@@ -14,7 +14,7 @@ RoxygenNote: 7.3.2
 Language: en-GB
 LazyData: true
 Depends: 
-    R (>= 4.0)
+    R (>= 4.1.0)
 Imports: 
     utils,
     glue,
