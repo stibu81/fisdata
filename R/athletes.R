@@ -147,10 +147,7 @@ extract_athletes <- function(url) {
     purrr::map(\(a) if (!a[1] %in% c("Active", "Not allowed")) c("", a) else a)
 
   # the competitor-id is required in order to query the results for the athlete
-  # it is only contained in the link
-  competitor_ids <- table_rows %>%
-    rvest::html_attr("href") %>%
-    stringr::str_extract("competitorid=(\\d+)", group = 1)
+  competitor_ids <- extract_ids(table_rows, "competitor")
 
   # create data frame
   df_names <- utils::head(names(empty_df), -1)

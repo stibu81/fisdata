@@ -157,10 +157,7 @@ extract_results <- function(url) {
     stringr::str_split("\n")
 
   # the race-id is required in order to query the results of the race
-  # it is only contained in the link
-  race_ids <- table_rows %>%
-    rvest::html_attr("href") %>%
-    stringr::str_extract("raceid=(\\d+)", group = 1)
+  race_ids <- extract_ids(table_rows, "race")
 
   # create data frame
   df_names <- utils::head(names(empty_df), -1)

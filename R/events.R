@@ -176,8 +176,7 @@ extract_events <- function(url) {
     purrr::map(rvest::html_text2)
 
   # the event-id is required in order to query the races for the event
-  # it is given by the id of the table-row div
-  event_ids <- table_rows %>% rvest::html_attr("id")
+  event_ids <- extract_ids(table_rows, "event")
 
   # create data frame
   # the structure of the list elements does not yet correspond to the structure

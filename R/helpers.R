@@ -269,3 +269,27 @@ is_cancelled <- function(table_rows) {
 
   status == "Cancelled"
 }
+
+
+# different kinds of IDs are contained in hyperlinks and can be extracted
+# with this function.
+
+extract_ids <- function(html, type = c("competitor", "race", "event")) {
+
+  type <- match.arg(type)
+
+  # the event-id is contained in the id-attribute of html
+  if (type == "event") {
+    return(html %>% rvest::html_attr("id"))
+  }
+
+  # if there is an "a"-tag, we must extract it
+  a_tag <- html %>% rvest::html_element("a")
+  if (!is.na(a_tag[1])) {
+    html <- a_tag
+  }
+
+  html %>%
+    rvest::html_attr("href") %>%
+    stringr::str_extract(glue::glue("{type}id=(\\d+)"), group = 1)
+}

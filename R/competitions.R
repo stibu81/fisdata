@@ -130,10 +130,7 @@ extract_competitions <- function(url) {
 
   # the race-id is required in order to query the results of the race
   # it is only contained in the link
-  race_ids <- containers %>%
-    rvest::html_element("a") %>%
-    rvest::html_attr("href") %>%
-    stringr::str_extract("raceid=(\\d+)", group = 1)
+  race_ids <- extract_ids(table_rows, "race")
 
   # create data frame
   dplyr::tibble(
