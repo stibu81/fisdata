@@ -41,9 +41,13 @@ get_standings_url <- function(sector = "",
   # gender is output as "F", but queried as "W"
   if (gender == "F") gender <- "W"
 
-  # if an invalid sector is used, the FIS-page returns results for all sectors.
-  # to avoid this, catch invalid sectors here.
-  if (!toupper(sector) %in% c("", fisdata::sectors$code)) {
+  # calling this without sector makes no sense, even though the FIS page selects
+  # alpine skiing by default
+  if (sector == "") {
+    cli::cli_abort("'sector' must not be empty.",
+                   call = error_call)
+  }
+  if (!toupper(sector) %in% c(fisdata::sectors$code)) {
     cli::cli_abort("'{sector}' is not a valid sector.",
                    call = error_call)
   }
@@ -61,7 +65,8 @@ extract_standings <- function(url) {
   table_rows <- url %>%
     rvest::read_html() %>%
     rvest::html_element(css = "div.table__body") %>%
-    rvest::html_elements(css = "a.table-row")
+    # usually the table rows are a-tags, but some can be divs.
+    rvest::html_elements(css = "a.table-row, div.table-row")
 
   # if there are no rows, return an empty table
   empty_df <- get_empty_standings_df()
@@ -77,18 +82,34 @@ extract_standings <- function(url) {
 
   # the competitor-id is required in order to query the results for the athlete
   competitor_ids <- extract_ids(table_rows, "competitor")
+  # if the table row is a div, the competitor id is contained in a link
+  # inside the div => also extract these
+  competitor_ids_in_div <- table_rows %>%
+    rvest::html_element("a") %>%
+    extract_ids("competitor")
+  i_in_div <- is.na(competitor_ids)
+  competitor_ids[i_in_div] <- competitor_ids_in_div[i_in_div]
 
   # create data frame
   standings_df <- standings %>%
     purrr::map(
       function(a) {
         # the first three elements are athlete, brand, and nation
-        abn <- a[1:3] %>%
-          as.list() %>%
+        # but brand is missing in some cases => if the second element is a
+        # nation code, brand is missing.
+        has_brand <- !a[[2]] %in% fisdata::nations$code
+        abn <- if (has_brand) {
+            i_before_ranks <- 1:3
+            as.list(a[1:3])
+          } else {
+            i_before_ranks <- 1:2
+            list(a[1], NA_character_, a[2])
+          }
+        abn <- abn %>%
           purrr::set_names(c("athlete", "brand", "nation")) %>%
           dplyr::as_tibble()
         # from the remainder, remove the elements that are just a space
-        a <- Filter(\(x) x != " ", a[-(1:3)])
+        a <- Filter(\(x) x != " ", a[-i_before_ranks])
         # the remainder is strucutred as follows:
         #   disicpline, discipline code, rank, points
         # for disciplines, where the athlete does not compete, the last two
@@ -123,7 +144,9 @@ extract_standings <- function(url) {
   # * athlete's name in title case
   # * points and ranks as integer
   standings_df %>%
-    dplyr::mutate(athlete = stringr::str_to_title(.data$athlete),
+    dplyr::mutate(athlete = .data$athlete %>%
+                    stringr::str_to_title() %>%
+                    stringr::str_trim(),
                   dplyr::across(-("athlete":"nation"), as.integer))
 
 }
