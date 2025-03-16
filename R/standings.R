@@ -70,7 +70,11 @@ extract_standings <- function(url) {
 
   # if there are no rows, return an empty table
   empty_df <- get_empty_standings_df()
-  if (length(table_rows) == 0) {
+  has_no_standings <- table_rows %>%
+    rvest::html_text2() %>%
+    stringr::str_detect("No standings found") %>%
+    any()
+  if (has_no_standings | length(table_rows) == 0) {
     return(empty_df)
   }
 

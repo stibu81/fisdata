@@ -62,3 +62,25 @@ test_that("query_standings() works", {
 
   expect_snapshot(print(wc_al_2025, width = Inf, n = Inf))
 })
+
+
+test_that("query_standings() works for empty result", {
+
+  local_mocked_bindings(
+    get_standings_url = function(...) test_path("data", "standings_empty.html.gz")
+  )
+  empty <- query_standings(sector = "AL", season = 2050)
+
+  expect_s3_class(empty, "tbl_df")
+  expect_equal(nrow(empty), 0)
+
+  expected_names <- c("athlete", "brand", "nation")
+  expect_named(empty, expected_names)
+
+  expected_types <- rep("character", 3)
+  for (i in seq_along(expected_names)) {
+    expect_type(empty[[!!expected_names[i]]], expected_types[i])
+  }
+
+  expect_equal(attr(empty, "url"), get_standings_url())
+})
