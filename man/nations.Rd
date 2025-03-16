@@ -5,7 +5,7 @@
 \alias{nations}
 \title{Table of IOC Country Codes}
 \format{
-A data frame with 219 rows and
+A data frame with 223 rows and
 3 variables:
 \describe{
 \item{code}{IOC country code consisting of three capital letters}
