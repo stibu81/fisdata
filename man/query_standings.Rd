@@ -2,9 +2,15 @@
 % Please edit documentation in R/standings.R
 \name{query_standings}
 \alias{query_standings}
-\title{Query Cup Standings for an Athlete}
+\title{Query Cup Standings}
 \usage{
-query_standings(sector = "", season = "", category = "", gender = "")
+query_standings(
+  sector = "",
+  season = "",
+  category = "",
+  gender = "",
+  type = c("ranking", "start-list", "nations")
+)
 }
 \arguments{
 \item{sector}{abbreviation of the sector, e.g., "AL" for
@@ -16,14 +22,24 @@ omitted, results are returned for the current season.}
 
 \item{category}{abbreviation of the category for the cup, e.g., "WC" for
 "World Cup". See the dataset \link{categories} for possible values; note that
-the standing is only available for some of the categories. If an unsupported
-category is used, the FIS page unfortunately returns the standings for a
-default category.}
+the standing is only available for some of the categories.
+If an unsupported category is used, the FIS page unfortunately returns
+the standings for a default category, which is usually the world cup ("WC").}
 
-\item{gender}{abbreviation of the gender: "M" for male or "F" for female}
+\item{gender}{abbreviation of the gender: "M" for male/men,
+"F" or "W" for female/women. For nations cups (\code{type = "nations"}), use
+"A" to get the overall nations cup.}
+
+\item{type}{type of standings to return. Not all types may be supported for
+all categories. Possible values are:
+\itemize{
+\item \code{"ranking"}, the default, returns the usual ranking of individual athletes
+which determines the discipline and overall winner of the cup.
+\item \code{"start-list"} returns the ranking for the start lists.
+\item \code{"nations"} returns the ranking of the nations cup.
+}}
 }
 \description{
-Query results for an athlete using various filters. Omitting a filter means
-that results with any value in that field will be returned.
-Filtering is case-insensitive and for \code{place} string matches are partial.
+Query cup standings by sector, category (i.e., the cup in this context),
+and gender.
 }

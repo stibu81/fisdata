@@ -1,8 +1,7 @@
-#' Query Cup Standings for an Athlete
+#' Query Cup Standings
 #'
-#' Query results for an athlete using various filters. Omitting a filter means
-#' that results with any value in that field will be returned.
-#' Filtering is case-insensitive and for `place` string matches are partial.
+#' Query cup standings by sector, category (i.e., the cup in this context),
+#' and gender.
 #'
 #' @inheritParams query_athletes
 #' @inheritParams query_results
@@ -11,19 +10,38 @@
 #'  omitted, results are returned for the current season.
 #' @param category abbreviation of the category for the cup, e.g., "WC" for
 #'  "World Cup". See the dataset [categories] for possible values; note that
-#'  the standing is only available for some of the categories. If an unsupported
-#'  category is used, the FIS page unfortunately returns the standings for a
-#'  default category.
+#'  the standing is only available for some of the categories.
+#'  If an unsupported category is used, the FIS page unfortunately returns
+#'  the standings for a default category, which is usually the world cup ("WC").
+#' @param gender abbreviation of the gender: "M" for male/men,
+#'  "F" or "W" for female/women. For nations cups (`type = "nations"`), use
+#'  "A" to get the overall nations cup.
+#' @param type type of standings to return. Not all types may be supported for
+#' all categories. Possible values are:
+#'
+#' * `"ranking"`, the default, returns the usual ranking of individual athletes
+#'   which determines the discipline and overall winner of the cup.
+#' * `"start-list"` returns the ranking for the start lists.
+#' * `"nations"` returns the ranking of the nations cup.
 #'
 #' @export
 
 query_standings <- function(sector = "",
                             season = "",
                             category = "",
-                            gender = "") {
+                            gender = "",
+                            type = c("ranking", "start-list", "nations")) {
 
-  url <- get_standings_url(sector, season, category, gender)
+  # type must already be handled here, because we use it further down
+  type <- match.arg(type)
+
+  url <- get_standings_url(sector, season, category, gender, type)
   standings <- extract_standings(url)
+
+  # if the results are for the nations cup, remove the column brand
+  if (type == "nations") {
+    standings <- standings %>% dplyr::select(-"brand")
+  }
 
   # add the url as an attribute
   attr(standings, "url") <- url
@@ -36,10 +54,17 @@ get_standings_url <- function(sector = "",
                               season = "",
                               category = "",
                               gender = "",
+                              type = "ranking",
                               error_call = rlang::caller_env()) {
 
   # gender is output as "F", but queried as "W"
   if (gender == "F") gender <- "W"
+
+  # gender = "A" is only supported for the nations cup.
+  if (gender == "A" && type != "nations") {
+    cli::cli_abort("gender 'A' is only supported for nations cups.",
+                   call = error_call)
+  }
 
   # calling this without sector makes no sense, even though the FIS page selects
   # alpine skiing by default
@@ -50,6 +75,13 @@ get_standings_url <- function(sector = "",
   if (!toupper(sector) %in% c(fisdata::sectors$code)) {
     cli::cli_abort("'{sector}' is not a valid sector.",
                    call = error_call)
+  }
+
+  # if type is "start-list" or "nation", the category code must be adapted
+  if (type == "start-list") {
+    category <- paste0(category, "SL")
+  } else if (type == "nations") {
+    category <- paste0("NC-", category)
   }
 
   glue::glue(

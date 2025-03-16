@@ -13,6 +13,22 @@ test_that("get_standings_url() works with valid inputs", {
     paste0("https://www.fis-ski.com/DB/general/cup-standings.html?",
            "sectorcode=JP&seasoncode=2023&cupcode=WC&gendercode=W")
   )
+  expect_equal(
+    get_standings_url(sector = "AL", category = "WC", type = "start-list"),
+    paste0("https://www.fis-ski.com/DB/general/cup-standings.html?",
+           "sectorcode=AL&seasoncode=&cupcode=WCSL&gendercode=")
+  )
+  expect_equal(
+    get_standings_url(sector = "AL", category = "WC", type = "nations"),
+    paste0("https://www.fis-ski.com/DB/general/cup-standings.html?",
+           "sectorcode=AL&seasoncode=&cupcode=NC-WC&gendercode=")
+  )
+  expect_equal(
+    get_standings_url(sector = "AL", category = "WC",
+                      gender = "A", type = "nations"),
+    paste0("https://www.fis-ski.com/DB/general/cup-standings.html?",
+           "sectorcode=AL&seasoncode=&cupcode=NC-WC&gendercode=A")
+  )
 })
 
 
@@ -24,6 +40,10 @@ test_that("get_standings_url() errors work", {
   expect_error(
     get_standings_url(sector = "XY"),
     "'XY' is not a valid sector."
+  )
+  expect_error(
+    get_standings_url(sector = "AL", gender = "A"),
+    "gender 'A' is only supported for nations cups."
   )
 })
 
