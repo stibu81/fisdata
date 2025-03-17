@@ -57,8 +57,7 @@ get_standings_url <- function(sector = "",
                               type = "ranking",
                               error_call = rlang::caller_env()) {
 
-  # gender is output as "F", but queried as "W"
-  if (gender == "F") gender <- "W"
+  gender <- standardise_gender(gender)
 
   # gender = "A" is only supported for the nations cup.
   if (gender == "A" && type != "nations") {

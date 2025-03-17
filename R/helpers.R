@@ -65,6 +65,14 @@ replace_special_chars <- function(x) {
 }
 
 
+# standardise gender: convert to upper case, replace "F" by "W".
+# the latter is useful because query_athletes() returns "F", but the API
+# must be queried with "W"
+standardise_gender <- function(gender) {
+  toupper(gender) %>%
+    stringr::str_replace("^F$", "W")
+}
+
 # format the birthdate to %Y-%m-%d. The birthdate is kept as a string, because
 # for many athletes, only the birthyear is registered. This format nevertheless
 # allows for correct sorting by birthdate.

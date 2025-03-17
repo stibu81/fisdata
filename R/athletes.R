@@ -11,7 +11,8 @@
 #'  alpine skiing. See the dataset [sectors] for possible values.
 #' @param nation abbreviation of the nation, e.g., "SUI" for Switzerland. The
 #'  value is matched exactly. See the dataset [nations] for possible values.
-#' @param gender abbreviation of the gender: "M" for male or "F" for female
+#' @param gender abbreviation of the gender: "M" for male/men,
+#'  "F" or "W" for female/women.
 #' @param birth_year birth year. This also supports multiple years separated
 #'  by commas (e.g, "1995,1998,2000") or year ranges (e.g., "1990-1995").
 #' @param brand ski or snowboard brand used by the athlete. String matching is
@@ -101,8 +102,7 @@ get_athletes_url <- function(last_name = "",
 
   # active athletes are found by querying with "O"
   active <- if (active_only) "O" else ""
-  # gender is output as "F", but queried as "W"
-  if (gender == "F") gender <- "W"
+  gender <- standardise_gender(gender)
 
   # if an invalid sector is used, the FIS-page returns results for all sectors.
   # to avoid this, catch invalid sectors here.

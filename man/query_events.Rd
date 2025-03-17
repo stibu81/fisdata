@@ -39,7 +39,8 @@ alpine skiing. See the dataset \link{sectors} for possible values.}
 \item{discipline}{abbreviation for the discipline, e.g., "DH" for
 "Downhill". See the dataset \link{disciplines} for possible values.}
 
-\item{gender}{abbreviation of the gender: "M" for male or "F" for female}
+\item{gender}{abbreviation of the gender: "M" for male/men,
+"F" or "W" for female/women.}
 
 \item{place}{location of the race. The API does not
 support special characters, but many are handled automatically

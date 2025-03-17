@@ -26,7 +26,8 @@ alpine skiing. See the dataset \link{sectors} for possible values.}
 \item{nation}{abbreviation of the nation, e.g., "SUI" for Switzerland. The
 value is matched exactly. See the dataset \link{nations} for possible values.}
 
-\item{gender}{abbreviation of the gender: "M" for male or "F" for female}
+\item{gender}{abbreviation of the gender: "M" for male/men,
+"F" or "W" for female/women.}
 
 \item{birth_year}{birth year. This also supports multiple years separated
 by commas (e.g, "1995,1998,2000") or year ranges (e.g., "1990-1995").}

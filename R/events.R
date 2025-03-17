@@ -113,9 +113,7 @@ get_events_url <- function(selection = c("all", "results", "upcoming"),
 
   selection <- match.arg(selection)
   if (selection == "all") selection <- ""
-
-  # gender is output as "F", but queried as "W"
-  if (gender == "F") gender <- "W"
+  gender <- standardise_gender(gender)
 
   # bring the date to standard format
   # for the date filter to work, also the season must be set explicitly

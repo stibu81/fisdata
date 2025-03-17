@@ -46,6 +46,12 @@ test_that("replace_special_chars() works", {
 })
 
 
+test_that("standardise_gender() works", {
+  expect_equal(standardise_gender(c("m", "f", "w", "a")), c("M", "W", "W", "A"))
+  expect_equal(standardise_gender(c("M", "F", "W", "A")), c("M", "W", "W", "A"))
+})
+
+
 test_that("format_birthdate() works", {
   expect_equal(
     format_birthdate(c("08-10-1997", "1974", "1987", "12-05-1993", NA)),
