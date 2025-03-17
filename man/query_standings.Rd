@@ -40,16 +40,17 @@ which determines the discipline and overall winner of the cup.
 }}
 }
 \value{
-A tibble with at least the following columns: \code{athlete}, \code{brand} (except for
-nations cups), and \code{nation}. Depending on the sector, there are multiple
+A tibble with at least the following columns: \code{sector}, \code{athlete},
+and \code{nation}. Except for nations cups, there are also the columns \code{brand}
+and \code{competitor_id}. Depending on the sector, there are multiple
 columns giving the rank and the points for the various disciplines. For
 example, in alpine skiing ("AL"), the columns \code{all_rank} and \code{all_points}
 give the rank and points for the overall world cup, while \code{dh_rank} and
 \code{dh_points} give the rank and points for the downhill world cup.
 }
 \description{
-Query cup standings by sector, category (i.e., the cup in this context),
-and gender.
+Query cup standings by sector, season, category
+(i.e., the cup in this context), and gender.
 }
 \examples{
 \dontrun{

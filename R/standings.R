@@ -1,10 +1,9 @@
 #' Query Cup Standings
 #'
-#' Query cup standings by sector, category (i.e., the cup in this context),
-#' and gender.
+#' Query cup standings by sector, season, category
+#' (i.e., the cup in this context), and gender.
 #'
 #' @inheritParams query_athletes
-#' @inheritParams query_results
 #' @param season year when the season ended, i.e., 2020 stands for the season
 #'  2019/2020. It is not possible to filter for multiple seasons at once. If
 #'  omitted, results are returned for the current season.
@@ -25,8 +24,9 @@
 #' * `"nations"` returns the ranking of the nations cup.
 #'
 #' @return
-#' A tibble with at least the following columns: `athlete`, `brand` (except for
-#' nations cups), and `nation`. Depending on the sector, there are multiple
+#' A tibble with at least the following columns: `sector`, `athlete`,
+#' and `nation`. Except for nations cups, there are also the columns `brand`
+#' and `competitor_id`. Depending on the sector, there are multiple
 #' columns giving the rank and the points for the various disciplines. For
 #' example, in alpine skiing ("AL"), the columns `all_rank` and `all_points`
 #' give the rank and points for the overall world cup, while `dh_rank` and
