@@ -66,7 +66,7 @@ query_standings <- function(sector = "",
 
   # if the results are for the nations cup, remove the column brand
   if (type == "nations") {
-    standings <- standings %>% dplyr::select(-"brand")
+    standings <- standings %>% dplyr::select(-"brand", -"competitor_id")
   }
 
   # add the url as an attribute
