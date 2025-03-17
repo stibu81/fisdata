@@ -39,7 +39,33 @@ which determines the discipline and overall winner of the cup.
 \item \code{"nations"} returns the ranking of the nations cup.
 }}
 }
+\value{
+A tibble with at least the following columns: \code{athlete}, \code{brand} (except for
+nations cups), and \code{nation}. Depending on the sector, there are multiple
+columns giving the rank and the points for the various disciplines. For
+example, in alpine skiing ("AL"), the columns \code{all_rank} and \code{all_points}
+give the rank and points for the overall world cup, while \code{dh_rank} and
+\code{dh_points} give the rank and points for the downhill world cup.
+}
 \description{
 Query cup standings by sector, category (i.e., the cup in this context),
 and gender.
+}
+\examples{
+\dontrun{
+# get the standings for the women's alpine skiing world cup 2023/24.
+query_standings(sector = "AL", season = 2024,
+                category = "WC", gender = "W")
+
+# get the overall nations ranking for the alpine skiing world cup 2024/25.
+query_standings(sector = "AL", season = 2025,
+                category = "WC", gender = "A",
+                type = "nations")
+
+# get the women's start list for the snowboard world cup 2021/22
+query_standings(sector = "SB", season = 2022,
+                category = "WC", gender = "W",
+                type = "start-list")
+}
+
 }
