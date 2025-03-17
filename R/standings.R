@@ -61,7 +61,8 @@ query_standings <- function(sector = "",
   type <- match.arg(type)
 
   url <- get_standings_url(sector, season, category, gender, type)
-  standings <- extract_standings(url)
+  standings <- extract_standings(url) %>%
+    dplyr::mutate(sector = toupper(sector), .before = 1)
 
   # if the results are for the nations cup, remove the column brand
   if (type == "nations") {
@@ -203,11 +204,13 @@ extract_standings <- function(url) {
   # prepare output data:
   # * athlete's name in title case
   # * points and ranks as integer
+  # * add competitor id
   standings_df %>%
     dplyr::mutate(athlete = .data$athlete %>%
                     stringr::str_to_title() %>%
                     stringr::str_trim(),
-                  dplyr::across(-("athlete":"nation"), as.integer))
+                  dplyr::across(-("athlete":"nation"), as.integer),
+                  competitor_id = competitor_ids)
 
 }
 

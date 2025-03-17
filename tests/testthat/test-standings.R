@@ -56,17 +56,19 @@ test_that("query_standings() works", {
 
   expect_s3_class(wc_al_2025, "tbl_df")
 
-  expected_names <- c("athlete", "brand", "nation",
+  expected_names <- c("sector", "athlete", "brand", "nation",
                       paste(rep(c("all", "dh", "gs", "sg", "sl"), each = 2),
                             rep(c("rank", "points"), 4),
-                            sep = "_"))
+                            sep = "_"),
+                      "competitor_id")
   expect_named(wc_al_2025, expected_names)
 
-  expected_types <- c(rep("character", 3), rep("integer", 10))
+  expected_types <- c(rep("character", 4), rep("integer", 10), "character")
   for (i in seq_along(expected_names)) {
     expect_type(wc_al_2025[[!!expected_names[i]]], expected_types[i])
   }
 
+  expect_in(wc_al_2025$sector, "AL")
   expect_in(wc_al_2025$nation, nations$code)
   for (col in str_subset(expected_names, "_rank$")) {
     expect_in(wc_al_2025[[!!col]], c(NA_integer_, 1:nrow(wc_al_2025)))
@@ -85,7 +87,6 @@ test_that("query_standings() works", {
 
 
 test_that("query_standings() works for empty result", {
-
   local_mocked_bindings(
     get_standings_url = function(...) test_path("data", "standings_empty.html.gz")
   )
@@ -94,10 +95,10 @@ test_that("query_standings() works for empty result", {
   expect_s3_class(empty, "tbl_df")
   expect_equal(nrow(empty), 0)
 
-  expected_names <- c("athlete", "brand", "nation")
+  expected_names <- c("sector", "athlete", "brand", "nation")
   expect_named(empty, expected_names)
 
-  expected_types <- rep("character", 3)
+  expected_types <- rep("character", 4)
   for (i in seq_along(expected_names)) {
     expect_type(empty[[!!expected_names[i]]], expected_types[i])
   }
