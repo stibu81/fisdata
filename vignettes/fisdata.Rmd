@@ -56,7 +56,8 @@ fisdata offers the following functions to query different types of data:
 * `query_events()`: query events by date, place, and other attributes.
 * `query_competitions()`: obtain all individual competitions that are
   associated with an event.
-  
+* `query_standings()`: get the cup standings with ranks and points per
+  discipline.
   
 Each function returns a tibble that contains instances of a given type as its
 rows. The following diagram shows the types of tables that can be created.
