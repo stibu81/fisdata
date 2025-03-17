@@ -6,8 +6,8 @@
 #'
 #' @param athlete a list or data frame with fields/columns `competitor_id` and
 #'  `sector` that describe a *single* athlete. The easiest way to create
-#'  such a data frame is through the functions [query_athletes()] or
-#'  [query_race()]. These functions
+#'  such a data frame is through the functions [query_athletes()],
+#'  [query_race()], or [query_standings()]. These functions
 #'  can return multiple athletes, but `query_results()` only returns the
 #'  results for one athlete. If multiple athletes are passed, only the first
 #'  one will be used.
@@ -69,9 +69,17 @@ query_results <- function(athlete,
 
   athlete <- ensure_one_athlete(athlete)
 
+  # depending on the source for athlete, the name is stored in column
+  # "name" or "athlete".
+  athlete_name <- if ("name" %in% names(athlete)) {
+    athlete$name
+  } else {
+    athlete$athlete
+  }
+
   url <- get_results_url(athlete, season, category, place, discipline)
   results <- extract_results(url) %>%
-    dplyr::mutate(athlete = athlete$name, .before = 1) %>%
+    dplyr::mutate(athlete = athlete_name, .before = 1) %>%
     # the sector code must be added in order to be able to query races
     dplyr::mutate(sector = !!athlete$sector, .before = "category")
 

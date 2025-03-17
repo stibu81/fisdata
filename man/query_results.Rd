@@ -9,8 +9,8 @@ query_results(athlete, season = "", category = "", place = "", discipline = "")
 \arguments{
 \item{athlete}{a list or data frame with fields/columns \code{competitor_id} and
 \code{sector} that describe a \emph{single} athlete. The easiest way to create
-such a data frame is through the functions \code{\link[=query_athletes]{query_athletes()}} or
-\code{\link[=query_race]{query_race()}}. These functions
+such a data frame is through the functions \code{\link[=query_athletes]{query_athletes()}},
+\code{\link[=query_race]{query_race()}}, or \code{\link[=query_standings]{query_standings()}}. These functions
 can return multiple athletes, but \code{query_results()} only returns the
 results for one athlete. If multiple athletes are passed, only the first
 one will be used.}
