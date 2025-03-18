@@ -95,10 +95,10 @@ test_that("query_standings() works for empty result", {
   expect_s3_class(empty, "tbl_df")
   expect_equal(nrow(empty), 0)
 
-  expected_names <- c("sector", "athlete", "brand", "nation")
+  expected_names <- c("sector", "athlete", "brand", "nation", "competitor_id")
   expect_named(empty, expected_names)
 
-  expected_types <- rep("character", 4)
+  expected_types <- rep("character", 5)
   for (i in seq_along(expected_names)) {
     expect_type(empty[[!!expected_names[i]]], expected_types[i])
   }

@@ -219,6 +219,7 @@ get_empty_standings_df <- function() {
   tibble::tibble(
     athlete = character(),
     brand = character(),
-    nation = character()
+    nation = character(),
+    competitor_id = character()
   )
 }
