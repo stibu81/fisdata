@@ -52,11 +52,11 @@
 #'   category = "WC",
 #'   season = 2024,
 #'   discipline = "DH"
-#'  )
+#' )
 #'
-#'  # get all results from Kitzbühel. Note that the
-#'  # umlaut is removed in the output.
-#'  query_results(odermatt, place = "Kitzbühl")
+#' # get all results from Kitzbühel. Note that the
+#' # umlaut is removed in the output.
+#' query_results(odermatt, place = "Kitzbühl")
 #' }
 #'
 #' @export
