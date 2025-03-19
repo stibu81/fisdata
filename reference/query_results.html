@@ -54,8 +54,8 @@ Filtering is case-insensitive and for <code>place</code> string matches are part
 <dl><dt id="arg-athlete">athlete<a class="anchor" aria-label="anchor" href="#arg-athlete"></a></dt>
 <dd><p>a list or data frame with fields/columns <code>competitor_id</code> and
 <code>sector</code> that describe a <em>single</em> athlete. The easiest way to create
-such a data frame is through the functions <code><a href="query_athletes.html">query_athletes()</a></code> or
-<code><a href="query_race.html">query_race()</a></code>. These functions
+such a data frame is through the functions <code><a href="query_athletes.html">query_athletes()</a></code>,
+<code><a href="query_race.html">query_race()</a></code>, or <code><a href="query_standings.html">query_standings()</a></code>. These functions
 can return multiple athletes, but <code>query_results()</code> only returns the
 results for one athlete. If multiple athletes are passed, only the first
 one will be used.</p></dd>
@@ -117,11 +117,11 @@ substitute by the user.</p>
 <span class="r-in"><span>  category <span class="op">=</span> <span class="st">"WC"</span>,</span></span>
 <span class="r-in"><span>  season <span class="op">=</span> <span class="fl">2024</span>,</span></span>
 <span class="r-in"><span>  discipline <span class="op">=</span> <span class="st">"DH"</span></span></span>
-<span class="r-in"><span> <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span> <span class="co"># get all results from Kitzbühel. Note that the</span></span></span>
-<span class="r-in"><span> <span class="co"># umlaut is removed in the output.</span></span></span>
-<span class="r-in"><span> <span class="fu">query_results</span><span class="op">(</span><span class="va">odermatt</span>, place <span class="op">=</span> <span class="st">"Kitzbühl"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># get all results from Kitzbühel. Note that the</span></span></span>
+<span class="r-in"><span><span class="co"># umlaut is removed in the output.</span></span></span>
+<span class="r-in"><span><span class="fu">query_results</span><span class="op">(</span><span class="va">odermatt</span>, place <span class="op">=</span> <span class="st">"Kitzbühl"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

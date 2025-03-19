@@ -85,6 +85,8 @@
 <code><a href="reference/query_events.html">query_events()</a></code>: query events by date, place, and other attributes.</li>
 <li>
 <code><a href="reference/query_competitions.html">query_competitions()</a></code>: obtain all individual competitions that are associated with an event.</li>
+<li>
+<code><a href="reference/query_standings.html">query_standings()</a></code>: get the cup standings with ranks and points per discipline.</li>
 </ul>
 </div>
 <div class="section level2">
@@ -133,6 +135,25 @@
 <span><span class="co">#&gt;  9     9    16 Crawford James    Head            1997 CAN    2M 23.86S 1.28S    </span></span>
 <span><span class="co">#&gt; 10    10     3 Schieder Florian  Atomic          1995 ITA    2M 23.95S 1.37S    </span></span>
 <span><span class="co">#&gt; # ℹ 38 more rows</span></span></code></pre></div>
+<p>Use <code><a href="reference/query_standings.html">query_standings()</a></code> to get the overall and downhill standings of the men’s alpine skiing world cup in the season 2022/23:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/query_standings.html">query_standings</a></span><span class="op">(</span>sector <span class="op">=</span> <span class="st">"AL"</span>, season <span class="op">=</span> <span class="fl">2023</span>,</span>
+<span>                category <span class="op">=</span> <span class="st">"WC"</span>, gender <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">athlete</span>, <span class="va">nation</span>, <span class="va">all_rank</span><span class="op">:</span><span class="va">dh_points</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 160 × 6</span></span>
+<span><span class="co">#&gt;    athlete                 nation all_rank all_points dh_rank dh_points</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                   &lt;chr&gt;     &lt;int&gt;      &lt;int&gt;   &lt;int&gt;     &lt;int&gt;</span></span>
+<span><span class="co">#&gt;  1 Odermatt Marco          SUI           1       2042       3       462</span></span>
+<span><span class="co">#&gt;  2 Kilde Aleksander Aamodt NOR           2       1340       1       760</span></span>
+<span><span class="co">#&gt;  3 Kristoffersen Henrik    NOR           3       1154      NA        NA</span></span>
+<span><span class="co">#&gt;  4 Braathen Lucas          NOR           4        954      NA        NA</span></span>
+<span><span class="co">#&gt;  5 Kriechmayr Vincent      AUT           5        953       2       614</span></span>
+<span><span class="co">#&gt;  6 Meillard Loic           SUI           6        877      NA        NA</span></span>
+<span><span class="co">#&gt;  7 Schwarz Marco           AUT           7        863      31        64</span></span>
+<span><span class="co">#&gt;  8 Pinturault Alexis       FRA           8        839      NA        NA</span></span>
+<span><span class="co">#&gt;  9 Feller Manuel           AUT           9        546      NA        NA</span></span>
+<span><span class="co">#&gt; 10 Zenhaeusern Ramon       SUI          10        467      NA        NA</span></span>
+<span><span class="co">#&gt; # ℹ 150 more rows</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="learn-more">Learn more<a class="anchor" aria-label="anchor" href="#learn-more"></a>
