@@ -189,6 +189,23 @@ test_that(
 
 
 test_that(
+  "query_results() works with a row from query_standings",
+  # athlete's name in column "athlete" instead of "name"
+  {
+    local_mocked_bindings(
+      get_results_url = function(...) test_path("data", "results_al_all.html.gz")
+    )
+    cuche_standings <- tibble(athlete = "Cuche Didier",
+                              sector = "AL",
+                              competitor_id = "11795")
+    cuche_athlete <- cuche_standings %>% rename(name = athlete)
+    dh <- query_results(cuche_standings)
+    expect_equal(dh, query_results(cuche_athlete))
+  }
+)
+
+
+test_that(
   "query_results() works for empty result",
   {
     local_mocked_bindings(

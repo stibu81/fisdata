@@ -86,6 +86,43 @@ test_that("query_standings() works", {
 })
 
 
+test_that("query_standings() works for nations cup", {
+  local_mocked_bindings(
+    get_standings_url = function(...) test_path("data", "standings_wc_al_2025_nations.html.gz")
+  )
+  wc_al_2025_nations <- query_standings(sector = "AL", type = "nations")
+
+  expect_s3_class(wc_al_2025_nations, "tbl_df")
+
+  expected_names <- c("sector", "athlete", "nation",
+                      paste(rep(c("all", "gs", "sl", "dh", "sg"), each = 2),
+                            rep(c("rank", "points"), 4),
+                            sep = "_"))
+  expect_named(wc_al_2025_nations, expected_names)
+
+  expected_types <- c(rep("character", 3), rep("integer", 10))
+  for (i in seq_along(expected_names)) {
+    expect_type(wc_al_2025_nations[[!!expected_names[i]]], expected_types[i])
+  }
+
+  expect_in(wc_al_2025_nations$sector, "AL")
+  expect_in(wc_al_2025_nations$nation, nations$code)
+  for (col in str_subset(expected_names, "_rank$")) {
+    expect_in(wc_al_2025_nations[[!!col]], c(NA_integer_, 1:nrow(wc_al_2025_nations)))
+  }
+  for (col in str_subset(expected_names, "_points$")) {
+    expect_in(
+      wc_al_2025_nations[[!!col]],
+      c(NA_integer_, 1:max(wc_al_2025_nations[[!!col]], na.rm = TRUE))
+    )
+  }
+
+  expect_equal(attr(wc_al_2025_nations, "url"), get_standings_url())
+
+  expect_snapshot(print(wc_al_2025_nations, width = Inf, n = Inf))
+})
+
+
 test_that("query_standings() works for empty result", {
   local_mocked_bindings(
     get_standings_url = function(...) test_path("data", "standings_empty.html.gz")

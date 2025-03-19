@@ -191,3 +191,78 @@
       90        NA      NA        NA      28        49      NA        NA 200704       
       91         6      NA        NA      31        43      NA        NA 195130       
 
+# query_standings() works for nations cup
+
+    Code
+      print(wc_al_2025_nations, width = Inf, n = Inf)
+    Output
+      # A tibble: 32 x 13
+         sector athlete                  nation all_rank all_points gs_rank gs_points
+         <chr>  <chr>                    <chr>     <int>      <int>   <int>     <int>
+       1 AL     Switzerland              SUI           1      10020       1      2043
+       2 AL     Austria                  AUT           2       6778       3      1226
+       3 AL     Italy                    ITA           3       6072       4      1211
+       4 AL     Norway                   NOR           4       4670       2      1714
+       5 AL     United States Of America USA           5       3817       5      1029
+       6 AL     France                   FRA           6       3118       9       480
+       7 AL     Germany                  GER           7       1888      11       343
+       8 AL     Sweden                   SWE           8       1779       6       555
+       9 AL     Slovenia                 SLO           9       1545      10       447
+      10 AL     Canada                   CAN          10       1522      13       298
+      11 AL     Croatia                  CRO          11       1482       8       519
+      12 AL     New Zealand              NZL          12        668       7       520
+      13 AL     Brazil                   BRA          13        664      14       291
+      14 AL     Albania                  ALB          14        586      12       334
+      15 AL     Czechia                  CZE          15        553      NA        NA
+      16 AL     Great Britain            GBR          16        311      NA        NA
+      17 AL     Belgium                  BEL          17        288      16       121
+      18 AL     Bulgaria                 BUL          18        229      NA        NA
+      19 AL     Andorra                  AND          19        153      15       153
+      20 AL     Finland                  FIN          20        152      NA        NA
+      21 AL     Poland                   POL          21        104      17        98
+      22 AL     Estonia                  EST          22         71      18        44
+      23 AL     Bosnia And Herzegovina   BIH          23         29      NA        NA
+      24 AL     Spain                    ESP          24         16      NA        NA
+      25 AL     Slovakia                 SVK          25         13      19        13
+      26 AL     Greece                   GRE          26         12      NA        NA
+      27 AL     Latvia                   LAT          27         10      NA        NA
+      28 AL     Chile                    CHI          28          8      NA        NA
+      29 AL     Netherlands              NED          28          8      20         8
+      30 AL     Japan                    JPN          30          6      NA        NA
+      31 AL     Liechtenstein            LIE          31          4      NA        NA
+      32 AL     Argentina                ARG          32          1      21         1
+         sl_rank sl_points dh_rank dh_points sg_rank sg_points
+           <int>     <int>   <int>     <int>   <int>     <int>
+       1       1      2589       1      2816       1      2572
+       2       2      2075       3      1560       3      1917
+       3       9       518       2      1817       2      2526
+       4       3      1877       8       415       6       664
+       5       7       880       4      1055       4       853
+       6       4      1269       5       594       5       775
+       7       8       820       9       383       8       342
+       8       5      1159      12        20      12        45
+       9      11       342       6       562      10       194
+      10      15       220       7       543       7       461
+      11       6       963      NA        NA      NA        NA
+      12      NA        NA      15         4      11       144
+      13      10       373      NA        NA      NA        NA
+      14      13       252      NA        NA      NA        NA
+      15      18        36      10       229       9       288
+      16      12       311      NA        NA      NA        NA
+      17      16       167      NA        NA      NA        NA
+      18      14       229      NA        NA      NA        NA
+      19      NA        NA      NA        NA      NA        NA
+      20      17        55      11        70      13        27
+      21      NA        NA      NA        NA      15         6
+      22      19        27      NA        NA      NA        NA
+      23      NA        NA      14         6      14        23
+      24      20        16      NA        NA      NA        NA
+      25      NA        NA      NA        NA      NA        NA
+      26      21        12      NA        NA      NA        NA
+      27      22        10      NA        NA      NA        NA
+      28      NA        NA      13         8      NA        NA
+      29      NA        NA      NA        NA      NA        NA
+      30      23         6      NA        NA      NA        NA
+      31      NA        NA      15         4      NA        NA
+      32      NA        NA      NA        NA      NA        NA
+
