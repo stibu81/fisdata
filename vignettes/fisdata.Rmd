@@ -36,9 +36,11 @@ Explanations for terms with obvious meaning are omitted.
 | athlete     |                                                  | Didier Cuche, Lara Gut-Behrami  |
 | sector      | the major groups of disciplines                  | Alpine Skiing, Cross-Country |
 | discipline  | a specific discipline                            | Downhill, Large Hill, Aerials   |
-| brand       | manufacturer of an athlete's skis or snowboards | Stöckli, Head |
-| competition | a competition in a single discipline and sector | Wengen Downhill 2025 |
-| event       | a set of one or more competitions in one or more disciplines taking place during one or more days in a specific location during a season | Wengen 2025 | category    | type of the event                                 | World Cup, Olympic Winter Games |
+| brand       | manufacturer of an athlete's skis or snowboards  | Stöckli, Head |
+| competition | a competition in a single discipline and sector  | Wengen Downhill 2025 |
+| event       | a set of one or more competitions in one or more disciplines taking place during one or more days in a specific location during a season | Wengen 2025
+| category    | type of the event                                | World Cup, Olympic Winter Games |
+| standings   | the overall ranking for a category or discipline within a category | Overall alpine skiing World Cup standings 2025 | 
 
 When filtering for sector, discipline, or category, a code is used instead of
 the full description. See the datasets `sectors`, `disciplines`, and 
@@ -56,7 +58,8 @@ fisdata offers the following functions to query different types of data:
 * `query_events()`: query events by date, place, and other attributes.
 * `query_competitions()`: obtain all individual competitions that are
   associated with an event.
-  
+* `query_standings()`: get the cup standings with ranks and points per
+  discipline.
   
 Each function returns a tibble that contains instances of a given type as its
 rows. The following diagram shows the types of tables that can be created.
@@ -64,26 +67,29 @@ Each node stands for a table with the label of the node indicating the type
 of objects contained in the table. Each arrow is labelled by the name of the
 function that returns the table that the arrow is pointing to. Some functions
 require an instance of another type as input, as indicated by the arrows.
-The two exceptions, `query_athletes()` and `query_events()` are thus the usual
-entry points to start a query.
+The three exceptions, `query_athletes()`, `query_standings()`, and
+`query_events()` are thus the usual entry points to start a query.
 
-```{r echo=FALSE, out.width="100%", out.height="200px"}
+```{r echo=FALSE, out.width="100%", out.height="260px"}
 DiagrammeR::mermaid('
 graph LR
 S1[ ]-->|"query_athletes()"|A(athletes)
 A-->|"query_results()"|AR(athlete<br>results)
 AR-->|"query_race()"|CR(competition<br>results)
 
-S2[ ]-->|"query_events()"|E(events)
+S2[ ]-->|"query_standings()"|ST(standings)
+ST-->|"query_results()"|AR
+
+S3[ ]-->|"query_events()"|E(events)
 E-->|"query_competitions()"|C(competitions)
 C-->|"query_race()"|CR
 
 CR-->|"query_results()"|AR
 
 classDef hiddenNode fill:#FFFFFF00,stroke:#FFFFFF00
-class S1,S2 hiddenNode
+class S1,S2,S3 hiddenNode
 classDef dataNode fill:#fffbd6,stroke:#fcaf16,color:#002395
-class A,AR,CR,E,C,CR dataNode
+class A,AR,CR,E,C,CR,ST dataNode
 ')
 ```
 

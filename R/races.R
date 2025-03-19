@@ -50,7 +50,7 @@
 #' wengen2025_res <- wengen2025_competitions %>%
 #'   filter(competition == "Downhill") %>%
 #'   query_race()
-#'  wengen2025_res
+#' wengen2025_res
 #'
 #' # each entry of the race results can be used to get that athletes full
 #' # results.
@@ -137,10 +137,7 @@ extract_race <- function(url, error_call = rlang::caller_env()) {
     stringr::str_split("\n")
 
   # the competitor-id is required in order to query the results for the athlete
-  # it is only contained in the link
-  competitor_ids <- table_rows %>%
-    rvest::html_attr("href") %>%
-    stringr::str_extract("competitorid=(\\d+)", group = 1)
+  competitor_ids <- extract_ids(table_rows, "competitor")
 
   # determine the column names of the result tibble
   out_names <- get_race_column_names(html, error_call = error_call)

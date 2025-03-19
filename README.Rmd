@@ -48,6 +48,8 @@ fisdata offers the following functions to query different types of data:
 * `query_events()`: query events by date, place, and other attributes.
 * `query_competitions()`: obtain all individual competitions that are
   associated with an event.
+* `query_standings()`: get the cup standings with ranks and points per
+  discipline.
 
 
 ## Example Queries
@@ -73,6 +75,15 @@ query_events(sector = "AL", place = "wengen", season = 2025) %>%
   filter(competition == "Downhill") %>% 
   query_race() %>% 
   select(rank, bib, name:diff_time)
+```
+
+Use `query_standings()` to get the overall and downhill standings of the men's
+alpine skiing world cup in the season 2022/23:
+
+```{r}
+query_standings(sector = "AL", season = 2023,
+                category = "WC", gender = "M") %>% 
+  select(athlete, nation, all_rank:dh_points)
 ```
 
 

@@ -36,6 +36,8 @@ fisdata offers the following functions to query different types of data:
 - `query_events()`: query events by date, place, and other attributes.
 - `query_competitions()`: obtain all individual competitions that are
   associated with an event.
+- `query_standings()`: get the cup standings with ranks and points per
+  discipline.
 
 ## Example Queries
 
@@ -88,6 +90,29 @@ query_events(sector = "AL", place = "wengen", season = 2025) %>%
 #>  9     9    16 Crawford James    Head            1997 CAN    2M 23.86S 1.28S    
 #> 10    10     3 Schieder Florian  Atomic          1995 ITA    2M 23.95S 1.37S    
 #> # ℹ 38 more rows
+```
+
+Use `query_standings()` to get the overall and downhill standings of the
+men’s alpine skiing world cup in the season 2022/23:
+
+``` r
+query_standings(sector = "AL", season = 2023,
+                category = "WC", gender = "M") %>% 
+  select(athlete, nation, all_rank:dh_points)
+#> # A tibble: 160 × 6
+#>    athlete                 nation all_rank all_points dh_rank dh_points
+#>    <chr>                   <chr>     <int>      <int>   <int>     <int>
+#>  1 Odermatt Marco          SUI           1       2042       3       462
+#>  2 Kilde Aleksander Aamodt NOR           2       1340       1       760
+#>  3 Kristoffersen Henrik    NOR           3       1154      NA        NA
+#>  4 Braathen Lucas          NOR           4        954      NA        NA
+#>  5 Kriechmayr Vincent      AUT           5        953       2       614
+#>  6 Meillard Loic           SUI           6        877      NA        NA
+#>  7 Schwarz Marco           AUT           7        863      31        64
+#>  8 Pinturault Alexis       FRA           8        839      NA        NA
+#>  9 Feller Manuel           AUT           9        546      NA        NA
+#> 10 Zenhaeusern Ramon       SUI          10        467      NA        NA
+#> # ℹ 150 more rows
 ```
 
 ## Learn more

@@ -3,6 +3,7 @@
 library(rvest)
 library(magrittr)
 library(purrr)
+library(tibble)
 library(dplyr)
 library(stringr)
 
@@ -17,7 +18,21 @@ nations <- tables %>%
   select(-group) %>%
   # the first row is not correct. Fix this by extracting three capital letters
   # as the country code
-  mutate(code = str_extract(code, "[A-Z]{3}")) %>%
+  mutate(code = str_extract(code, "[A-Z]{3}"))
+
+# manually add some codes that are used on the FIS page but not listed on
+# wikipedia (some are contained in the column "Other codes used").
+more_nations <- tribble(
+    ~code, ~country,
+    "BRD", "West Germany",
+    "DDR", "East Germany",
+    "JUG", "Yugoslavia",
+    "SOV", "Soviet Union"
+  ) %>%
+  mutate(current = FALSE)
+
+nations <- nations %>%
+  bind_rows(more_nations) %>%
   arrange(code)
 
 usethis::use_data(nations, overwrite = TRUE)

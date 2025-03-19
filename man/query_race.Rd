@@ -58,7 +58,7 @@ library(dplyr)
 wengen2025_res <- wengen2025_competitions \%>\%
   filter(competition == "Downhill") \%>\%
   query_race()
- wengen2025_res
+wengen2025_res
 
 # each entry of the race results can be used to get that athletes full
 # results.

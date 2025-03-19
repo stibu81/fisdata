@@ -113,9 +113,7 @@ get_events_url <- function(selection = c("all", "results", "upcoming"),
 
   selection <- match.arg(selection)
   if (selection == "all") selection <- ""
-
-  # gender is output as "F", but queried as "W"
-  if (gender == "F") gender <- "W"
+  gender <- standardise_gender(gender)
 
   # bring the date to standard format
   # for the date filter to work, also the season must be set explicitly
@@ -176,8 +174,7 @@ extract_events <- function(url) {
     purrr::map(rvest::html_text2)
 
   # the event-id is required in order to query the races for the event
-  # it is given by the id of the table-row div
-  event_ids <- table_rows %>% rvest::html_attr("id")
+  event_ids <- extract_ids(table_rows, "event")
 
   # create data frame
   # the structure of the list elements does not yet correspond to the structure

@@ -11,7 +11,8 @@
 #'  alpine skiing. See the dataset [sectors] for possible values.
 #' @param nation abbreviation of the nation, e.g., "SUI" for Switzerland. The
 #'  value is matched exactly. See the dataset [nations] for possible values.
-#' @param gender abbreviation of the gender: "M" for male or "F" for female
+#' @param gender abbreviation of the gender: "M" for male/men,
+#'  "F" or "W" for female/women.
 #' @param birth_year birth year. This also supports multiple years separated
 #'  by commas (e.g, "1995,1998,2000") or year ranges (e.g., "1990-1995").
 #' @param brand ski or snowboard brand used by the athlete. String matching is
@@ -101,8 +102,7 @@ get_athletes_url <- function(last_name = "",
 
   # active athletes are found by querying with "O"
   active <- if (active_only) "O" else ""
-  # gender is output as "F", but queried as "W"
-  if (gender == "F") gender <- "W"
+  gender <- standardise_gender(gender)
 
   # if an invalid sector is used, the FIS-page returns results for all sectors.
   # to avoid this, catch invalid sectors here.
@@ -147,10 +147,7 @@ extract_athletes <- function(url) {
     purrr::map(\(a) if (!a[1] %in% c("Active", "Not allowed")) c("", a) else a)
 
   # the competitor-id is required in order to query the results for the athlete
-  # it is only contained in the link
-  competitor_ids <- table_rows %>%
-    rvest::html_attr("href") %>%
-    stringr::str_extract("competitorid=(\\d+)", group = 1)
+  competitor_ids <- extract_ids(table_rows, "competitor")
 
   # create data frame
   df_names <- utils::head(names(empty_df), -1)
