@@ -2,3 +2,25 @@ url: https://stibu81.github.io/fisdata/
 template:
   bootstrap: 5
 
+reference:
+- title: Querying Functions
+  desc: Functions that download data from the FIS page
+  contents:
+  - query_athletes
+  - query_results
+  - query_events
+  - query_competitions
+  - query_standings
+  - query_race
+
+- title: Other Functions
+  contents:
+  - show_url
+
+- title: Datasets
+  desc: Datasets describing values that can be used in the querying functions
+  contents:
+  - sectors
+  - categories
+  - disciplines
+  - nations
