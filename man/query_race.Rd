@@ -34,6 +34,9 @@ runs and accordingly have multiple run times and possibly a total time.
 The function tries to be flexible in determining the format that is used
 for a given race, but it is known to fail for some special cases (e.g.,
 team races in alpine skiing).
+
+The results are cached such that the same data are only downloaded once
+per sessions.
 }
 \examples{
 \dontrun{

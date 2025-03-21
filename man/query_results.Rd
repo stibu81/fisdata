@@ -45,6 +45,9 @@ automatically: à, á, å, ä, æ, ç, ć, č, ð, é, è, ê, ë, ï, ñ, ø, �
 œ, š, ß, ú, ü, and ž.
 Other special characters must be replaced by the suitable
 substitute by the user.
+
+The results are cached such that the same data are only downloaded once
+per sessions.
 }
 \examples{
 \dontrun{

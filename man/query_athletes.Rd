@@ -63,6 +63,9 @@ substitute by the user.
 
 One use of this function is to get the competitor id for an athlete, which
 is needed in order to query an athletes results with \code{\link[=query_results]{query_results()}}.
+
+The results are cached such that the same data are only downloaded once
+per sessions.
 }
 \examples{
 \dontrun{

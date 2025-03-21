@@ -12,7 +12,10 @@ query_competitions(event)
 create such a data frame is through the function \code{\link[=query_events]{query_events()}}.
 This function can return multiple events, but \code{query_events()} only
 returns the results for one event If multiple events are passed, only
-the first one will be used.}
+the first one will be used.
+
+The results are cached such that the same data are only downloaded once
+per sessions.}
 }
 \value{
 A tibble with the following columns: \code{place}, \code{date}, \code{time}, \code{competition},

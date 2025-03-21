@@ -35,6 +35,9 @@
 #' applied, the results are further limited to a single month. If no month is
 #' explicitly specified, the current month is used.
 #'
+#' The results are cached such that the same data are only downloaded once
+#' per sessions.
+#'
 #' @returns
 #' A tibble with the following columns: `start_date`, `end_date`, `place`,
 #' `nation`, `sector`, `categories`, `disciplines`, `genders`,

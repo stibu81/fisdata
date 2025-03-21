@@ -29,6 +29,9 @@
 #' Other special characters must be replaced by the suitable
 #' substitute by the user.
 #'
+#' The results are cached such that the same data are only downloaded once
+#' per sessions.
+#'
 #' @returns
 #' A tibble with the following columns: `athlete`, `date`, `place`, `nation`,
 #' `sector`, `category`, `discipline`, `rank`, `fis_points`, `cup_points`,

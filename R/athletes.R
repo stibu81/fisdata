@@ -32,6 +32,9 @@
 #' One use of this function is to get the competitor id for an athlete, which
 #' is needed in order to query an athletes results with [query_results()].
 #'
+#' The results are cached such that the same data are only downloaded once
+#' per sessions.
+#'
 #' @returns
 #' A tibble with the following columns: `active`, `fis_code`, `name`, `nation`,
 #' `age`, `birthdate`, `gender`, `sector`, `club`, `brand`, and

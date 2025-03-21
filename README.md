@@ -39,6 +39,11 @@ fisdata offers the following functions to query different types of data:
 - `query_standings()`: get the cup standings with ranks and points per
   discipline.
 
+All these functions are cached, that is, if they are called multiple
+times in the same session, the data is downloaded only once. This leads
+to better performance and reduces the number of requests that are sent
+to the FIS webpage.
+
 ## Example Queries
 
 Use `query_athletes()` and `query_results()` to get Didier Cuche’s full

@@ -9,6 +9,9 @@
 #'  returns the results for one event If multiple events are passed, only
 #'  the first one will be used.
 #'
+#' The results are cached such that the same data are only downloaded once
+#' per sessions.
+#'
 #' @returns
 #' A tibble with the following columns: `place`, `date`, `time`, `competition`,
 #' `sector`, `category`, `gender`, and `race_id`.

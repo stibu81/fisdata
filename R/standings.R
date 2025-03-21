@@ -32,6 +32,9 @@
 #' give the rank and points for the overall world cup, while `dh_rank` and
 #' `dh_points` give the rank and points for the downhill world cup.
 #'
+#' The results are cached such that the same data are only downloaded once
+#' per sessions.
+#'
 #' @examples
 #' \dontrun{
 #' # get the standings for the women's alpine skiing world cup 2023/24.

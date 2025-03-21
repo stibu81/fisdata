@@ -85,6 +85,9 @@ Results are always limited to events from a single season. If no season is
 explicitly provided, the current season is used. If no or few filters are
 applied, the results are further limited to a single month. If no month is
 explicitly specified, the current month is used.
+
+The results are cached such that the same data are only downloaded once
+per sessions.
 }
 \examples{
 \dontrun{

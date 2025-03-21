@@ -93,6 +93,11 @@ class A,AR,CR,E,C,CR,ST dataNode
 ')
 ```
 
+All the querying functions are cached, that is, if they are called multiple
+times in the same session, the data is downloaded only once. This leads to
+better performance and reduces the number of requests that are sent to the FIS
+webpage.
+
 
 ## Running a Query
 

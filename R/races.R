@@ -19,6 +19,9 @@
 #' for a given race, but it is known to fail for some special cases (e.g.,
 #' team races in alpine skiing).
 #'
+#' The results are cached such that the same data are only downloaded once
+#' per sessions.
+#'
 #' @returns
 #' A tibble with at least the following columns: `rank` (or `order`, if only
 #' the start list has been published), `bib`, `fis_code`,
