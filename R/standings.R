@@ -119,6 +119,11 @@ get_standings_url <- function(sector = "",
 
 extract_standings <- function(url) {
 
+  cached <- get_cache(url)
+  if (!cachem::is.key_missing(cached)) {
+    return(cached)
+  }
+
   table_rows <- url %>%
     rvest::read_html() %>%
     rvest::html_element(css = "div.table__body") %>%
@@ -132,6 +137,7 @@ extract_standings <- function(url) {
     stringr::str_detect("No standings found") %>%
     any()
   if (has_no_standings | length(table_rows) == 0) {
+    set_cache(url, empty_df)
     return(empty_df)
   }
 
@@ -205,13 +211,16 @@ extract_standings <- function(url) {
   # * athlete's name in title case
   # * points and ranks as integer
   # * add competitor id
-  standings_df %>%
+  standings_df <- standings_df %>%
     dplyr::mutate(athlete = .data$athlete %>%
                     stringr::str_to_title() %>%
                     stringr::str_trim(),
                   dplyr::across(-("athlete":"nation"), as.integer),
                   competitor_id = competitor_ids)
 
+  set_cache(url, standings_df)
+
+  standings_df
 }
 
 

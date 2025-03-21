@@ -125,6 +125,11 @@ get_athletes_url <- function(last_name = "",
 
 extract_athletes <- function(url) {
 
+  cached <- get_cache(url)
+  if (!cachem::is.key_missing(cached)) {
+    return(cached)
+  }
+
   table_rows <- url %>%
     rvest::read_html() %>%
     rvest::html_element(css = "div.tbody") %>%
@@ -133,6 +138,7 @@ extract_athletes <- function(url) {
   # if there are no rows, return an empty table
   empty_df <- get_empty_athletes_df()
   if (length(table_rows) == 0) {
+    set_cache(url, empty_df)
     return(empty_df)
   }
 
@@ -168,12 +174,16 @@ extract_athletes <- function(url) {
   # * explicit missing values
   # * reorder
   set_na <- \(x) dplyr::if_else(x %in% c("", " "), NA_character_, x)
-  athletes_df %>%
+  athletes_df <- athletes_df %>%
     dplyr::mutate(active = .data$active == "Active",
                   name = stringr::str_to_title(.data$name),
                   age = as.integer(.data$age)) %>%
     dplyr::mutate(dplyr::across(dplyr::where(is.character), set_na)) %>%
     dplyr::mutate(birthdate = format_birthdate(.data$birthdate))
+
+  set_cache(url, athletes_df)
+
+  athletes_df
 }
 
 

@@ -28,7 +28,8 @@ Imports:
     rlang,
     cli,
     magrittr,
-    clipr
+    clipr,
+    cachem
 Suggests: 
     roxygen2,
     spelling,

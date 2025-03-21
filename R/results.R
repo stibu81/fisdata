@@ -147,6 +147,11 @@ get_results_url <- function(athlete,
 
 extract_results <- function(url) {
 
+  cached <- get_cache(url)
+  if (!cachem::is.key_missing(cached)) {
+    return(cached)
+  }
+
   table_rows <- url %>%
     rvest::read_html() %>%
     rvest::html_element(css = "div.table__body") %>%
@@ -155,6 +160,7 @@ extract_results <- function(url) {
   # if there are no rows, return an empty table
   empty_df <- get_empty_results_df()
   if (length(table_rows) == 0) {
+    set_cache(url, empty_df)
     return(empty_df)
   }
 
@@ -195,13 +201,16 @@ extract_results <- function(url) {
   # * date as Date
   # * rank as integer (with DNF, DNQ etc. as NA)
   # * fis_points and cup_points as numeric
-  results_df %>%
+  results_df <- results_df %>%
     dplyr::mutate(date = as.Date(.data$date, format = "%d-%m-%Y"),
                   rank = suppressWarnings(as.integer(.data$rank)),
                   fis_points = parse_number(.data$fis_points),
                   cup_points = parse_number(.data$cup_points),
                   race_id = race_ids)
 
+  set_cache(url, results_df)
+
+  results_df
 }
 
 
