@@ -9,6 +9,7 @@
 #'  returns the results for one event If multiple events are passed, only
 #'  the first one will be used.
 #'
+#' @details
 #' The results are cached such that the same data are only downloaded once
 #' per sessions.
 #'

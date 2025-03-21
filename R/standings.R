@@ -23,6 +23,10 @@
 #' * `"start-list"` returns the ranking for the start lists.
 #' * `"nations"` returns the ranking of the nations cup.
 #'
+#' @details
+#' The results are cached such that the same data are only downloaded once
+#' per sessions.
+#'
 #' @return
 #' A tibble with at least the following columns: `sector`, `athlete`,
 #' and `nation`. Except for nations cups, there are also the columns `brand`
@@ -31,9 +35,6 @@
 #' example, in alpine skiing ("AL"), the columns `all_rank` and `all_points`
 #' give the rank and points for the overall world cup, while `dh_rank` and
 #' `dh_points` give the rank and points for the downhill world cup.
-#'
-#' The results are cached such that the same data are only downloaded once
-#' per sessions.
 #'
 #' @examples
 #' \dontrun{
