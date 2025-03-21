@@ -23,6 +23,15 @@ cache <- new.env()
     max_age = 86400,
     evict = "lru"
   )
+
+  # set options to default values
+  options(
+    fisdata_sector = "",
+    fisdata_season = "",
+    fisdata_gender = "",
+    fisdata_category = "",
+    fisdata_discipline = ""
+  )
 }
 
 # nocov end

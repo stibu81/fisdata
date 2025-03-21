@@ -4,7 +4,13 @@
 \alias{query_results}
 \title{Query Results for an Athlete}
 \usage{
-query_results(athlete, season = "", category = "", place = "", discipline = "")
+query_results(
+  athlete,
+  season = fd_def("season"),
+  category = fd_def("category"),
+  place = "",
+  discipline = fd_def("discipline")
+)
 }
 \arguments{
 \item{athlete}{a list or data frame with fields/columns \code{competitor_id} and

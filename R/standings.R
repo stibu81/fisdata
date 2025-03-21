@@ -55,10 +55,10 @@
 #'
 #' @export
 
-query_standings <- function(sector = "",
-                            season = "",
-                            category = "",
-                            gender = "",
+query_standings <- function(sector = fd_def("sector"),
+                            season = fd_def("season"),
+                            category = fd_def("category"),
+                            gender = fd_def("gender"),
                             type = c("ranking", "start-list", "nations")) {
 
   # type must already be handled here, because we use it further down

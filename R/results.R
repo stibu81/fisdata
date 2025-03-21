@@ -65,10 +65,10 @@
 #' @export
 
 query_results <- function(athlete,
-                          season = "",
-                          category = "",
+                          season = fd_def("season"),
+                          category = fd_def("category"),
                           place = "",
-                          discipline = "") {
+                          discipline = fd_def("discipline")) {
 
   athlete <- ensure_one_athlete(athlete)
 

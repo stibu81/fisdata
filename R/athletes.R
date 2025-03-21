@@ -69,9 +69,9 @@
 
 query_athletes <- function(last_name = "",
                            first_name = "",
-                           sector = "",
+                           sector = fd_def("sector"),
                            nation = "",
-                           gender = "",
+                           gender = fd_def("gender"),
                            birth_year = "",
                            brand = "",
                            active_only = FALSE) {

@@ -5,10 +5,10 @@
 \title{Query Cup Standings}
 \usage{
 query_standings(
-  sector = "",
-  season = "",
-  category = "",
-  gender = "",
+  sector = fd_def("sector"),
+  season = fd_def("season"),
+  category = fd_def("category"),
+  gender = fd_def("gender"),
   type = c("ranking", "start-list", "nations")
 )
 }

@@ -62,12 +62,12 @@
 #' @export
 
 query_events <- function(selection = c("all", "results", "upcoming"),
-                         sector = "",
-                         category = "",
-                         discipline = "",
-                         gender = "",
+                         sector = fd_def("sector"),
+                         category = fd_def("category"),
+                         discipline = fd_def("discipline"),
+                         gender = fd_def("gender"),
                          place = "",
-                         season = "",
+                         season = fd_def("season"),
                          month = "",
                          date = "") {
 
