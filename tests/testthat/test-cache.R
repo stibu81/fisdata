@@ -3,13 +3,13 @@ library(glue)
 library(cachem)
 
 test_that("url_to_key() works for", {
-  expect_equal(url_to_key("abc123"), "abc123")
-  expect_equal(url_to_key("ABC123"), "abc123")
+  expect_equal(url_to_key("abc:123"), "abc_123")
+  expect_equal(url_to_key("ABC%123"), "abc_123")
   expect_equal(
     url_to_key(glue("{fis_db_url}/biographies.html")),
-    "biographiesqhtml"
+    "biographies_html"
   )
-  expect_equal(url_to_key("+./&=*?"), "qqqqqqq")
+  expect_equal(url_to_key("+./&=*?"), "_______")
 })
 
 
