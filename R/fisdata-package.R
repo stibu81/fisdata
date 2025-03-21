@@ -15,6 +15,8 @@ globalVariables(".")
 # create an environment that is used as cache
 cache <- new.env()
 
+# nocov start
+
 .onLoad <- function(libname, pkgname) {
   cache <<- cachem::cache_mem(
     max_size = 512 * 2^20,
@@ -22,3 +24,5 @@ cache <- new.env()
     evict = "lru"
   )
 }
+
+# nocov end
