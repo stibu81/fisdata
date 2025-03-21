@@ -11,3 +11,14 @@ NULL
 fis_db_url <- "https://www.fis-ski.com/DB/general"
 
 globalVariables(".")
+
+# create an environment that is used as cache
+cache <- new.env()
+
+.onLoad <- function(libname, pkgname) {
+  cache <<- cachem::cache_mem(
+    max_size = 512 * 2^20,
+    max_age = 86400,
+    evict = "lru"
+  )
+}
