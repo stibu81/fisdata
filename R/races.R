@@ -117,6 +117,11 @@ get_races_url <- function(result) {
 
 extract_race <- function(url, error_call = rlang::caller_env()) {
 
+  cached <- get_cache(url)
+  if (!cachem::is.key_missing(cached)) {
+    return(cached)
+  }
+
   html <- rvest::read_html(url)
 
   table_rows <- html %>%
@@ -127,6 +132,7 @@ extract_race <- function(url, error_call = rlang::caller_env()) {
   # always present
   empty_df <- get_empty_race_df()
   if (length(table_rows) == 0) {
+    set_cache(url, empty_df)
     return(empty_df)
   }
 
@@ -154,13 +160,17 @@ extract_race <- function(url, error_call = rlang::caller_env()) {
     dplyr::bind_rows()
 
   # process all the columns based on their name
-  purrr::map(
+  race_df <- purrr::map(
       out_names,
       \(name) process_race_column(name, race_df)
     ) %>%
     purrr::set_names(out_names) %>%
     dplyr::as_tibble() %>%
     dplyr::mutate(competitor_id = competitor_ids)
+
+  set_cache(url, race_df)
+
+  race_df
 }
 
 

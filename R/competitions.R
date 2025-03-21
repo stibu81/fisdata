@@ -86,6 +86,11 @@ get_competitions_url <- function(event) {
 
 extract_competitions <- function(url) {
 
+  cached <- get_cache(url)
+  if (!cachem::is.key_missing(cached)) {
+    return(cached)
+  }
+
   table_rows <- url %>%
     rvest::read_html() %>%
     rvest::html_element(css = "div.table__body") %>%
@@ -94,6 +99,7 @@ extract_competitions <- function(url) {
   # if there are no rows, return an empty table
   empty_df <- get_empty_competitions_df()
   if (length(table_rows) == 0) {
+    set_cache(url, empty_df)
     return(empty_df)
   }
 
@@ -133,7 +139,7 @@ extract_competitions <- function(url) {
   race_ids <- extract_ids(table_rows, "race")
 
   # create data frame
-  dplyr::tibble(
+  competitions_df <- dplyr::tibble(
     date = date,
     time = time,
     competition = competition_types,
@@ -142,6 +148,10 @@ extract_competitions <- function(url) {
     cancelled = is_cancelled(table_rows),
     race_id = race_ids
   )
+
+  set_cache(url, competitions_df)
+
+  competitions_df
 }
 
 

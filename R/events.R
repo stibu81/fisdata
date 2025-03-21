@@ -151,7 +151,12 @@ get_events_url <- function(selection = c("all", "results", "upcoming"),
 
 extract_events <- function(url) {
 
- table_rows <- url %>%
+  cached <- get_cache(url)
+  if (!cachem::is.key_missing(cached)) {
+    return(cached)
+  }
+
+  table_rows <- url %>%
     rvest::read_html() %>%
     rvest::html_element(css = "div.table__body") %>%
     rvest::html_elements(css = "div.table-row")
@@ -163,6 +168,7 @@ extract_events <- function(url) {
     stringr::str_detect("No events found") %>%
     any()
   if (length(table_rows) == 0 | has_no_events) {
+    set_cache(url, empty_df)
     return(empty_df)
   }
 
@@ -206,7 +212,7 @@ extract_events <- function(url) {
   # * split date range into two dates
   # * split event_details into categories and disciplines
   # * convert genders to a list
-  events_df %>%
+  events_df <- events_df %>%
     dplyr::mutate(cancelled = is_cancelled(table_rows), .after = "genders") %>%
     dplyr::mutate(genders = parse_gender_list(.data$genders)) %>%
     dplyr::mutate(start_date = event_dates$start_date,
@@ -217,6 +223,10 @@ extract_events <- function(url) {
                   disciplines = !!event_details$disciplines,
                   .before = "genders") %>%
     dplyr::select(-"event_details")
+
+  set_cache(url, events_df)
+
+  events_df
 }
 
 
