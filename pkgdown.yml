@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   fisdata: fisdata.html
-last_built: 2025-03-22T15:51Z
+last_built: 2025-03-22T16:13Z
 urls:
   reference: https://stibu81.github.io/fisdata/reference
   article: https://stibu81.github.io/fisdata/articles
