@@ -2,6 +2,7 @@
 % Please edit documentation in R/defaults.R
 \name{set_fisdata_defaults}
 \alias{set_fisdata_defaults}
+\alias{get_fisdata_defaults}
 \alias{reset_fisdata_defaults}
 \alias{fd_def}
 \title{Get And Set Default Values for Querying functions}
@@ -14,6 +15,8 @@ set_fisdata_defaults(
   discipline = NULL,
   reset = FALSE
 )
+
+get_fisdata_defaults()
 
 reset_fisdata_defaults()
 
@@ -47,6 +50,8 @@ all the others are left unchanged.}
 
 \code{reset_fisdata_defaults()} resets all the default values to \code{""}, which is
 the same value they get when the package is loaded.
+
+\code{get_fisdata_defaults()} shows the currently selected default values.
 
 \code{fd_def()} returns the current default value for a single parameter; this
 function's main use is as default argument in the querying functions.

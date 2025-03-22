@@ -7,6 +7,8 @@
 #' `reset_fisdata_defaults()` resets all the default values to `""`, which is
 #' the same value they get when the package is loaded.
 #'
+#' `get_fisdata_defaults()` shows the currently selected default values.
+#'
 #' `fd_def()` returns the current default value for a single parameter; this
 #' function's main use is as default argument in the querying functions.
 #'
@@ -65,6 +67,17 @@ set_fisdata_defaults <- function(sector = NULL,
   if (!is.null(discipline)) {
     options(fisdata_discipline = toupper(discipline))
   }
+}
+
+
+#' @rdname set_fisdata_defaults
+#' @export
+
+get_fisdata_defaults <- function() {
+  opt_names <- paste0("fisdata_", eval(formals(fd_def)$name))
+  opt_values <- unlist(rlang::exec(options, !!!opt_names))
+  names(opt_values) <- stringr::str_remove(opt_names, "fisdata_")
+  opt_values
 }
 
 
