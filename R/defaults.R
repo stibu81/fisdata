@@ -43,7 +43,9 @@ set_fisdata_defaults <- function(sector = NULL,
 
   if (!is.null(season)) {
     season_int <- as.integer(season)
-    if (is.na(season_int) | season_int < 1950 |
+    if (season == "") {
+      options(fisdata_season = "")
+    } else if (is.na(season_int) | season_int < 1950 |
         season_int > lubridate::year(lubridate::today()) + 1) {
       cli::cli_warn("'{season}' is not a valid season.")
     } else {
@@ -53,8 +55,8 @@ set_fisdata_defaults <- function(sector = NULL,
 
   if (!is.null(gender)) {
     use_gender <- standardise_gender(gender)
-    if (!use_gender %in% c("M", "W")) {
-      cli::cli_warn("'{gender{' is not a valid gender code.")
+    if (!use_gender %in% c("", "M", "W")) {
+      cli::cli_warn("'{gender}' is not a valid gender code.")
     } else {
       options(fisdata_gender = use_gender)
     }
