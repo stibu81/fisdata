@@ -42,7 +42,7 @@ set_fisdata_defaults <- function(sector = NULL,
   }
 
   if (!is.null(season)) {
-    season_int <- as.integer(season)
+    season_int <- suppressWarnings(as.integer(season))
     if (season == "") {
       options(fisdata_season = "")
     } else if (is.na(season_int) | season_int < 1950 |
