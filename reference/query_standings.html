@@ -42,10 +42,10 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">query_standings</span><span class="op">(</span></span>
-<span>  sector <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  season <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  category <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  gender <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  sector <span class="op">=</span> <span class="fu"><a href="set_fisdata_defaults.html">fd_def</a></span><span class="op">(</span><span class="st">"sector"</span><span class="op">)</span>,</span>
+<span>  season <span class="op">=</span> <span class="fu"><a href="set_fisdata_defaults.html">fd_def</a></span><span class="op">(</span><span class="st">"season"</span><span class="op">)</span>,</span>
+<span>  category <span class="op">=</span> <span class="fu"><a href="set_fisdata_defaults.html">fd_def</a></span><span class="op">(</span><span class="st">"category"</span><span class="op">)</span>,</span>
+<span>  gender <span class="op">=</span> <span class="fu"><a href="set_fisdata_defaults.html">fd_def</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span>,</span>
 <span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ranking"</span>, <span class="st">"start-list"</span>, <span class="st">"nations"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -97,6 +97,13 @@ columns giving the rank and the points for the various disciplines. For
 example, in alpine skiing ("AL"), the columns <code>all_rank</code> and <code>all_points</code>
 give the rank and points for the overall world cup, while <code>dh_rank</code> and
 <code>dh_points</code> give the rank and points for the downhill world cup.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>All filter arguments are set to <code>""</code> by default. Setting an argument to
+<code>""</code> means that no filtering takes place for this parameter. For those
+arguments that have a call to <code><a href="set_fisdata_defaults.html">fd_def()</a></code> as their default value, the default
+value can be globally set using <code><a href="set_fisdata_defaults.html">set_fisdata_defaults()</a></code>.</p>
 <p>The results are cached such that the same data are only downloaded once
 per sessions.</p>
     </div>
