@@ -22,6 +22,11 @@
 #'  "Downhill". See the dataset [disciplines] for possible values.
 #'
 #' @details
+#' All filter arguments are set to `""` by default. Setting an argument to
+#' `""` means that no filtering takes place for this parameter. For those
+#' arguments that have a call to [fd_def()] as their default value, the default
+#' value can be globally set using [set_fisdata_defaults()].
+#'
 #' The API does not support special character in the field `place`.
 #' The following special characters are handled
 #' automatically: à, á, å, ä, æ, ç, ć, č, ð, é, è, ê, ë, ï, ñ, ø, ó, ő, ö,

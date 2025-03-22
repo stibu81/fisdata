@@ -53,6 +53,11 @@ Query cup standings by sector, season, category
 (i.e., the cup in this context), and gender.
 }
 \details{
+All filter arguments are set to \code{""} by default. Setting an argument to
+\code{""} means that no filtering takes place for this parameter. For those
+arguments that have a call to \code{\link[=fd_def]{fd_def()}} as their default value, the default
+value can be globally set using \code{\link[=set_fisdata_defaults]{set_fisdata_defaults()}}.
+
 The results are cached such that the same data are only downloaded once
 per sessions.
 }

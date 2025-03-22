@@ -74,6 +74,11 @@ Filtering is case-insensitive and for \code{place}, string matching is partial.
 equivalent to calling \code{query_events()} with today's date.
 }
 \details{
+All filter arguments are set to \code{""} by default. Setting an argument to
+\code{""} means that no filtering takes place for this parameter. For those
+arguments that have a call to \code{\link[=fd_def]{fd_def()}} as their default value, the default
+value can be globally set using \code{\link[=set_fisdata_defaults]{set_fisdata_defaults()}}.
+
 The API does not support special character in the field \code{place}.
 The following special characters are handled
 automatically: à, á, å, ä, æ, ç, ć, č, ð, é, è, ê, ë, ï, ñ, ø, ó, ő, ö,

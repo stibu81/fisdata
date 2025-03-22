@@ -54,6 +54,11 @@ with any value in that field will be returned. Filtering is case-insensitive
 and for \code{last_name}, \code{first_name}, and \code{brand}, string matching is partial.
 }
 \details{
+All filter arguments are set to \code{""} by default. Setting an argument to
+\code{""} means that no filtering takes place for this parameter. For those
+arguments that have a call to \code{\link[=fd_def]{fd_def()}} as their default value, the default
+value can be globally set using \code{\link[=set_fisdata_defaults]{set_fisdata_defaults()}}.
+
 The API does not support special character in the fields \code{last_name},
 \code{first_name}, and \code{brand}. The following special characters are handled
 automatically: à, á, å, ä, æ, ç, ć, č, ð, é, è, ê, ë, ï, ñ, ø, ó, ő, ö,

@@ -5,7 +5,7 @@
 \alias{get_fisdata_defaults}
 \alias{reset_fisdata_defaults}
 \alias{fd_def}
-\title{Get And Set Default Values for Querying functions}
+\title{Get And Set Default Values for Parameters in Querying Functions}
 \usage{
 set_fisdata_defaults(
   sector = NULL,

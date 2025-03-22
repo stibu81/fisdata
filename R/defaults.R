@@ -1,4 +1,4 @@
-#' Get And Set Default Values for Querying functions
+#' Get And Set Default Values for Parameters in Querying Functions
 #'
 #' @description
 #' `set_fisdata_defaults()` sets default values for common arguments that will
