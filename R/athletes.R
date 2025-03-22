@@ -22,6 +22,12 @@
 #' @param active_only should the query be restricted to active athletes.
 #'
 #' @details
+#' All filter arguments are set to `""` by default. Setting an argument to
+#' `""` means that no filtering takes place for this parameter. For those
+#' arguments that have a call to [fd_def()] as their default value, the default
+#' value can be globally set using [set_fisdata_defaults()].
+#'
+#'
 #' The API does not support special character in the fields `last_name`,
 #' `first_name`, and `brand`. The following special characters are handled
 #' automatically: à, á, å, ä, æ, ç, ć, č, ð, é, è, ê, ë, ï, ñ, ø, ó, ő, ö,
@@ -69,9 +75,9 @@
 
 query_athletes <- function(last_name = "",
                            first_name = "",
-                           sector = "",
+                           sector = fd_def("sector"),
                            nation = "",
-                           gender = "",
+                           gender = fd_def("gender"),
                            birth_year = "",
                            brand = "",
                            active_only = FALSE) {

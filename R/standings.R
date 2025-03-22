@@ -23,6 +23,15 @@
 #' * `"start-list"` returns the ranking for the start lists.
 #' * `"nations"` returns the ranking of the nations cup.
 #'
+#' @details
+#' All filter arguments are set to `""` by default. Setting an argument to
+#' `""` means that no filtering takes place for this parameter. For those
+#' arguments that have a call to [fd_def()] as their default value, the default
+#' value can be globally set using [set_fisdata_defaults()].
+#'
+#' The results are cached such that the same data are only downloaded once
+#' per sessions.
+#'
 #' @return
 #' A tibble with at least the following columns: `sector`, `athlete`,
 #' and `nation`. Except for nations cups, there are also the columns `brand`
@@ -31,9 +40,6 @@
 #' example, in alpine skiing ("AL"), the columns `all_rank` and `all_points`
 #' give the rank and points for the overall world cup, while `dh_rank` and
 #' `dh_points` give the rank and points for the downhill world cup.
-#'
-#' The results are cached such that the same data are only downloaded once
-#' per sessions.
 #'
 #' @examples
 #' \dontrun{
@@ -54,10 +60,10 @@
 #'
 #' @export
 
-query_standings <- function(sector = "",
-                            season = "",
-                            category = "",
-                            gender = "",
+query_standings <- function(sector = fd_def("sector"),
+                            season = fd_def("season"),
+                            category = fd_def("category"),
+                            gender = fd_def("gender"),
                             type = c("ranking", "start-list", "nations")) {
 
   # type must already be handled here, because we use it further down

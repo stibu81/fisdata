@@ -16,6 +16,7 @@ reference:
 - title: Other Functions
   contents:
   - show_url
+  - set_fisdata_defaults
 
 - title: Datasets
   desc: Datasets describing values that can be used in the querying functions

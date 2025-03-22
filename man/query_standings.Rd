@@ -5,10 +5,10 @@
 \title{Query Cup Standings}
 \usage{
 query_standings(
-  sector = "",
-  season = "",
-  category = "",
-  gender = "",
+  sector = fd_def("sector"),
+  season = fd_def("season"),
+  category = fd_def("category"),
+  gender = fd_def("gender"),
   type = c("ranking", "start-list", "nations")
 )
 }
@@ -47,13 +47,19 @@ columns giving the rank and the points for the various disciplines. For
 example, in alpine skiing ("AL"), the columns \code{all_rank} and \code{all_points}
 give the rank and points for the overall world cup, while \code{dh_rank} and
 \code{dh_points} give the rank and points for the downhill world cup.
-
-The results are cached such that the same data are only downloaded once
-per sessions.
 }
 \description{
 Query cup standings by sector, season, category
 (i.e., the cup in this context), and gender.
+}
+\details{
+All filter arguments are set to \code{""} by default. Setting an argument to
+\code{""} means that no filtering takes place for this parameter. For those
+arguments that have a call to \code{\link[=fd_def]{fd_def()}} as their default value, the default
+value can be globally set using \code{\link[=set_fisdata_defaults]{set_fisdata_defaults()}}.
+
+The results are cached such that the same data are only downloaded once
+per sessions.
 }
 \examples{
 \dontrun{
