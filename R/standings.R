@@ -1,7 +1,11 @@
-#' Query Cup Standings
+#' Query Cup Standings for a Season or an Athlete
 #'
-#' Query cup standings by sector, season, category
-#' (i.e., the cup in this context), and gender.
+#' @description
+#' Query cup standings, either
+#'
+#' * the full standings for a season by sector, category
+#'   (i.e., the cup in this context), and gender, or
+#' * the career standings for an athlete by category.
 #'
 #' @inheritParams query_athletes
 #' @param season year when the season ended, i.e., 2020 stands for the season
@@ -22,6 +26,19 @@
 #'   which determines the discipline and overall winner of the cup.
 #' * `"start-list"` returns the ranking for the start lists.
 #' * `"nations"` returns the ranking of the nations cup.
+#'
+#' @param athlete a list or data frame with fields/columns `competitor_id` and
+#'  `sector` that describe a *single* athlete. The easiest way to create
+#'  such a data frame is through the functions [query_athletes()],
+#'  [query_race()], or [query_standings()]. These functions
+#'  can return multiple athletes, but `query_results()` only returns the
+#'  results for one athlete. If multiple athletes are passed, only the first
+#'  one will be used.
+#'
+#'  Providing a value for `athlete` will trigger the function to return the
+#'  career standings for this athlete. All arguments except for `category`
+#'  and `type` will be ignored in this case. The value `"nations"` for `type`
+#'  is not allowed.
 #'
 #' @details
 #' All filter arguments are set to `""` by default. Setting an argument to
@@ -64,18 +81,27 @@ query_standings <- function(sector = fd_def("sector"),
                             season = fd_def("season"),
                             category = fd_def("category"),
                             gender = fd_def("gender"),
-                            type = c("ranking", "start-list", "nations")) {
+                            type = c("ranking", "start-list", "nations"),
+                            athlete = NULL) {
 
   # type must already be handled here, because we use it further down
   type <- match.arg(type)
 
-  url <- get_standings_url(sector, season, category, gender, type)
-  standings <- extract_standings(url) %>%
-    dplyr::mutate(sector = toupper(sector), .before = 1)
+  # there are two distinct queries that can be performed by this function:
+  # * if athlete is given, get the career standings of that athlete
+  # * otherwise, get the full standings for a season
+  if (!is.null(athlete)) {
+    cli::cli_abort("querying standings for an athlete is not yet supported.")
+  } else {
 
-  # if the results are for the nations cup, remove the column brand
-  if (type == "nations") {
-    standings <- standings %>% dplyr::select(-"brand", -"competitor_id")
+    url <- get_standings_url(sector, season, category, gender, type)
+    standings <- extract_standings(url) %>%
+      dplyr::mutate(sector = toupper(sector), .before = 1)
+
+    # if the results are for the nations cup, remove the column brand
+    if (type == "nations") {
+      standings <- standings %>% dplyr::select(-"brand", -"competitor_id")
+    }
   }
 
   # add the url as an attribute

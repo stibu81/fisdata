@@ -2,14 +2,15 @@
 % Please edit documentation in R/standings.R
 \name{query_standings}
 \alias{query_standings}
-\title{Query Cup Standings}
+\title{Query Cup Standings for a Season or an Athlete}
 \usage{
 query_standings(
   sector = fd_def("sector"),
   season = fd_def("season"),
   category = fd_def("category"),
   gender = fd_def("gender"),
-  type = c("ranking", "start-list", "nations")
+  type = c("ranking", "start-list", "nations"),
+  athlete = NULL
 )
 }
 \arguments{
@@ -38,6 +39,19 @@ which determines the discipline and overall winner of the cup.
 \item \code{"start-list"} returns the ranking for the start lists.
 \item \code{"nations"} returns the ranking of the nations cup.
 }}
+
+\item{athlete}{a list or data frame with fields/columns \code{competitor_id} and
+\code{sector} that describe a \emph{single} athlete. The easiest way to create
+such a data frame is through the functions \code{\link[=query_athletes]{query_athletes()}},
+\code{\link[=query_race]{query_race()}}, or \code{\link[=query_standings]{query_standings()}}. These functions
+can return multiple athletes, but \code{query_results()} only returns the
+results for one athlete. If multiple athletes are passed, only the first
+one will be used.
+
+Providing a value for \code{athlete} will trigger the function to return the
+career standings for this athlete. All arguments except for \code{category}
+and \code{type} will be ignored in this case. The value \code{"nations"} for \code{type}
+is not allowed.}
 }
 \value{
 A tibble with at least the following columns: \code{sector}, \code{athlete},
@@ -49,8 +63,12 @@ give the rank and points for the overall world cup, while \code{dh_rank} and
 \code{dh_points} give the rank and points for the downhill world cup.
 }
 \description{
-Query cup standings by sector, season, category
-(i.e., the cup in this context), and gender.
+Query cup standings, either
+\itemize{
+\item the full standings for a season by sector, category
+(i.e., the cup in this context), and gender, or
+\item the career standings for an athlete by category.
+}
 }
 \details{
 All filter arguments are set to \code{""} by default. Setting an argument to
