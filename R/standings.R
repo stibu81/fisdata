@@ -87,13 +87,24 @@ query_standings <- function(sector = fd_def("sector"),
   # type must already be handled here, because we use it further down
   type <- match.arg(type)
 
+  # if category is not given, the FIS API returns World Cup standings
+  # => make this explicit
+  if (category == "") category <- "WC"
+
   # there are two distinct queries that can be performed by this function:
   # * if athlete is given, get the career standings of that athlete
   # * otherwise, get the full standings for a season
   if (!is.null(athlete)) {
-    cli::cli_abort("querying standings for an athlete is not yet supported.")
+    athlete <- ensure_one_athlete(athlete)
+    url <- get_athlete_standings_url(athlete, category, type)
+    standings <- extract_athlete_standings(url) %>%
+      dplyr::mutate(
+        athlete = athlete$name,
+        sector = !!athlete$sector,
+        category = category,
+        .before = 1
+      )
   } else {
-
     url <- get_standings_url(sector, season, category, gender, type)
     standings <- extract_standings(url) %>%
       dplyr::mutate(sector = toupper(sector), .before = 1)
@@ -265,5 +276,108 @@ get_empty_standings_df <- function() {
     brand = character(),
     nation = character(),
     competitor_id = character()
+  )
+}
+
+
+
+get_athlete_standings_url <- function(athlete,
+                                      category,
+                                      type,
+                                      error_call = rlang::caller_env()) {
+
+  competitor_id <- athlete$competitor_id
+  sector <- athlete$sector
+
+  # if type is "start-list", the category code must be adapted.
+  # "nations" is not supported here.
+  if (type == "start-list") {
+    category <- paste0(category, "SL")
+  } else if (type == "nations") {
+    cli::cli_abort("type = 'nations' is not supported for athlete standings.")
+  }
+
+  glue::glue(
+    "{fis_db_url}/athlete-biography.html?",
+    "sectorcode={sector}&competitorid={competitor_id}&",
+    "type=cups&cupcode={category}"
+  )
+}
+
+
+extract_athlete_standings <- function(url) {
+
+  cached <- get_cache(url)
+  if (!cachem::is.key_missing(cached)) {
+    return(cached)
+  }
+
+  table_rows <- url %>%
+    rvest::read_html() %>%
+    rvest::html_element(css = "div.table__body") %>%
+    # usually the table rows are a-tags, but some can be divs.
+    rvest::html_elements(css = "a.table-row, div.table-row")
+
+  # if there are no rows, return an empty table
+  empty_df <- get_empty_athlete_standings_df()
+  if (length(table_rows) == 0) {
+    set_cache(url, empty_df)
+    return(empty_df)
+  }
+
+  # extract the standings data by parsing the entire container-div
+  standings <- table_rows %>%
+    rvest::html_elements(css = "div.container") %>%
+    rvest::html_text2() %>%
+    stringr::str_split("\n")
+
+  # create data frame
+  standings_df <- standings %>%
+    purrr::map(
+      function(a) {
+        # the first element is the season
+        season <- as.integer(a[[1]])
+        # the remainder is structured as follows:
+        #   disicpline, rank, points
+        # for disciplines, where the athlete did not compete in the season,
+        # the last two fields are replaced by a single "---"
+        # first, remove the disciplines that this athlete does not compete in
+        i_dashes <- which(a == "---")
+        i_rm <- purrr::map(i_dashes, \(i) (i - 1):i) %>%
+          unlist()
+        # if there are no dashes, i_rm ends up being NULL
+        if (!is.null(i_rm)) a <- a[-i_rm]
+        # loop through the disciplines
+        a_split <- split(a[-1], rep(1:(length(a) / 3), each = 3))
+        ranks_points <- purrr::map(
+            a_split,
+            function(disc) {
+              parse_number(disc[2:3]) %>%
+                as.integer() %>%
+                as.list() %>%
+                purrr::set_names(
+                  paste(
+                    stringr::str_replace_all(tolower(disc[1]), " +", "_"),
+                    c("rank", "points"),
+                    sep = "_")
+                ) %>%
+                dplyr::as_tibble()
+            }
+          ) %>%
+          dplyr::bind_cols() %>%
+          dplyr::mutate(season = season, .before = 1)
+      }
+    ) %>%
+    dplyr::bind_rows()
+
+  set_cache(url, standings_df)
+
+  standings_df
+}
+
+
+get_empty_athlete_standings_df <- function() {
+  tibble::tibble(
+    season = integer()
   )
 }
