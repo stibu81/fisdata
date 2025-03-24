@@ -96,10 +96,11 @@ query_standings <- function(sector = fd_def("sector"),
   # * otherwise, get the full standings for a season
   if (!is.null(athlete)) {
     athlete <- ensure_one_athlete(athlete)
+    athlete_name <- get_athlete_name(athlete)
     url <- get_athlete_standings_url(athlete, category, type)
     standings <- extract_athlete_standings(url) %>%
       dplyr::mutate(
-        athlete = athlete$name,
+        athlete = athlete_name,
         sector = !!athlete$sector,
         category = category,
         .before = 1
