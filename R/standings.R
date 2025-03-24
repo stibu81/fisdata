@@ -312,8 +312,9 @@ extract_athlete_standings <- function(url) {
     return(cached)
   }
 
-  table_rows <- url %>%
-    rvest::read_html() %>%
+  html <- url %>%
+    rvest::read_html()
+  table_rows <- html %>%
     rvest::html_element(css = "div.table__body") %>%
     # usually the table rows are a-tags, but some can be divs.
     rvest::html_elements(css = "a.table-row, div.table-row")
@@ -331,6 +332,15 @@ extract_athlete_standings <- function(url) {
     rvest::html_text2() %>%
     stringr::str_split("\n")
 
+  # the rows do not contain the abbreviated disciplines, so we need to
+  # extract them from the table header
+  discipline_codes <- html %>%
+    rvest::html_element(css = "div.table__head") %>%
+    rvest::html_element(css = "div.container") %>%
+    rvest::html_elements(css = "div.g-md") %>%
+    rvest::html_text() %>%
+    tolower()
+
   # create data frame
   standings_df <- standings %>%
     purrr::map(
@@ -341,7 +351,10 @@ extract_athlete_standings <- function(url) {
         #   disicpline, rank, points
         # for disciplines, where the athlete did not compete in the season,
         # the last two fields are replaced by a single "---"
-        # first, remove the disciplines that this athlete does not compete in
+        # first, replace the long discipline names by the abbreviations.
+        i_disc <- stringr::str_detect(a, "[A-Za-z]")
+        a[i_disc] <- discipline_codes
+        # then, remove the disciplines that this athlete does not compete in
         i_dashes <- which(a == "---")
         i_rm <- purrr::map(i_dashes, \(i) (i - 1):i) %>%
           unlist()
@@ -356,10 +369,7 @@ extract_athlete_standings <- function(url) {
                 as.integer() %>%
                 as.list() %>%
                 purrr::set_names(
-                  paste(
-                    stringr::str_replace_all(tolower(disc[1]), " +", "_"),
-                    c("rank", "points"),
-                    sep = "_")
+                  paste(disc[1], c("rank", "points"), sep = "_")
                 ) %>%
                 dplyr::as_tibble()
             }
