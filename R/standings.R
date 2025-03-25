@@ -283,8 +283,8 @@ get_empty_standings_df <- function() {
 
 
 get_athlete_standings_url <- function(athlete,
-                                      category,
-                                      type,
+                                      category = "",
+                                      type = "ranking",
                                       error_call = rlang::caller_env()) {
 
   competitor_id <- athlete$competitor_id

@@ -109,6 +109,27 @@ test_that("query_standings() works with caching", {
 })
 
 
+test_that("query_standings() for athlete works with caching", {
+  local_mocked_bindings(
+    get_standings_url = function(...) test_path("data", "standings_odermatt.html.gz")
+  )
+  odermatt <- tibble(
+      name = "Odermatt Marco",
+      sector = "AL",
+      competitor_id = "190231"
+    )
+  standings_odermatt <- query_standings(athlete = odermatt)
+
+  local_mocked_bindings(
+    read_html = function(...) stop("Cache was not used!"),
+    .package = "rvest"
+  )
+  expect_silent(
+    expect_equal(query_standings(athlete = odermatt), standings_odermatt)
+  )
+})
+
+
 test_that("query_events() works with caching", {
   local_mocked_bindings(
     get_events_url = function(...) test_path("data", "events_20250201.html.gz")

@@ -48,7 +48,7 @@ test_that("get_standings_url() errors work", {
 })
 
 
-test_that("query_standings() works", {
+test_that("query_standings() works for alpine world cup", {
   local_mocked_bindings(
     get_standings_url = function(...) test_path("data", "standings_wc_al_2025.html.gz")
   )
@@ -141,4 +141,79 @@ test_that("query_standings() works for empty result", {
   }
 
   expect_equal(attr(empty, "url"), get_standings_url())
+})
+
+
+test_that("get_athlete_standings_url() works with valid inputs", {
+  odermatt <- tibble(
+      name = "Odermatt Marco",
+      sector = "AL",
+      competitor_id = "190231"
+    )
+  expect_equal(
+    get_athlete_standings_url(athlete = odermatt),
+    paste0("https://www.fis-ski.com/DB/general/athlete-biography.html?",
+           "sectorcode=AL&competitorid=190231&type=cups&cupcode=")
+  )
+  expect_equal(
+    get_athlete_standings_url(athlete = odermatt,
+                              category = "WC",
+                              type = "start-list"),
+    paste0("https://www.fis-ski.com/DB/general/athlete-biography.html?",
+           "sectorcode=AL&competitorid=190231&type=cups&cupcode=WCSL")
+  )
+})
+
+
+test_that("get_standings_url() errors work", {
+  odermatt <- tibble(
+      name = "Odermatt Marco",
+      sector = "AL",
+      competitor_id = "190231"
+    )
+  expect_error(
+    get_athlete_standings_url(athlete = odermatt, type = "nations"),
+    "type = 'nations' is not supported for athlete standings"
+  )
+})
+
+
+test_that("query_standings() works for alpine skiing athlete", {
+  local_mocked_bindings(
+    get_athlete_standings_url = function(...) test_path("data", "athlete_standings_odermatt.html.gz")
+  )
+  odermatt <- tibble(
+      name = "Odermatt Marco",
+      sector = "AL",
+      competitor_id = "190231"
+    )
+  standings_odermatt <- query_standings(athlete = odermatt)
+
+  expect_s3_class(standings_odermatt, "tbl_df")
+
+  expected_names <- c("athlete", "sector", "category", "season",
+                      paste(rep(c("all", "dh", "gs", "sg", "ac"), each = 2),
+                            rep(c("rank", "points"), 4),
+                            sep = "_"))
+  expect_named(standings_odermatt, expected_names)
+
+  expected_types <- c(rep("character", 3), rep("integer", 11))
+  for (i in seq_along(expected_names)) {
+    expect_type(standings_odermatt[[!!expected_names[i]]], expected_types[i])
+  }
+
+  expect_in(standings_odermatt$athlete, "Odermatt Marco")
+  expect_in(standings_odermatt$sector, "AL")
+  expect_in(standings_odermatt$category, "WC")
+  expect_equal(standings_odermatt$season, 2025:2017)
+  for (col in str_subset(expected_names, "_(rank|points)$")) {
+    expect_in(
+      standings_odermatt[[!!col]],
+      c(NA_integer_, 1:max(standings_odermatt[[!!col]], na.rm = TRUE)))
+  }
+
+  expect_equal(attr(standings_odermatt, "url"),
+               get_athlete_standings_url(athlete = odermatt))
+
+  expect_snapshot(print(standings_odermatt, width = Inf, n = Inf))
 })
