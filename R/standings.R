@@ -321,8 +321,12 @@ extract_athlete_standings <- function(url) {
     rvest::html_elements(css = "a.table-row, div.table-row")
 
   # if there are no rows, return an empty table
+  has_no_standings <- table_rows %>%
+    rvest::html_text2() %>%
+    stringr::str_detect("no data available") %>%
+    any()
   empty_df <- get_empty_athlete_standings_df()
-  if (length(table_rows) == 0) {
+  if (length(table_rows) == 0 | has_no_standings) {
     set_cache(url, empty_df)
     return(empty_df)
   }

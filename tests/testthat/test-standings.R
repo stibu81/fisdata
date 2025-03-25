@@ -212,8 +212,33 @@ test_that("query_standings() works for alpine skiing athlete", {
       c(NA_integer_, 1:max(standings_odermatt[[!!col]], na.rm = TRUE)))
   }
 
-  expect_equal(attr(standings_odermatt, "url"),
-               get_athlete_standings_url(athlete = odermatt))
+  expect_equal(attr(standings_odermatt, "url"), get_athlete_standings_url())
 
   expect_snapshot(print(standings_odermatt, width = Inf, n = Inf))
+})
+
+
+test_that("query_standings() with athlete works for empty result", {
+  local_mocked_bindings(
+    get_athlete_standings_url = function(...) test_path("data", "athlete_standings_empty.html.gz")
+  )
+  odermatt <- tibble(
+      name = "Odermatt Marco",
+      sector = "AL",
+      competitor_id = "190231"
+    )
+  empty <- query_standings(athlete = odermatt)
+
+  expect_s3_class(empty, "tbl_df")
+  expect_equal(nrow(empty), 0)
+
+  expected_names <- c("athlete", "sector", "category", "season")
+  expect_named(empty, expected_names)
+
+  expected_types <- c(rep("character", 3), "integer")
+  for (i in seq_along(expected_names)) {
+    expect_type(empty[[!!expected_names[i]]], expected_types[i])
+  }
+
+  expect_equal(attr(empty, "url"), get_athlete_standings_url())
 })
