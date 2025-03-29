@@ -50,9 +50,13 @@
 #' per sessions.
 #'
 #' @return
-#' A tibble with at least the following columns: `sector`, `athlete`,
-#' and `nation`. Except for nations cups, there are also the columns `brand`
-#' and `competitor_id`. Depending on the sector, there are multiple
+#' When querying for season standings, a tibble with at least
+#' the following columns: `sector`, `athlete`, and `nation`.
+#' Except for nations cups, there are also the columns `brand`
+#' and `competitor_id`. When querying for an athlete's standings, a tibble with
+#' at least the columns `athlete`, `sector`, `category`, and `season`.
+#'
+#' Depending on the sector, there are multiple
 #' columns giving the rank and the points for the various disciplines. For
 #' example, in alpine skiing ("AL"), the columns `all_rank` and `all_points`
 #' give the rank and points for the overall world cup, while `dh_rank` and
@@ -73,6 +77,10 @@
 #' query_standings(sector = "SB", season = 2022,
 #'                 category = "WC", gender = "W",
 #'                 type = "start-list")
+#'
+#' # get the standings for Marco Odermatt
+#' odermatt <- query_athletes("odermatt", "marco")
+#' query_standings(athlete = odermatt)
 #' }
 #'
 #' @export

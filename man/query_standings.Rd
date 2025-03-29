@@ -54,9 +54,13 @@ and \code{type} will be ignored in this case. The value \code{"nations"} for \co
 is not allowed.}
 }
 \value{
-A tibble with at least the following columns: \code{sector}, \code{athlete},
-and \code{nation}. Except for nations cups, there are also the columns \code{brand}
-and \code{competitor_id}. Depending on the sector, there are multiple
+When querying for season standings, a tibble with at least
+the following columns: \code{sector}, \code{athlete}, and \code{nation}.
+Except for nations cups, there are also the columns \code{brand}
+and \code{competitor_id}. When querying for an athlete's standings, a tibble with
+at least the columns \code{athlete}, \code{sector}, \code{category}, and \code{season}.
+
+Depending on the sector, there are multiple
 columns giving the rank and the points for the various disciplines. For
 example, in alpine skiing ("AL"), the columns \code{all_rank} and \code{all_points}
 give the rank and points for the overall world cup, while \code{dh_rank} and
@@ -94,6 +98,10 @@ query_standings(sector = "AL", season = 2025,
 query_standings(sector = "SB", season = 2022,
                 category = "WC", gender = "W",
                 type = "start-list")
+
+# get the standings for Marco Odermatt
+odermatt <- query_athletes("odermatt", "marco")
+query_standings(athlete = odermatt)
 }
 
 }
