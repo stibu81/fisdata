@@ -1,4 +1,4 @@
-# query_standings() works
+# query_standings() works for alpine world cup
 
     Code
       print(wc_al_2025, width = Inf, n = Inf)
@@ -265,4 +265,33 @@
       30      23         6      NA        NA      NA        NA
       31      NA        NA      15         4      NA        NA
       32      NA        NA      NA        NA      NA        NA
+
+# query_standings() works for alpine skiing athlete
+
+    Code
+      print(standings_odermatt, width = Inf, n = Inf)
+    Output
+      # A tibble: 9 x 14
+        athlete        sector category season all_rank all_points dh_rank dh_points
+        <chr>          <chr>  <chr>     <int>    <int>      <int>   <int>     <int>
+      1 Odermatt Marco AL     WC         2025        1       1641       1       605
+      2 Odermatt Marco AL     WC         2024        1       1947       1       552
+      3 Odermatt Marco AL     WC         2023        1       2042       3       462
+      4 Odermatt Marco AL     WC         2022        1       1639       4       517
+      5 Odermatt Marco AL     WC         2021        2       1093      16       126
+      6 Odermatt Marco AL     WC         2020       17        434      43        20
+      7 Odermatt Marco AL     WC         2019       24        334      53         7
+      8 Odermatt Marco AL     WC         2018       76         62      38        22
+      9 Odermatt Marco AL     WC         2017      114         23      NA        NA
+        gs_rank gs_points sg_rank sg_points ac_rank ac_points
+          <int>     <int>   <int>     <int>   <int>     <int>
+      1       1       500       1       536      NA        NA
+      2       1       900       1       495      NA        NA
+      3       1       840       1       740      NA        NA
+      4       1       720       2       402      NA        NA
+      5       2       649       2       318      NA        NA
+      6       9       211       7       203      NA        NA
+      7       8       245      20        72      35        10
+      8      45        16      34        24      NA        NA
+      9      41        23      NA        NA      NA        NA
 

@@ -2,19 +2,22 @@
 % Please edit documentation in R/standings.R
 \name{query_standings}
 \alias{query_standings}
-\title{Query Cup Standings}
+\title{Query Cup Standings for a Season or an Athlete}
 \usage{
 query_standings(
   sector = fd_def("sector"),
   season = fd_def("season"),
   category = fd_def("category"),
   gender = fd_def("gender"),
-  type = c("ranking", "start-list", "nations")
+  type = c("ranking", "start-list", "nations"),
+  athlete = NULL
 )
 }
 \arguments{
 \item{sector}{abbreviation of the sector, e.g., "AL" for
-alpine skiing. See the dataset \link{sectors} for possible values.}
+alpine skiing. See the dataset \link{sectors} for possible values. For
+convenience, you can also pass a data frame or list describing an athlete
+(see argument \code{athlete}).}
 
 \item{season}{year when the season ended, i.e., 2020 stands for the season
 2019/2020. It is not possible to filter for multiple seasons at once. If
@@ -38,19 +41,40 @@ which determines the discipline and overall winner of the cup.
 \item \code{"start-list"} returns the ranking for the start lists.
 \item \code{"nations"} returns the ranking of the nations cup.
 }}
+
+\item{athlete}{a list or data frame with fields/columns \code{competitor_id} and
+\code{sector} that describe a \emph{single} athlete. The easiest way to create
+such a data frame is through the functions \code{\link[=query_athletes]{query_athletes()}},
+\code{\link[=query_race]{query_race()}}, or \code{\link[=query_standings]{query_standings()}}. These functions
+can return multiple athletes, but \code{query_results()} only returns the
+results for one athlete. If multiple athletes are passed, only the first
+one will be used.
+
+Providing a value for \code{athlete} will trigger the function to return the
+career standings for this athlete. All arguments except for \code{category}
+and \code{type} will be ignored in this case. The value \code{"nations"} for \code{type}
+is not allowed.}
 }
 \value{
-A tibble with at least the following columns: \code{sector}, \code{athlete},
-and \code{nation}. Except for nations cups, there are also the columns \code{brand}
-and \code{competitor_id}. Depending on the sector, there are multiple
+When querying for season standings, a tibble with at least
+the following columns: \code{sector}, \code{athlete}, and \code{nation}.
+Except for nations cups, there are also the columns \code{brand}
+and \code{competitor_id}. When querying for an athlete's standings, a tibble with
+at least the columns \code{athlete}, \code{sector}, \code{category}, and \code{season}.
+
+Depending on the sector, there are multiple
 columns giving the rank and the points for the various disciplines. For
 example, in alpine skiing ("AL"), the columns \code{all_rank} and \code{all_points}
 give the rank and points for the overall world cup, while \code{dh_rank} and
 \code{dh_points} give the rank and points for the downhill world cup.
 }
 \description{
-Query cup standings by sector, season, category
-(i.e., the cup in this context), and gender.
+Query cup standings, either
+\itemize{
+\item the full standings for a season by sector, category
+(i.e., the cup in this context), and gender, or
+\item the career standings for an athlete by category.
+}
 }
 \details{
 All filter arguments are set to \code{""} by default. Setting an argument to
@@ -76,6 +100,13 @@ query_standings(sector = "AL", season = 2025,
 query_standings(sector = "SB", season = 2022,
                 category = "WC", gender = "W",
                 type = "start-list")
+
+# get the standings for Marco Odermatt
+odermatt <- query_athletes("odermatt", "marco")
+query_standings(athlete = odermatt)
+
+# the athlete may also simply be passed as the first argument
+query_standings(odermatt)
 }
 
 }

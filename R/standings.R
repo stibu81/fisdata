@@ -1,9 +1,16 @@
-#' Query Cup Standings
+#' Query Cup Standings for a Season or an Athlete
 #'
-#' Query cup standings by sector, season, category
-#' (i.e., the cup in this context), and gender.
+#' @description
+#' Query cup standings, either
 #'
-#' @inheritParams query_athletes
+#' * the full standings for a season by sector, category
+#'   (i.e., the cup in this context), and gender, or
+#' * the career standings for an athlete by category.
+#'
+#' @param sector abbreviation of the sector, e.g., "AL" for
+#'  alpine skiing. See the dataset [sectors] for possible values. For
+#'  convenience, you can also pass a data frame or list describing an athlete
+#'  (see argument `athlete`).
 #' @param season year when the season ended, i.e., 2020 stands for the season
 #'  2019/2020. It is not possible to filter for multiple seasons at once. If
 #'  omitted, results are returned for the current season.
@@ -23,6 +30,19 @@
 #' * `"start-list"` returns the ranking for the start lists.
 #' * `"nations"` returns the ranking of the nations cup.
 #'
+#' @param athlete a list or data frame with fields/columns `competitor_id` and
+#'  `sector` that describe a *single* athlete. The easiest way to create
+#'  such a data frame is through the functions [query_athletes()],
+#'  [query_race()], or [query_standings()]. These functions
+#'  can return multiple athletes, but `query_results()` only returns the
+#'  results for one athlete. If multiple athletes are passed, only the first
+#'  one will be used.
+#'
+#'  Providing a value for `athlete` will trigger the function to return the
+#'  career standings for this athlete. All arguments except for `category`
+#'  and `type` will be ignored in this case. The value `"nations"` for `type`
+#'  is not allowed.
+#'
 #' @details
 #' All filter arguments are set to `""` by default. Setting an argument to
 #' `""` means that no filtering takes place for this parameter. For those
@@ -33,9 +53,13 @@
 #' per sessions.
 #'
 #' @return
-#' A tibble with at least the following columns: `sector`, `athlete`,
-#' and `nation`. Except for nations cups, there are also the columns `brand`
-#' and `competitor_id`. Depending on the sector, there are multiple
+#' When querying for season standings, a tibble with at least
+#' the following columns: `sector`, `athlete`, and `nation`.
+#' Except for nations cups, there are also the columns `brand`
+#' and `competitor_id`. When querying for an athlete's standings, a tibble with
+#' at least the columns `athlete`, `sector`, `category`, and `season`.
+#'
+#' Depending on the sector, there are multiple
 #' columns giving the rank and the points for the various disciplines. For
 #' example, in alpine skiing ("AL"), the columns `all_rank` and `all_points`
 #' give the rank and points for the overall world cup, while `dh_rank` and
@@ -56,6 +80,13 @@
 #' query_standings(sector = "SB", season = 2022,
 #'                 category = "WC", gender = "W",
 #'                 type = "start-list")
+#'
+#' # get the standings for Marco Odermatt
+#' odermatt <- query_athletes("odermatt", "marco")
+#' query_standings(athlete = odermatt)
+#'
+#' # the athlete may also simply be passed as the first argument
+#' query_standings(odermatt)
 #' }
 #'
 #' @export
@@ -64,18 +95,42 @@ query_standings <- function(sector = fd_def("sector"),
                             season = fd_def("season"),
                             category = fd_def("category"),
                             gender = fd_def("gender"),
-                            type = c("ranking", "start-list", "nations")) {
+                            type = c("ranking", "start-list", "nations"),
+                            athlete = NULL) {
 
   # type must already be handled here, because we use it further down
   type <- match.arg(type)
 
-  url <- get_standings_url(sector, season, category, gender, type)
-  standings <- extract_standings(url) %>%
-    dplyr::mutate(sector = toupper(sector), .before = 1)
+  # if category is not given, the FIS API returns World Cup standings
+  # => make this explicit
+  if (category == "") category <- "WC"
 
-  # if the results are for the nations cup, remove the column brand
-  if (type == "nations") {
-    standings <- standings %>% dplyr::select(-"brand", -"competitor_id")
+  # if sector is set to a data frame or list, use it as athlete
+  if (is.list(sector)) athlete <- sector
+
+  # there are two distinct queries that can be performed by this function:
+  # * if athlete is given, get the career standings of that athlete
+  # * otherwise, get the full standings for a season
+  if (!is.null(athlete)) {
+    athlete <- ensure_one_athlete(athlete)
+    athlete_name <- get_athlete_name(athlete)
+    url <- get_athlete_standings_url(athlete, category, type)
+    standings <- extract_athlete_standings(url) %>%
+      dplyr::mutate(
+        athlete = athlete_name,
+        sector = !!athlete$sector,
+        category = category,
+        .before = 1
+      )
+  } else {
+    url <- get_standings_url(sector, season, category, gender, type)
+    standings <- extract_standings(url) %>%
+      dplyr::mutate(sector = toupper(sector), .before = 1)
+
+    # if the results are for the nations cup, remove the column brand
+    if (type == "nations") {
+      standings <- standings %>% dplyr::select(-"brand", -"competitor_id")
+    }
   }
 
   # add the url as an attribute
@@ -239,5 +294,122 @@ get_empty_standings_df <- function() {
     brand = character(),
     nation = character(),
     competitor_id = character()
+  )
+}
+
+
+
+get_athlete_standings_url <- function(athlete,
+                                      category = "",
+                                      type = "ranking",
+                                      error_call = rlang::caller_env()) {
+
+  competitor_id <- athlete$competitor_id
+  sector <- athlete$sector
+
+  # if type is "start-list", the category code must be adapted.
+  # "nations" is not supported here.
+  if (type == "start-list") {
+    category <- paste0(category, "SL")
+  } else if (type == "nations") {
+    cli::cli_abort("type = 'nations' is not supported for athlete standings.")
+  }
+
+  glue::glue(
+    "{fis_db_url}/athlete-biography.html?",
+    "sectorcode={sector}&competitorid={competitor_id}&",
+    "type=cups&cupcode={category}"
+  )
+}
+
+
+extract_athlete_standings <- function(url) {
+
+  cached <- get_cache(url)
+  if (!cachem::is.key_missing(cached)) {
+    return(cached)
+  }
+
+  html <- url %>%
+    rvest::read_html()
+  table_rows <- html %>%
+    rvest::html_element(css = "div.table__body") %>%
+    # usually the table rows are a-tags, but some can be divs.
+    rvest::html_elements(css = "a.table-row, div.table-row")
+
+  # if there are no rows, return an empty table
+  has_no_standings <- table_rows %>%
+    rvest::html_text2() %>%
+    stringr::str_detect("no data available") %>%
+    any()
+  empty_df <- get_empty_athlete_standings_df()
+  if (length(table_rows) == 0 | has_no_standings) {
+    set_cache(url, empty_df)
+    return(empty_df)
+  }
+
+  # extract the standings data by parsing the entire container-div
+  standings <- table_rows %>%
+    rvest::html_elements(css = "div.container") %>%
+    rvest::html_text2() %>%
+    stringr::str_split("\n")
+
+  # the rows do not contain the abbreviated disciplines, so we need to
+  # extract them from the table header
+  discipline_codes <- html %>%
+    rvest::html_element(css = "div.table__head") %>%
+    rvest::html_element(css = "div.container") %>%
+    rvest::html_elements(css = "div.g-md") %>%
+    rvest::html_text() %>%
+    tolower()
+
+  # create data frame
+  standings_df <- standings %>%
+    purrr::map(
+      function(a) {
+        # the first element is the season
+        season <- as.integer(a[[1]])
+        # the remainder is structured as follows:
+        #   disicpline, rank, points
+        # for disciplines, where the athlete did not compete in the season,
+        # the last two fields are replaced by a single "---"
+        # first, replace the long discipline names by the abbreviations.
+        i_disc <- stringr::str_detect(a, "[A-Za-z]")
+        a[i_disc] <- discipline_codes
+        # then, remove the disciplines that this athlete does not compete in
+        i_dashes <- which(a == "---")
+        i_rm <- purrr::map(i_dashes, \(i) (i - 1):i) %>%
+          unlist()
+        # if there are no dashes, i_rm ends up being NULL
+        if (!is.null(i_rm)) a <- a[-i_rm]
+        # loop through the disciplines
+        a_split <- split(a[-1], rep(1:(length(a) / 3), each = 3))
+        ranks_points <- purrr::map(
+            a_split,
+            function(disc) {
+              parse_number(disc[2:3]) %>%
+                as.integer() %>%
+                as.list() %>%
+                purrr::set_names(
+                  paste(disc[1], c("rank", "points"), sep = "_")
+                ) %>%
+                dplyr::as_tibble()
+            }
+          ) %>%
+          dplyr::bind_cols() %>%
+          dplyr::mutate(season = season, .before = 1)
+      }
+    ) %>%
+    dplyr::bind_rows()
+
+  set_cache(url, standings_df)
+
+  standings_df
+}
+
+
+get_empty_athlete_standings_df <- function() {
+  tibble::tibble(
+    season = integer()
   )
 }

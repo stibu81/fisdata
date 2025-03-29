@@ -77,13 +77,7 @@ query_results <- function(athlete,
 
   athlete <- ensure_one_athlete(athlete)
 
-  # depending on the source for athlete, the name is stored in column
-  # "name" or "athlete".
-  athlete_name <- if ("name" %in% names(athlete)) {
-    athlete$name
-  } else {
-    athlete$athlete
-  }
+  athlete_name <- get_athlete_name(athlete)
 
   url <- get_results_url(athlete, season, category, place, discipline)
   results <- extract_results(url) %>%
@@ -122,9 +116,10 @@ ensure_one_athlete <- function(athlete, error_call = rlang::caller_env()) {
   # if there are multiple rows, warn and only keep the first one
   if (nrow(athlete) > 1) {
     athlete <- athlete[1, ]
+    athlete_name <- get_athlete_name(athlete)
     cli::cli_warn(
       c("!" = "Multiple athletes were passed to argument 'athlete'.",
-        "i" = "Only results for the first one ({athlete$name}) are returned."),
+        "i" = "Only results for the first one ({athlete_name}) are returned."),
       call = error_call
     )
   }

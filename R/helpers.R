@@ -301,3 +301,14 @@ extract_ids <- function(html, type = c("competitor", "race", "event")) {
     rvest::html_attr("href") %>%
     stringr::str_extract(glue::glue("{type}id=(\\d+)"), group = 1)
 }
+
+
+# depending on the source for athlete, the name is stored in column
+# "name" or "athlete".
+get_athlete_name <- function(athlete) {
+  athlete_name <- if ("name" %in% names(athlete)) {
+    athlete$name
+  } else {
+    athlete$athlete
+  }
+}
