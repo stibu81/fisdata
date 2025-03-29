@@ -242,3 +242,17 @@ test_that("query_standings() with athlete works for empty result", {
 
   expect_equal(attr(empty, "url"), get_athlete_standings_url())
 })
+
+
+test_that("query_standings() with athlete in first position works", {
+  local_mocked_bindings(
+    get_athlete_standings_url = function(...) test_path("data", "athlete_standings_odermatt.html.gz")
+  )
+  odermatt <- tibble(
+      name = "Odermatt Marco",
+      sector = "AL",
+      competitor_id = "190231"
+    )
+  standings_odermatt <- query_standings(odermatt)
+  expect_equal(standings_odermatt, query_standings(athlete = odermatt))
+})

@@ -7,7 +7,10 @@
 #'   (i.e., the cup in this context), and gender, or
 #' * the career standings for an athlete by category.
 #'
-#' @inheritParams query_athletes
+#' @param sector abbreviation of the sector, e.g., "AL" for
+#'  alpine skiing. See the dataset [sectors] for possible values. For
+#'  convenience, you can also pass a data frame or list describing an athlete
+#'  (see argument `athlete`).
 #' @param season year when the season ended, i.e., 2020 stands for the season
 #'  2019/2020. It is not possible to filter for multiple seasons at once. If
 #'  omitted, results are returned for the current season.
@@ -81,6 +84,9 @@
 #' # get the standings for Marco Odermatt
 #' odermatt <- query_athletes("odermatt", "marco")
 #' query_standings(athlete = odermatt)
+#'
+#' # the athlete may also simply be passed as the first argument
+#' query_standings(odermatt)
 #' }
 #'
 #' @export
@@ -98,6 +104,9 @@ query_standings <- function(sector = fd_def("sector"),
   # if category is not given, the FIS API returns World Cup standings
   # => make this explicit
   if (category == "") category <- "WC"
+
+  # if sector is set to a data frame or list, use it as athlete
+  if (is.list(sector)) athlete <- sector
 
   # there are two distinct queries that can be performed by this function:
   # * if athlete is given, get the career standings of that athlete

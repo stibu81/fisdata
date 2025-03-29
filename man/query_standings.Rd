@@ -15,7 +15,9 @@ query_standings(
 }
 \arguments{
 \item{sector}{abbreviation of the sector, e.g., "AL" for
-alpine skiing. See the dataset \link{sectors} for possible values.}
+alpine skiing. See the dataset \link{sectors} for possible values. For
+convenience, you can also pass a data frame or list describing an athlete
+(see argument \code{athlete}).}
 
 \item{season}{year when the season ended, i.e., 2020 stands for the season
 2019/2020. It is not possible to filter for multiple seasons at once. If
@@ -102,6 +104,9 @@ query_standings(sector = "SB", season = 2022,
 # get the standings for Marco Odermatt
 odermatt <- query_athletes("odermatt", "marco")
 query_standings(athlete = odermatt)
+
+# the athlete may also simply be passed as the first argument
+query_standings(odermatt)
 }
 
 }
