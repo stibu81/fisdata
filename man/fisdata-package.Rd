@@ -4,7 +4,7 @@
 \name{fisdata-package}
 \alias{fisdata}
 \alias{fisdata-package}
-\title{fisdata: Query Data From the FIS Web Page}
+\title{fisdata: Query Data from the FIS Web Page}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 

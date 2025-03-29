@@ -1,5 +1,5 @@
 Package: fisdata
-Title: Query Data From the FIS Web Page
+Title: Query Data from the FIS Web Page
 Version: 0.2.0
 Authors@R: 
   person("Stefan", "Lanz", , "slanz1137@gmail.com", role = c("aut", "cre"))
