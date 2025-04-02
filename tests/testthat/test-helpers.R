@@ -104,16 +104,25 @@ test_that("parse_gender_list() works", {
 
 
 test_that("get_half_of_the_year_at_date() works", {
-  expect_equal(get_half_of_the_year_at_date(as.Date("2023-03-07")), c(2023, 1))
-  expect_equal(get_half_of_the_year_at_date(as.Date("2020-06-30")), c(2020, 1))
-  expect_equal(get_half_of_the_year_at_date(as.Date("2021-11-07")), c(2021, 2))
-  expect_equal(get_half_of_the_year_at_date(as.Date("2020-07-01")), c(2020, 2))
+  expect_equal(
+    get_half_of_the_year_at_date(as.Date("2021-05-02"))[[1]],
+    c(2021, 1)
+  )
+  expect_equal(
+    get_half_of_the_year_at_date(
+      as.Date(c("2023-03-07", "2020-06-30", "2021-11-07", "2020-07-01"))
+    ),
+    list(c(2023, 1), c(2020, 1), c(2021, 2), c(2020, 2))
+  )
 })
 
 
 test_that("get_season_at_date() works", {
-  expect_equal(get_season_at_date(as.Date("2025-04-06")), 2025)
-  expect_equal(get_season_at_date(as.Date("2024-10-15")), 2025)
+  expect_equal(get_season_at_date(as.Date("2023-04-03")), 2023)
+  expect_equal(
+    get_season_at_date(as.Date(c("2025-04-06", "2024-10-15"))),
+    c(2025, 2025)
+  )
 })
 
 
@@ -127,7 +136,7 @@ test_that("parse_event_dates() works", {
 
   # test during the first half of the year
   local_mocked_bindings(
-    get_half_of_the_year_at_date = function(x) c(2025, 1)
+    get_half_of_the_year_at_date = function(x) list(c(2025, 1))
   )
 
   expected <- tibble(
@@ -144,7 +153,7 @@ test_that("parse_event_dates() works", {
 
   # test during the second half of the year
   local_mocked_bindings(
-    get_half_of_the_year_at_date = function(x) c(2024, 2)
+    get_half_of_the_year_at_date = function(x) list(c(2024, 2))
   )
   expect_equal(parse_event_dates(test_dates), expected)
 })
