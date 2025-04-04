@@ -18,13 +18,14 @@ summarise_results(
 \item{results}{athlete's results as returned by \code{\link[=query_results]{query_results()}}.}
 
 \item{by}{variables to groups the results by. Possible values are "season",
-"category" and "discipline". Values are partially matched.}
+"category" and "discipline". Values are partially matched. Set this value
+to an empty vector (\code{c()}) or \code{NA} to summarise without grouping.}
 
 \item{show_pos}{numeric that controls the summary of ranks. Indicate the
 break points for the ranks to summarise. The function will then return
 counts for the number of ranks that are at least as good as each break
 point an worse then the next better break point. Set this value to an
-empty vector (\code{c()}) or \code{NA} to not include the position summaries.}
+empty vector (\code{c()}) or \code{FALSE} to not include the position summaries.}
 
 \item{show_dnf}{logical, should the races where the athlete did not finish
 be counted?}

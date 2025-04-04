@@ -5,12 +5,13 @@
 #'
 #' @param results athlete's results as returned by [query_results()].
 #' @param by variables to groups the results by. Possible values are "season",
-#'  "category" and "discipline". Values are partially matched.
+#'  "category" and "discipline". Values are partially matched. Set this value
+#'  to an empty vector (`c()`) or `NA` to summarise without grouping.
 #' @param show_pos numeric that controls the summary of ranks. Indicate the
 #'  break points for the ranks to summarise. The function will then return
 #'  counts for the number of ranks that are at least as good as each break
 #'  point an worse then the next better break point. Set this value to an
-#'  empty vector (`c()`) or `NA` to not include the position summaries.
+#'  empty vector (`c()`) or `FALSE` to not include the position summaries.
 #' @param show_podiums logical,  should the count of podiums (ranks 1 to 3)
 #'  be returned?
 #' @param show_dnf logical, should the races where the athlete did not finish
@@ -45,7 +46,8 @@ summarise_results <- function(results,
   do_show_pos <- !isFALSE(show_pos) && length(show_pos) > 0
   if (do_show_pos) {
     # check for non-integer values
-    if (!is.numeric(show_pos) | any(show_pos != as.integer(show_pos))) {
+    if (!is.numeric(show_pos) |
+        any(show_pos != suppressWarnings(as.integer(show_pos)))) {
       cli::cli_abort("show_pos must be a vector of integer values.")
     }
     # check for duplicates
@@ -93,7 +95,7 @@ summarise_results <- function(results,
   }
 
   if (show_n_races) {
-    res[["n_races"]] <- 1
+    res[["n_races"]] <- 1L
   }
 
   # move cup_points to the end
