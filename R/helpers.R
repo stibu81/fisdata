@@ -254,14 +254,14 @@ parse_event_details <- function(x) {
 # get the current year and half of the year
 
 get_half_of_the_year_at_date <- function(date = lubridate::today()) {
-  years <- lubridate::year(date)
-  hoy <- (lubridate::month(date) > 6) + 1
+  years <- as.integer(lubridate::year(date))
+  hoy <- as.integer(lubridate::month(date) > 6) + 1L
   purrr::map2(years, hoy, \(y, h) c(y, h))
 }
 
 
 get_season_at_date <- function(date = lubridate::today()) {
-  lubridate::year(date) + (lubridate::month(date) > 6)
+  as.integer(lubridate::year(date) + (lubridate::month(date) > 6))
 }
 
 
