@@ -152,7 +152,8 @@ get_debuts <- function(athlete,
   }
 
   results %>%
-    dplyr::filter(.data$date == min(.data$date), .by = grp_by)
+    dplyr::filter(.data$date == min(.data$date), .by = grp_by) %>%
+    dplyr::arrange(desc(.data$date))
 }
 
 

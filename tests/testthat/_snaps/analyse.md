@@ -29,3 +29,22 @@
        9     1     1     0     0     0       2         81
       10     0     1     1     0     0       2         54
 
+# get_debuts() works with default settings
+
+    Code
+      print(debuts, width = Inf, n = Inf)
+    Output
+      # A tibble: 4 x 11
+        athlete      date       place       nation sector category           
+        <chr>        <date>     <chr>       <chr>  <chr>  <chr>              
+      1 Cuche Didier 2009-12-18 Val Gardena ITA    AL     World Cup          
+      2 Cuche Didier 2009-02-07 Val d'Isère FRA    AL     World Championships
+      3 Cuche Didier 2009-02-04 Val d'Isère FRA    AL     World Championships
+      4 Cuche Didier 2009-01-24 Kitzbuehel  AUT    AL     World Cup          
+        discipline  rank fis_points cup_points race_id
+        <chr>      <int>      <dbl>      <dbl> <chr>  
+      1 Super G       NA          0         NA 5      
+      2 Downhill       2          0         NA 3      
+      3 Super G        1          0         NA 2      
+      4 Downhill       4          0         50 1      
+

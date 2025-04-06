@@ -1,8 +1,7 @@
 library(dplyr, warn.conflicts = FALSE)
 library(stringr)
 
-# create a data frame with some results from Didier Cuche. Some irrelevant
-# columns are omitted.
+# create a data frame with some results from Didier Cuche.
 cuche_res <- tribble(
          ~date,         ~place,  ~nation,             ~category, ~discipline, ~rank, ~cup_points,
   "2009-01-24",   "Kitzbuehel",    "AUT",           "World Cup",  "Downhill",    4L,          50,
@@ -22,8 +21,9 @@ cuche_res <- tribble(
   ) %>%
   mutate(date = as.Date(date)) %>%
   mutate(athlete = "Cuche Didier", .before = 1) %>%
-  mutate(sector = "AL", .after = "place") %>%
-  mutate(race_id = 1:n(), .after = last_col())
+  mutate(sector = "AL", .after = "nation") %>%
+  mutate(fis_points = 0, .after = "rank") %>%
+  mutate(race_id = as.character(1:n()), .after = last_col())
 
 
 test_that("summarise_results() works with default settings", {
@@ -152,3 +152,74 @@ test_that("summarise_results() works with different summaries", {
   )
 })
 
+
+test_that("get_debuts() works with default settings", {
+  local_mocked_bindings(
+    query_results = function(...) cuche_res
+  )
+  cuche <- tibble(name = "Cuche Didier")
+  debuts <- get_debuts(cuche)
+
+  expect_s3_class(debuts, "tbl_df")
+
+  expected_names <- c("athlete", "date", "place", "nation", "sector",
+                      "category", "discipline", "rank", "fis_points",
+                      "cup_points", "race_id")
+  expect_named(debuts, expected_names)
+
+  expected_types <- rep("character", 11) %>%
+    replace(c(2, 8:10), c("Date", "integer", "double", "double"))
+  for (i in seq_along(expected_names)) {
+    if (expected_types[i] == "Date") {
+      expect_s3_class(debuts[[!!expected_names[i]]], expected_types[i])
+    } else {
+      expect_type(debuts[[!!expected_names[i]]], expected_types[i])
+    }
+  }
+
+  expect_in(debuts$athlete, "Cuche Didier")
+  expect_in(debuts$nation, nations$code)
+  expect_in(debuts$sector, "AL")
+  expect_in(debuts$category, c("World Cup", "World Championships"))
+  expect_in(debuts$discipline, c("Downhill", "Super G"))
+  expect_in(debuts$rank, c(0:100, NA_integer_))
+  expect_in(na.omit(debuts$cup_points), 0:100)
+  expect_match(debuts$race_id, "^\\d+$")
+
+  expect_snapshot(print(debuts, width = Inf, n = Inf))
+})
+
+
+test_that("get_debuts() works with different groupings", {
+  local_mocked_bindings(
+    query_results = function(...) cuche_res
+  )
+  cuche <- tibble(name = "Cuche Didier")
+  grp_cols <- c("category", "discipline")
+
+  debuts_no_grp <- get_debuts(cuche, by = c())
+  expect_equal(nrow(debuts_no_grp), 1)
+  expect_equal(debuts_no_grp$date, min(cuche_res$date))
+
+  debuts_by_category <- get_debuts(cuche, by = "category")
+  expect_equal(nrow(debuts_by_category), 2)
+  expect_setequal(debuts_by_category$category, cuche_res$category)
+
+  debuts_by_discipline <- get_debuts(cuche, by = "discipline")
+  expect_equal(nrow(debuts_by_discipline), 2)
+  expect_setequal(debuts_by_discipline$discipline, cuche_res$discipline)
+})
+
+
+test_that("get_debuts() works for all types", {
+  local_mocked_bindings(
+    query_results = function(...) cuche_res
+  )
+  cuche <- tibble(name = "Cuche Didier")
+
+  debuts_podium <- get_debuts(cuche, type = "podium")
+  expect_in(debuts_podium$rank, 1:3)
+
+  debuts_victory <- get_debuts(cuche, type = "victory")
+  expect_in(debuts_victory$rank, 1L)
+})
