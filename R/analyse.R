@@ -35,20 +35,10 @@ summarise_results <- function(results,
                               show_n_races = TRUE,
                               show_points = TRUE) {
 
-  # determine the grouping
-  grp_choices <- c("season", "category", "discipline", "place", "nation")
-  grp_by <- if (all(is.na(by)) || length(by) == 0) {
-    "athlete"
-  } else {
-    grp_matches <- pmatch(by, grp_choices, duplicates.ok = TRUE)
-    if (any(is.na(grp_matches))) {
-      cli::cli_abort(
-        "Invalid grouping variables:
-          {glue::single_quote(by[is.na(grp_matches)])}"
-      )
-    }
-    c("athlete", unique(grp_choices[grp_matches]))
-  }
+  grp_by <- c(
+    "athlete",
+    match_groupings(by, c("season", "category", "discipline", "place", "nation"))
+  )
 
   # prepare show_pos: should positions be summarised?
   # if so, sort, remove duplicates, handle invalid inputs
@@ -118,4 +108,23 @@ summarise_results <- function(results,
       dplyr::across(dplyr::everything(), \(x) sum(x, na.rm = TRUE)),
       .by = dplyr::all_of(grp_by)
     )
+}
+
+
+match_groupings <- function(by, choices, error_call = rlang::caller_env()) {
+
+  # NA and c() both imply no grouping
+  if (all(is.na(by)) || length(by) == 0) {
+    return(character())
+  }
+
+  grp_matches <- pmatch(by, choices, duplicates.ok = TRUE)
+  if (any(is.na(grp_matches))) {
+    cli::cli_abort(
+      "Invalid grouping variables:
+        {glue::single_quote(by[is.na(grp_matches)])}",
+      call = error_call
+    )
+  }
+  unique(choices[grp_matches])
 }
