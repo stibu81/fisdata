@@ -111,6 +111,51 @@ summarise_results <- function(results,
 }
 
 
+#' Get the debut races, podiums or victories for an athlete
+#'
+#' @inheritParams query_results
+#' @param by variables to groups the results by. Possible values are "category",
+#'  and "discipline". Values are partially matched. Set this value
+#'  to an empty vector (`c()`) or `NA` to summarise without grouping.
+#' @param type which type of debut to get: the first race ("race"), the first
+#'  podium ("podium"), or the first victory ("victory").
+#'
+#' @return
+#' A tibble with the following columns: `athlete`, `date`, `place`, `nation`,
+#' `sector`, `category`, `discipline`, `rank`, `fis_points`, `cup_points`,
+#' and `race_id`.
+#'
+#' @export
+
+get_debuts <- function(athlete,
+                       category = fd_def("category"),
+                       discipline = fd_def("discipline"),
+                       by = c("category", "discipline"),
+                       type = c("race", "podium", "victory")) {
+
+  type <- match.arg(type)
+  grp_by <- match_groupings(by, c("category", "discipline"))
+
+  athlete <- ensure_one_athlete(athlete)
+
+  # get results for all seasons independent of defaults
+  results <- query_results(athlete, season = "", category = category,
+                           place = "", discipline = discipline) %>%
+    dplyr::filter(.data$category != "Training")
+
+  # limit the races to those of the requested type, i.e., all races,
+  # podiums or victories.
+  if (type == "podium") {
+    results <- results %>% dplyr::filter(.data$rank <= 3)
+  } else if (type == "victory") {
+    results <- results %>% dplyr::filter(.data$rank == 1)
+  }
+
+  results %>%
+    dplyr::filter(.data$date == min(.data$date), .by = grp_by)
+}
+
+
 match_groupings <- function(by, choices, error_call = rlang::caller_env()) {
 
   # NA and c() both imply no grouping
