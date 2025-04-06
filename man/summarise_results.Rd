@@ -18,7 +18,8 @@ summarise_results(
 \item{results}{athlete's results as returned by \code{\link[=query_results]{query_results()}}.}
 
 \item{by}{variables to groups the results by. Possible values are "season",
-"category" and "discipline". Values are partially matched. Set this value
+"category", "discipline", "place", and "nation".
+Values are partially matched. Set this value
 to an empty vector (\code{c()}) or \code{NA} to summarise without grouping.}
 
 \item{show_pos}{numeric that controls the summary of ranks. Indicate the

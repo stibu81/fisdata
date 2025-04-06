@@ -4,21 +4,21 @@ library(stringr)
 # create a data frame with some results from Didier Cuche. Some irrelevant
 # columns are omitted.
 cuche_res <- tribble(
-         ~date,         ~place,             ~category, ~discipline, ~rank, ~cup_points,
-  "2009-01-24",   "Kitzbuehel",           "World Cup",  "Downhill",    4L,          50,
-  "2009-02-04",  "Val d'Isère", "World Championships",   "Super G",    1L,          NA,
-  "2009-02-07",  "Val d'Isère", "World Championships",  "Downhill",    2L,          NA,
-  "2009-03-07",    "Kvitfjell",           "World Cup",  "Downhill",   13L,          20,
-  "2009-12-18",  "Val Gardena",           "World Cup",   "Super G",    NA,          NA,
-  "2010-03-06",    "Kvitfjell",           "World Cup",  "Downhill",    1L,         100,
-  "2010-12-04", "Beaver Creek",           "World Cup",   "Super G",    3L,          60,
-  "2011-01-21",   "Kitzbuehel",           "World Cup",   "Super G",    4L,          50,
-  "2011-02-09",     "Garmisch", "World Championships",   "Super G",    4L,          NA,
-  "2011-02-12",     "Garmisch", "World Championships",  "Downhill",    2L,          NA,
-  "2011-03-11",    "Kvitfjell",           "World Cup",  "Downhill",    5L,          45,
-  "2011-03-12",    "Kvitfjell",           "World Cup",  "Downhill",    7L,          36,
-  "2011-12-29",       "Bormio",           "World Cup",  "Downhill",    8L,          32,
-  "2012-02-11",        "Sochi",           "World Cup",  "Downhill",   12L,          22
+         ~date,         ~place,  ~nation,             ~category, ~discipline, ~rank, ~cup_points,
+  "2009-01-24",   "Kitzbuehel",    "AUT",           "World Cup",  "Downhill",    4L,          50,
+  "2009-02-04",  "Val d'Isère",    "FRA", "World Championships",   "Super G",    1L,          NA,
+  "2009-02-07",  "Val d'Isère",    "FRA", "World Championships",  "Downhill",    2L,          NA,
+  "2009-03-07",    "Kvitfjell",    "NOR",           "World Cup",  "Downhill",   13L,          20,
+  "2009-12-18",  "Val Gardena",    "ITA",           "World Cup",   "Super G",    NA,          NA,
+  "2010-03-06",    "Kvitfjell",    "NOR",           "World Cup",  "Downhill",    1L,         100,
+  "2010-12-04", "Beaver Creek",    "USA",           "World Cup",   "Super G",    3L,          60,
+  "2011-01-21",   "Kitzbuehel",    "AUT",           "World Cup",   "Super G",    4L,          50,
+  "2011-02-09",     "Garmisch",    "GER", "World Championships",   "Super G",    4L,          NA,
+  "2011-02-12",     "Garmisch",    "GER", "World Championships",  "Downhill",    2L,          NA,
+  "2011-03-11",    "Kvitfjell",    "NOR",           "World Cup",  "Downhill",    5L,          45,
+  "2011-03-12",    "Kvitfjell",    "NOR",           "World Cup",  "Downhill",    7L,          36,
+  "2011-12-29",       "Bormio",    "ITA",           "World Cup",  "Downhill",    8L,          32,
+  "2012-02-11",        "Sochi",    "RUS",           "World Cup",  "Downhill",   12L,          22
   ) %>%
   mutate(date = as.Date(date)) %>%
   mutate(athlete = "Cuche Didier", .before = 1) %>%
@@ -90,7 +90,7 @@ test_that("messages in summarise_results() work", {
 
 
 test_that("summarise_results() works with different groupings", {
-  grp_cols <- c("season", "category", "discipline")
+  grp_cols <- c("season", "category", "discipline", "place", "nation")
 
   cuche_no_grp <- summarise_results(cuche_res, by = c(), show_pos = FALSE)
   expect_named(cuche_no_grp[1], "athlete")
@@ -103,13 +103,14 @@ test_that("summarise_results() works with different groupings", {
   }
 
   expect_named(
-    summarise_results(cuche_res, by = rev(grp_cols), show_pos = FALSE)[1:4],
+    summarise_results(cuche_res, by = rev(grp_cols), show_pos = FALSE) %>%
+      select(1:(length(grp_cols) + 1)),
     c("athlete", rev(grp_cols))
   )
 
   expect_named(
-    summarise_results(cuche_res, by = c("d", "c"), show_pos = FALSE)[1:3],
-    c("athlete", "discipline", "category")
+    summarise_results(cuche_res, by = c("d", "n", "c"), show_pos = FALSE)[1:4],
+    c("athlete", "discipline", "nation", "category")
   )
 })
 

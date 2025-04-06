@@ -5,7 +5,8 @@
 #'
 #' @param results athlete's results as returned by [query_results()].
 #' @param by variables to groups the results by. Possible values are "season",
-#'  "category" and "discipline". Values are partially matched. Set this value
+#'  "category", "discipline", "place", and "nation".
+#'  Values are partially matched. Set this value
 #'  to an empty vector (`c()`) or `NA` to summarise without grouping.
 #' @param show_pos numeric that controls the summary of ranks. Indicate the
 #'  break points for the ranks to summarise. The function will then return
@@ -35,10 +36,11 @@ summarise_results <- function(results,
                               show_points = TRUE) {
 
   # determine the grouping
+  grp_choices <- c("season", "category", "discipline", "place", "nation")
   grp_by <- if (all(is.na(by)) || length(by) == 0) {
     "athlete"
   } else {
-    c("athlete", match.arg(by, several.ok = TRUE))
+    c("athlete", match.arg(by, grp_choices, several.ok = TRUE))
   }
 
   # prepare show_pos: should positions be summarised?
