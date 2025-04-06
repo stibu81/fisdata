@@ -40,7 +40,14 @@ summarise_results <- function(results,
   grp_by <- if (all(is.na(by)) || length(by) == 0) {
     "athlete"
   } else {
-    c("athlete", match.arg(by, grp_choices, several.ok = TRUE))
+    grp_matches <- pmatch(by, grp_choices, duplicates.ok = TRUE)
+    if (any(is.na(grp_matches))) {
+      cli::cli_abort(
+        "Invalid grouping variables:
+          {glue::single_quote(by[is.na(grp_matches)])}"
+      )
+    }
+    c("athlete", unique(grp_choices[grp_matches]))
   }
 
   # prepare show_pos: should positions be summarised?

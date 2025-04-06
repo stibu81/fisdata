@@ -86,6 +86,8 @@ test_that("messages in summarise_results() work", {
                  "show_pos must be a vector of integer values")
   expect_error(summarise_results(cuche_res, show_pos = c(1, "a")),
                  "show_pos must be a vector of integer values")
+  expect_error(summarise_results(cuche_res, by = c("a", "b", "c", "d")),
+               "Invalid grouping variables: 'a' and 'b'")
 })
 
 
