@@ -25,6 +25,21 @@
 #' it contains the grouping columns indicated by the argument `by` and possibly
 #' one or several columns containing the requested summaries.
 #'
+#' @examples
+#' \dontrun{
+#' # get Marco Odermatts World Cup results
+#' odermatt <- query_athletes("odermatt", "marco")
+#' odermatt_res <- query_results(odermatt, category = "WC")
+#'
+#' # summarise by category and season
+#' summarise_results(odermatt_res, by = c("category", "season"))
+#'
+#' # summarise by category, season, and discipline, only show podiums
+#' summarise_results(odermatt_res, by = c("category", "season", "discipline"),
+#'                   show_pos = 1:3, show_dnf = FALSE, show_n_races = FALSE,
+#'                   show_points = FALSE)
+#' }
+#'
 #' @export
 
 summarise_results <- function(results,
@@ -106,7 +121,7 @@ summarise_results <- function(results,
     dplyr::select(-"rank") %>%
     dplyr::summarise(
       dplyr::across(dplyr::everything(), \(x) sum(x, na.rm = TRUE)),
-      .by = dplyr::all_of(grp_by)
+    .by = dplyr::all_of(grp_by)
     )
 }
 
@@ -124,6 +139,16 @@ summarise_results <- function(results,
 #' A tibble with the following columns: `athlete`, `date`, `place`, `nation`,
 #' `sector`, `category`, `discipline`, `rank`, `fis_points`, `cup_points`,
 #' and `race_id`.
+#'
+#' @examples
+#' \dontrun{
+#' # get Marco Odermatt's World Cup debuts by discipline
+#' odermatt <- query_athletes("odermatt", "marco")
+#' get_debuts(odermatt, category = "WC")
+#'
+#' # get first victory by category
+#' get_debuts(odermatt, by = "category", type = "victory")
+#' }
 #'
 #' @export
 

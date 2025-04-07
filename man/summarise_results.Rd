@@ -47,3 +47,19 @@ one or several columns containing the requested summaries.
 Summarise the results of an athlete as they are returned by
 \code{\link[=query_results]{query_results()}}.
 }
+\examples{
+\dontrun{
+# get Marco Odermatts World Cup results
+odermatt <- query_athletes("odermatt", "marco")
+odermatt_res <- query_results(odermatt, category = "WC")
+
+# summarise by category and season
+summarise_results(odermatt_res, by = c("category", "season"))
+
+# summarise by category, season, and discipline, only show podiums
+summarise_results(odermatt_res, by = c("category", "season", "discipline"),
+                  show_pos = 1:3, show_dnf = FALSE, show_n_races = FALSE,
+                  show_points = FALSE)
+}
+
+}

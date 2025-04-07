@@ -42,3 +42,14 @@ and \code{race_id}.
 \description{
 Get the debut races, podiums or victories for an athlete
 }
+\examples{
+\dontrun{
+# get Marco Odermatt's World Cup debuts by discipline
+odermatt <- query_athletes("odermatt", "marco")
+get_debuts(odermatt, category = "WC")
+
+# get first victory by category
+get_debuts(odermatt, by = "category", type = "victory")
+}
+
+}
