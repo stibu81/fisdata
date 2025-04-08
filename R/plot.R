@@ -2,7 +2,9 @@
 #'
 #' @export
 
-plot_results_summary <- function(results, pos = 1:3) {
+plot_results_summary <- function(results,
+                                 by = c("category", "discipline"),
+                                 pos = 1:3) {
 
   # up to 9 athletes are supported. Abort if there are more.
   n_athletes <- dplyr::n_distinct(results$athlete)
@@ -11,10 +13,12 @@ plot_results_summary <- function(results, pos = 1:3) {
                    {n_athletes}.")
   }
 
+  by <- match_groupings(by, c("category", "discipline"))
+
   plot_data <- results %>%
-    summarise_results(by = c("category", "discipline"), show_pos = pos) %>%
+    summarise_results(by = by, show_pos = pos) %>%
     dplyr::select(
-      "athlete", "category", "discipline", dplyr::matches("^(pos|top)")
+      "athlete", dplyr::all_of(by), dplyr::matches("^(pos|top)")
     ) %>%
     dplyr::mutate(
       n_results = rowSums(dplyr::pick(dplyr::matches("^(pos|top)")))
@@ -41,8 +45,8 @@ plot_results_summary <- function(results, pos = 1:3) {
     athlete = plot_data$athlete[1],
     count = 0,
     position = names(cols_legend),
-    discipline = plot_data$discipline[1],
-    category = plot_data$category[1]
+    discipline = if ("discipline" %in% by) plot_data$discipline[1],
+    category = if ("category" %in% by) plot_data$category[1]
   )
 
   plot_data %>%
@@ -53,8 +57,11 @@ plot_results_summary <- function(results, pos = 1:3) {
         fill = paste(.data[["athlete"]], .data[["position"]], sep = "_"))
     ) +
     ggplot2::geom_col(position = "stack") +
-    ggplot2::facet_grid(rows = dplyr::vars(.data$category),
-                        cols = dplyr::vars(.data$discipline)) +
+    ggplot2::facet_grid(
+      rows = if ("category" %in% by) dplyr::vars(.data[["category"]]),
+      cols = if ("discipline" %in% by) dplyr::vars(.data[["discipline"]]),
+      scales = "free_y"
+    ) +
     ggplot2::scale_fill_manual(values = cols, guide = "none") +
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
