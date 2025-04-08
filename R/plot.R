@@ -26,25 +26,26 @@ plot_results_summary <- function(results,
     dplyr::filter(.data$n_results > 0) %>%
     tidyr::pivot_longer(dplyr::matches("^(pos|top)"),
                         names_to = "position",
-                        values_to = "count")
+                        values_to = "count") %>%
+    dplyr::mutate(
+      athlete = factor(.data$athlete, levels = unique(.data$athlete)),
+      position = factor(.data$position, levels = unique(.data$position))
+    )
 
   cols <- create_athlete_pos_colour_scale(plot_data$athlete, plot_data$position)
 
-  # for the legend, we only want to show each position once in the colour of the
-  # first athlete => extract these colours and name them only by the position
-  n_pos <- dplyr::n_distinct(plot_data$position)
-  cols_legend <- cols[1:n_pos]
-  names(cols_legend) <- stringr::str_remove(names(cols_legend), "^[^_]+_")
+  # use monochrome colours for the legend
+  n_pos <- length(levels(plot_data$position))
   cols_legend <- colorspace::darken(grDevices::grey(0.7),
                                     seq(0, 0.5, length.out = n_pos))
-  names(cols_legend) <- unique(plot_data$position)
+  names(cols_legend) <- levels(plot_data$position)
 
   # in addition, we need to plot some data that uses all the values for the
   # the legend.
   data_legend <- dplyr::tibble(
     athlete = plot_data$athlete[1],
     count = 0,
-    position = names(cols_legend),
+    position = factor(names(cols_legend), levels = names(cols_legend)),
     discipline = if ("discipline" %in% by) plot_data$discipline[1],
     category = if ("category" %in% by) plot_data$category[1]
   )
@@ -54,7 +55,7 @@ plot_results_summary <- function(results,
       ggplot2::aes(
         x = .data[["athlete"]],
         y = .data[["count"]],
-        fill = paste(.data[["athlete"]], .data[["position"]], sep = "_"))
+        fill = interaction(.data[["athlete"]], .data[["position"]], sep = "_"))
     ) +
     ggplot2::geom_col(position = "stack") +
     ggplot2::facet_grid(
