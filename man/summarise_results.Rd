@@ -15,12 +15,15 @@ summarise_results(
 )
 }
 \arguments{
-\item{results}{athlete's results as returned by \code{\link[=query_results]{query_results()}}.}
+\item{results}{athlete's results as returned by \code{\link[=query_results]{query_results()}}. The
+function can also handle the results from multiple athletes that are
+combined into a single tibble with \code{\link[dplyr:bind_rows]{dplyr::bind_rows()}}.}
 
 \item{by}{variables to groups the results by. Possible values are "season",
 "category", "discipline", "place", and "nation".
-Values are partially matched. Set this value
-to an empty vector (\code{c()}) or \code{NA} to summarise without grouping.}
+Values are partially matched. In addition, the function always groups by
+athlete. Set this value to an empty vector (\code{c()}) or \code{NA} to summarise
+without additional grouping (i.e., only by athlete).}
 
 \item{show_pos}{numeric that controls the summary of ranks. Indicate the
 break points for the ranks to summarise. The function will then return

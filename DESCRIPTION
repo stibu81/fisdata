@@ -29,7 +29,10 @@ Imports:
     cli,
     magrittr,
     clipr,
-    cachem
+    cachem,
+    ggplot2,
+    colorspace,
+    ggnewscale
 Suggests: 
     roxygen2,
     spelling,

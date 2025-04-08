@@ -3,11 +3,14 @@
 #' Summarise the results of an athlete as they are returned by
 #' [query_results()].
 #'
-#' @param results athlete's results as returned by [query_results()].
+#' @param results athlete's results as returned by [query_results()]. The
+#'  function can also handle the results from multiple athletes that are
+#'  combined into a single tibble with [dplyr::bind_rows()].
 #' @param by variables to groups the results by. Possible values are "season",
 #'  "category", "discipline", "place", and "nation".
-#'  Values are partially matched. Set this value
-#'  to an empty vector (`c()`) or `NA` to summarise without grouping.
+#'  Values are partially matched. In addition, the function always groups by
+#'  athlete. Set this value to an empty vector (`c()`) or `NA` to summarise
+#'  without additional grouping (i.e., only by athlete).
 #' @param show_pos numeric that controls the summary of ranks. Indicate the
 #'  break points for the ranks to summarise. The function will then return
 #'  counts for the number of ranks that are at least as good as each break
