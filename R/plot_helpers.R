@@ -14,7 +14,7 @@ create_athlete_pos_colour_scale <- function(athletes, positions) {
   base_colours <- cb_pal_set1[1:n_athletes]
   cols <- purrr::map(
       base_colours,
-      \(x) colorspace::darken(x, seq(0, 0.5, length.out = n_pos))
+      \(x) create_darkend_colour_sequence(x, n_pos)
     ) %>%
     unlist()
   names(cols) <- paste(rep(unique(athletes), each = n_pos),
@@ -24,3 +24,7 @@ create_athlete_pos_colour_scale <- function(athletes, positions) {
 }
 
 
+create_darkend_colour_sequence <- function(colour, n) {
+  dark_max <- if (n <= 3) 0.5 else 0.7
+  colorspace::darken(colour, seq(0, dark_max, length.out = n))
+}
