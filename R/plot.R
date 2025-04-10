@@ -46,12 +46,14 @@ plot_results_summary <- function(results,
     athlete = plot_data$athlete[1],
     count = 0,
     position = factor(names(cols_legend), levels = names(cols_legend)),
+    fill = .data$position,
     discipline = if ("discipline" %in% by) plot_data$discipline[1],
     category = if ("category" %in% by) plot_data$category[1]
   )
 
   p <- plot_data %>%
     dplyr::mutate(
+      fill = interaction(.data$athlete, .data$position, sep = "_"),
       tooltip = glue::glue(
         "athlete: {.data$athlete}
          position: {.data$position}
@@ -62,7 +64,8 @@ plot_results_summary <- function(results,
       ggplot2::aes(
         x = .data[["athlete"]],
         y = .data[["count"]],
-        fill = interaction(.data[["athlete"]], .data[["position"]], sep = "_"))
+        fill = .data[["fill"]]
+      )
     ) +
     ggiraph::geom_col_interactive(
       ggplot2::aes(tooltip = .data[["tooltip"]],

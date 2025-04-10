@@ -46,9 +46,10 @@ fis_plot <- function(p, interactive) {
       ggiraph::opts_tooltip(
         # for some reason, when I don't set the font family her, a serif
         # font is used.
-        css = paste0("padding:5px;background:black;color:white;",
+        css = paste0("padding:5px;color:white;",
                      "border-radius:5px;text-align:left;",
-                     "font-family:sans-serif")
+                     "font-family:sans-serif"),
+        use_fill = TRUE, use_stroke = TRUE
       )
     )
   )
