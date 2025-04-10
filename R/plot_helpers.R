@@ -33,7 +33,7 @@ create_darkend_colour_sequence <- function(colour, n) {
 # helper function that creates an interactive ggiraph plot with the
 # appropriate settings
 
-fis_plot <- function(p, interactive) {
+fis_plot <- function(p, interactive, width, height) {
 
   if (!interactive) {
     return(p)
@@ -41,6 +41,8 @@ fis_plot <- function(p, interactive) {
 
   ggiraph::girafe(
     ggobj = p,
+    width_svg = width,
+    height_svg = height,
     options = list(
       ggiraph::opts_zoom(max = 5),
       ggiraph::opts_tooltip(

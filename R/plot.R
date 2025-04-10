@@ -5,7 +5,9 @@
 plot_results_summary <- function(results,
                                  by = c("category", "discipline"),
                                  pos = 1:3,
-                                 interactive = TRUE) {
+                                 interactive = TRUE,
+                                 width = NULL,
+                                 height = NULL) {
 
   # up to 9 athletes are supported. Abort if there are more.
   n_athletes <- dplyr::n_distinct(results$athlete)
@@ -93,5 +95,5 @@ plot_results_summary <- function(results,
       guide = ggplot2::guide_legend(override.aes = list(alpha = 1))
     )
 
-  fis_plot(p, interactive)
+  fis_plot(p, interactive, width, height)
 }
