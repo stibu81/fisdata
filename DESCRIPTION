@@ -32,7 +32,8 @@ Imports:
     cachem,
     ggplot2,
     colorspace,
-    ggnewscale
+    ggnewscale,
+    ggiraph 
 Suggests: 
     roxygen2,
     spelling,

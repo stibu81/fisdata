@@ -4,7 +4,12 @@
 \alias{plot_results_summary}
 \title{Plot summary of one or more athlete's results}
 \usage{
-plot_results_summary(results, pos = 1:3)
+plot_results_summary(
+  results,
+  by = c("category", "discipline"),
+  pos = 1:3,
+  interactive = TRUE
+)
 }
 \description{
 Plot summary of one or more athlete's results

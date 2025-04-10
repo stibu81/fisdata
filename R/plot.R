@@ -4,7 +4,8 @@
 
 plot_results_summary <- function(results,
                                  by = c("category", "discipline"),
-                                 pos = 1:3) {
+                                 pos = 1:3,
+                                 interactive = TRUE) {
 
   # up to 9 athletes are supported. Abort if there are more.
   n_athletes <- dplyr::n_distinct(results$athlete)
@@ -49,14 +50,25 @@ plot_results_summary <- function(results,
     category = if ("category" %in% by) plot_data$category[1]
   )
 
-  plot_data %>%
+  p <- plot_data %>%
+    dplyr::mutate(
+      tooltip = glue::glue(
+        "athlete: {.data$athlete}
+         position: {.data$position}
+         count: {.data$count}"
+      )
+    ) %>%
     ggplot2::ggplot(
       ggplot2::aes(
         x = .data[["athlete"]],
         y = .data[["count"]],
         fill = interaction(.data[["athlete"]], .data[["position"]], sep = "_"))
     ) +
-    ggplot2::geom_col(position = "stack") +
+    ggiraph::geom_col_interactive(
+      ggplot2::aes(tooltip = .data[["tooltip"]],
+                   data_id = .data[["position"]]),
+      position = "stack"
+    ) +
     ggplot2::facet_grid(
       rows = if ("category" %in% by) dplyr::vars(.data[["category"]]),
       cols = if ("discipline" %in% by) dplyr::vars(.data[["discipline"]]),
@@ -77,4 +89,6 @@ plot_results_summary <- function(results,
       values = cols_legend,
       guide = ggplot2::guide_legend(override.aes = list(alpha = 1))
     )
+
+  fis_plot(p, interactive)
 }

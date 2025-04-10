@@ -28,3 +28,28 @@ create_darkend_colour_sequence <- function(colour, n) {
   dark_max <- if (n <= 3) 0.5 else 0.7
   colorspace::darken(colour, seq(0, dark_max, length.out = n))
 }
+
+
+# helper function that creates an interactive ggiraph plot with the
+# appropriate settings
+
+fis_plot <- function(p, interactive) {
+
+  if (!interactive) {
+    return(p)
+  }
+
+  ggiraph::girafe(
+    ggobj = p,
+    options = list(
+      ggiraph::opts_zoom(max = 5),
+      ggiraph::opts_tooltip(
+        # for some reason, when I don't set the font family her, a serif
+        # font is used.
+        css = paste0("padding:5px;background:black;color:white;",
+                     "border-radius:5px;text-align:left;",
+                     "font-family:sans-serif")
+      )
+    )
+  )
+}
