@@ -49,7 +49,8 @@ fis_plot <- function(p, interactive) {
         css = paste0("padding:5px;color:white;",
                      "border-radius:5px;text-align:left;",
                      "font-family:sans-serif"),
-        use_fill = TRUE, use_stroke = TRUE
+        use_fill = TRUE,
+        opacity = 1
       )
     )
   )
