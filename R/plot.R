@@ -1,13 +1,14 @@
 #' Plot summary of one or more athlete's results
 #'
+#' @rdname plot_results
 #' @export
 
-plot_results_summary <- function(results,
-                                 by = c("category", "discipline"),
-                                 pos = 1:3,
-                                 interactive = TRUE,
-                                 width = NULL,
-                                 height = NULL) {
+plot_rank_summary <- function(results,
+                              by = c("category", "discipline"),
+                              pos = 1:3,
+                              interactive = TRUE,
+                              width = NULL,
+                              height = NULL) {
 
   # up to 9 athletes are supported. Abort if there are more.
   n_athletes <- dplyr::n_distinct(results$athlete)
