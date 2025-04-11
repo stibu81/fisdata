@@ -14,7 +14,7 @@
 #' @param show_pos numeric that controls the summary of ranks. Indicate the
 #'  break points for the ranks to summarise. The function will then return
 #'  counts for the number of ranks that are at least as good as each break
-#'  point an worse then the next better break point. Set this value to an
+#'  point and worse then the next better break point. Set this value to an
 #'  empty vector (`c()`) or `FALSE` to not include the position summaries.
 #' @param show_podiums logical,  should the count of podiums (ranks 1 to 3)
 #'  be returned?

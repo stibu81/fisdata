@@ -1,5 +1,22 @@
 #' Plot summary of one or more athlete's results
 #'
+#' @param results a tibble with the results of one or more athletes. The tibble
+#'  for one athlete can be created with [query_results()] and the tibble for
+#'  multiple athletes can be combined with [dplyr::bind_rows()].
+#' @param by variables to groups the plots by. Possible values are "category"
+#'  (on rows) and "discipline" (on columns). Values are partially matched.
+#'  Set this value to an empty vector (`c()`) or `NA` to create a plot with
+#'  a single facet.
+#' @param pos numeric that controls the summary of ranks. Indicate the
+#'  break points for the ranks to summarise. The plot will then show the
+#'  counts for the number of ranks that are at least as good as each break
+#'  point and worse then the next better break point.
+#' @param interactive logical indicating whether an interactive plot (with
+#'  ggiraph) should be returned. If `FALSE`, a static ggplot is returned that
+#'  can be turned into an interactive plot with [ggiraph::girafe()].
+#' @param width,height dimensions for the interactive plot in inches, passed on
+#'  to [ggiraph::girafe()]. The default values are 6 and 5 inches, respectively.
+#'
 #' @rdname plot_results
 #' @export
 

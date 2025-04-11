@@ -28,7 +28,7 @@ without additional grouping (i.e., only by athlete).}
 \item{show_pos}{numeric that controls the summary of ranks. Indicate the
 break points for the ranks to summarise. The function will then return
 counts for the number of ranks that are at least as good as each break
-point an worse then the next better break point. Set this value to an
+point and worse then the next better break point. Set this value to an
 empty vector (\code{c()}) or \code{FALSE} to not include the position summaries.}
 
 \item{show_dnf}{logical, should the races where the athlete did not finish
