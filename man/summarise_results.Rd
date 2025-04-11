@@ -10,7 +10,7 @@ summarise_results(
   show_pos = c(1, 2, 3, 5, 10, 20, 30),
   show_dnf = TRUE,
   show_podiums = TRUE,
-  show_n_races = TRUE,
+  show_races = TRUE,
   show_points = TRUE
 )
 }
@@ -37,7 +37,7 @@ be counted?}
 \item{show_podiums}{logical,  should the count of podiums (ranks 1 to 3)
 be returned?}
 
-\item{show_n_races}{logical, should the number of races be returned?}
+\item{show_races}{logical, should the number of races be returned?}
 
 \item{show_points}{logical, should the sum of the cup points be returned?}
 }
@@ -61,7 +61,7 @@ summarise_results(odermatt_res, by = c("category", "season"))
 
 # summarise by category, season, and discipline, only show podiums
 summarise_results(odermatt_res, by = c("category", "season", "discipline"),
-                  show_pos = 1:3, show_dnf = FALSE, show_n_races = FALSE,
+                  show_pos = 1:3, show_dnf = FALSE, show_races = FALSE,
                   show_points = FALSE)
 }
 

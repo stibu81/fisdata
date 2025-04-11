@@ -20,7 +20,7 @@
 #'  be returned?
 #' @param show_dnf logical, should the races where the athlete did not finish
 #'  be counted?
-#' @param show_n_races logical, should the number of races be returned?
+#' @param show_races logical, should the number of races be returned?
 #' @param show_points logical, should the sum of the cup points be returned?
 #'
 #' @returns
@@ -39,7 +39,7 @@
 #'
 #' # summarise by category, season, and discipline, only show podiums
 #' summarise_results(odermatt_res, by = c("category", "season", "discipline"),
-#'                   show_pos = 1:3, show_dnf = FALSE, show_n_races = FALSE,
+#'                   show_pos = 1:3, show_dnf = FALSE, show_races = FALSE,
 #'                   show_points = FALSE)
 #' }
 #'
@@ -50,7 +50,7 @@ summarise_results <- function(results,
                               show_pos = c(1, 2, 3, 5, 10, 20, 30),
                               show_dnf = TRUE,
                               show_podiums = TRUE,
-                              show_n_races = TRUE,
+                              show_races = TRUE,
                               show_points = TRUE) {
 
   grp_by <- c(
@@ -82,7 +82,7 @@ summarise_results <- function(results,
                   if (show_points) "cup_points")
 
   if (show_podiums) {
-    res[["podium"]] <- res$rank <= 3
+    res[["podiums"]] <- res$rank <= 3
   }
 
   if (do_show_pos) {
@@ -111,8 +111,8 @@ summarise_results <- function(results,
     res[["dnf"]] <- is.na(res$rank)
   }
 
-  if (show_n_races) {
-    res[["n_races"]] <- 1L
+  if (show_races) {
+    res[["races"]] <- 1L
   }
 
   # move cup_points to the end

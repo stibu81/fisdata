@@ -31,9 +31,9 @@ test_that("summarise_results() works with default settings", {
 
     expect_s3_class(cuche_sum, "tbl_df")
 
-    expected_names <- c("athlete", "season", "category", "discipline", "podium",
+    expected_names <- c("athlete", "season", "category", "discipline", "podiums",
                         paste0("pos", 1:3), paste0("top", c(5, 10, 20, 30)),
-                        "dnf", "n_races", "cup_points")
+                        "dnf", "races", "cup_points")
     expect_named(cuche_sum, expected_names)
 
     expected_types <- c("character", "integer", "character", "character",
@@ -46,8 +46,8 @@ test_that("summarise_results() works with default settings", {
     expect_in(cuche_sum$season, 2009:2012)
     expect_in(cuche_sum$category, c("World Cup", "World Championships"))
     expect_in(cuche_sum$discipline, c("Downhill", "Super G"))
-    expect_equal(cuche_sum$podium, rowSums(select(cuche_sum, pos1:pos3)))
-    expect_equal(rowSums(select(cuche_sum, pos1:dnf)), cuche_sum$n_races)
+    expect_equal(cuche_sum$podiums, rowSums(select(cuche_sum, pos1:pos3)))
+    expect_equal(rowSums(select(cuche_sum, pos1:dnf)), cuche_sum$races)
 
     expect_snapshot(print(cuche_sum, width = Inf, n = Inf))
 })
@@ -122,31 +122,31 @@ test_that("summarise_results() works with different summaries", {
 
   expect_named(
     summarise_results(cuche_res, show_pos = FALSE, show_dnf = FALSE,
-                      show_podiums = FALSE, show_n_races = FALSE,
+                      show_podiums = FALSE, show_races = FALSE,
                       show_points = FALSE),
     base_names
   )
   expect_named(
     summarise_results(cuche_res, show_pos = FALSE, show_dnf = TRUE,
-                      show_podiums = FALSE, show_n_races = FALSE,
+                      show_podiums = FALSE, show_races = FALSE,
                       show_points = FALSE),
     c(base_names, "dnf")
   )
   expect_named(
     summarise_results(cuche_res, show_pos = FALSE, show_dnf = FALSE,
-                      show_podiums = TRUE, show_n_races = FALSE,
+                      show_podiums = TRUE, show_races = FALSE,
                       show_points = FALSE),
-    c(base_names, "podium")
+    c(base_names, "podiums")
   )
   expect_named(
     summarise_results(cuche_res, show_pos = FALSE, show_dnf = FALSE,
-                      show_podiums = FALSE, show_n_races = TRUE,
+                      show_podiums = FALSE, show_races = TRUE,
                       show_points = FALSE),
-    c(base_names, "n_races")
+    c(base_names, "races")
   )
   expect_named(
     summarise_results(cuche_res, show_pos = FALSE, show_dnf = FALSE,
-                      show_podiums = FALSE, show_n_races = FALSE,
+                      show_podiums = FALSE, show_races = FALSE,
                       show_points = TRUE),
     c(base_names, "cup_points")
   )
