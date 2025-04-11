@@ -82,19 +82,19 @@ plot_rank_summary <- function(results,
     ) %>%
     ggplot2::ggplot(
       ggplot2::aes(
-        x = .data[["athlete"]],
-        y = .data[["count"]],
-        fill = .data[["fill"]]
+        x = .data$athlete,
+        y = .data$count,
+        fill = .data$fill
       )
     ) +
     ggiraph::geom_col_interactive(
-      ggplot2::aes(tooltip = .data[["tooltip"]],
-                   data_id = .data[["position"]]),
+      ggplot2::aes(tooltip = .data$tooltip,
+                   data_id = .data$position),
       position = "stack"
     ) +
     ggplot2::facet_grid(
-      rows = if ("category" %in% by) dplyr::vars(.data[["category"]]),
-      cols = if ("discipline" %in% by) dplyr::vars(.data[["discipline"]]),
+      rows = if ("category" %in% by) dplyr::vars(.data$category),
+      cols = if ("discipline" %in% by) dplyr::vars(.data$discipline),
       scales = "free_y"
     ) +
     ggplot2::scale_fill_manual(values = cols, guide = "none") +
@@ -105,7 +105,7 @@ plot_rank_summary <- function(results,
     ggnewscale::new_scale_fill() +
     ggplot2::geom_col(
       data = data_legend,
-      ggplot2::aes(fill = .data[["position"]]),
+      ggplot2::aes(fill = .data$position),
       alpha = 0
     ) +
     ggplot2::scale_fill_manual(
