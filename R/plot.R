@@ -115,3 +115,73 @@ plot_rank_summary <- function(results,
 
   fis_plot(p, interactive, width, height)
 }
+
+
+#' @param variable character giving the variable to plot on the y-axis.
+#' @rdname plot_results
+#' @export
+
+plot_results_summary <- function(results,
+                                 by = c("category", "discipline"),
+                                 variable = c("points", "races", "victories",
+                                              "podiums", "dnf"),
+                                 interactive = TRUE,
+                                 width = NULL,
+                                 height = NULL) {
+
+  variable <- match.arg(variable)
+  # make sure variable corresponds to a column in the output from
+  # summarise_results()
+  if (variable == "points") variable <- "cup_points"
+
+  # up to 9 athletes are supported. Abort if there are more.
+  n_athletes <- dplyr::n_distinct(results$athlete)
+  if (n_athletes > 9) {
+    cli::cli_abort("Only up to 9 athletes are supported, you provided
+                   {n_athletes}.")
+  }
+
+  by <- match_groupings(by, c("category", "discipline"))
+
+  plot_data <- results %>%
+    summarise_results(by = by, show_pos = 1) %>%
+    dplyr::rename(victories = "pos1")
+
+  cols <- cb_pal_set1[1:n_athletes]
+  names(cols) <- unique(plot_data$athlete)
+
+  p <- plot_data %>%
+    dplyr::mutate(
+      tooltip = glue::glue(
+        "athlete: {.data$athlete}
+         races: {.data$races}
+         cup points: {format(.data$cup_points, big.mark = \"'\")}
+         victories: {.data$victories}
+         podiums: {.data$podiums}
+         dnf: {.data$dnf}"
+      )
+    ) %>%
+    ggplot2::ggplot(
+      ggplot2::aes(
+        x = .data$athlete,
+        y = .data[[variable]],
+        fill = .data$athlete
+      )
+    ) +
+    ggiraph::geom_col_interactive(
+      ggplot2::aes(tooltip = .data$tooltip,
+                   data_id = .data$athlete)
+    ) +
+    ggplot2::facet_grid(
+      rows = if ("category" %in% by) dplyr::vars(.data$category),
+      cols = if ("discipline" %in% by) dplyr::vars(.data$discipline),
+      scales = "free_y"
+    ) +
+    ggplot2::scale_fill_manual(values = cols, guide = "none") +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
+    ) +
+    ggplot2::labs(x = NULL)
+
+  fis_plot(p, interactive, width, height)
+}

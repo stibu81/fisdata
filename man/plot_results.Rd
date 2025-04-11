@@ -2,12 +2,22 @@
 % Please edit documentation in R/plot.R
 \name{plot_rank_summary}
 \alias{plot_rank_summary}
+\alias{plot_results_summary}
 \title{Plot summary of one or more athlete's results}
 \usage{
 plot_rank_summary(
   results,
   by = c("category", "discipline"),
   pos = 1:3,
+  interactive = TRUE,
+  width = NULL,
+  height = NULL
+)
+
+plot_results_summary(
+  results,
+  by = c("category", "discipline"),
+  variable = c("points", "races", "victories", "podiums", "dnf"),
   interactive = TRUE,
   width = NULL,
   height = NULL
@@ -34,6 +44,8 @@ can be turned into an interactive plot with \code{\link[ggiraph:girafe]{ggiraph:
 
 \item{width, height}{dimensions for the interactive plot in inches, passed on
 to \code{\link[ggiraph:girafe]{ggiraph::girafe()}}. The default values are 6 and 5 inches, respectively.}
+
+\item{variable}{character giving the variable to plot on the y-axis.}
 }
 \description{
 Plot summary of one or more athlete's results
