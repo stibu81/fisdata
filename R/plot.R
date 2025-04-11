@@ -118,6 +118,7 @@ plot_rank_summary <- function(results,
 
 
 #' @param variable character giving the variable to plot on the y-axis.
+#' @param relative use relative scale for points, victories, podiums or dnf?
 #' @rdname plot_results
 #' @export
 
@@ -125,6 +126,7 @@ plot_results_summary <- function(results,
                                  by = c("category", "discipline"),
                                  variable = c("points", "races", "victories",
                                               "podiums", "dnf"),
+                                 relative = FALSE,
                                  interactive = TRUE,
                                  width = NULL,
                                  height = NULL) {
@@ -145,10 +147,28 @@ plot_results_summary <- function(results,
 
   plot_data <- results %>%
     summarise_results(by = by, show_pos = 1) %>%
-    dplyr::rename(victories = "pos1")
+    dplyr::rename(victories = "pos1") %>%
+    dplyr::mutate(
+      dplyr::across(
+        c("podiums", "victories", "dnf", "cup_points"),
+        \(x) x / .data$races,
+        .names = "{.col}_rel"
+      )
+    )
 
   cols <- cb_pal_set1[1:n_athletes]
   names(cols) <- unique(plot_data$athlete)
+
+  # prepare variable name and title for the y-axis
+  y_var <- if (relative && variable != "races") {
+    paste0(variable, "_rel")
+  } else {
+    variable
+  }
+  y_title <- dplyr::case_when(
+    y_var == "cup_points_rel" ~ "cup points per race",
+    .default = stringr::str_replace_all(variable, "_", " ")
+  )
 
   p <- plot_data %>%
     dplyr::mutate(
@@ -156,15 +176,16 @@ plot_results_summary <- function(results,
         "athlete: {.data$athlete}
          races: {.data$races}
          cup points: {format(.data$cup_points, big.mark = \"'\")}
-         victories: {.data$victories}
-         podiums: {.data$podiums}
-         dnf: {.data$dnf}"
+         per race: {round(.data$cup_points_rel)}
+         victories: {.data$victories} ({(round(100 * .data$victories_rel, 1))}%)
+         podiums: {.data$podiums} ({(round(100 * .data$podiums_rel, 1))}%)
+         dnf: {.data$dnf} ({(round(100 * .data$dnf_rel, 1))}%)"
       )
     ) %>%
     ggplot2::ggplot(
       ggplot2::aes(
         x = .data$athlete,
-        y = .data[[variable]],
+        y = .data[[y_var]],
         fill = .data$athlete
       )
     ) +
@@ -181,7 +202,11 @@ plot_results_summary <- function(results,
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
     ) +
-    ggplot2::labs(x = NULL)
+    ggplot2::labs(x = NULL, y = y_title)
+
+  if (relative && !variable %in% c("cup_points", "race")) {
+    p <- p + ggplot2::scale_y_continuous(labels = scales::label_percent())
+  }
 
   fis_plot(p, interactive, width, height)
 }
