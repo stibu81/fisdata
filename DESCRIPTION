@@ -31,6 +31,7 @@ Imports:
     clipr,
     cachem,
     ggplot2,
+    scales,
     colorspace,
     ggnewscale,
     ggiraph 

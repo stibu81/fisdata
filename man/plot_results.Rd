@@ -18,6 +18,7 @@ plot_results_summary(
   results,
   by = c("category", "discipline"),
   variable = c("points", "races", "victories", "podiums", "dnf"),
+  relative = FALSE,
   interactive = TRUE,
   width = NULL,
   height = NULL
@@ -46,6 +47,8 @@ can be turned into an interactive plot with \code{\link[ggiraph:girafe]{ggiraph:
 to \code{\link[ggiraph:girafe]{ggiraph::girafe()}}. The default values are 6 and 5 inches, respectively.}
 
 \item{variable}{character giving the variable to plot on the y-axis.}
+
+\item{relative}{use relative scale for points, victories, podiums or dnf?}
 }
 \description{
 Plot summary of one or more athlete's results
