@@ -14,7 +14,7 @@ create_athlete_pos_colour_scale <- function(athletes, positions) {
   base_colours <- cb_pal_set1[1:n_athletes]
   cols <- purrr::map(
       base_colours,
-      \(x) create_darkend_colour_sequence(x, n_pos)
+      \(x) create_darkened_colour_sequence(x, n_pos)
     ) %>%
     unlist()
   names(cols) <- paste(rep(unique(athletes), each = n_pos),
@@ -24,7 +24,7 @@ create_athlete_pos_colour_scale <- function(athletes, positions) {
 }
 
 
-create_darkend_colour_sequence <- function(colour, n) {
+create_darkened_colour_sequence <- function(colour, n) {
   dark_max <- if (n <= 3) 0.5 else 0.7
   colorspace::darken(colour, seq(0, dark_max, length.out = n))
 }
@@ -33,7 +33,7 @@ create_darkend_colour_sequence <- function(colour, n) {
 # helper function that creates an interactive ggiraph plot with the
 # appropriate settings
 
-fis_plot <- function(p, interactive, width, height) {
+fis_plot <- function(p, interactive, width = NULL, height = NULL) {
 
   if (!interactive) {
     return(p)

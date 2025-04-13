@@ -57,7 +57,7 @@ plot_rank_summary <- function(results,
 
   # use monochrome colours for the legend
   n_pos <- length(levels(plot_data$position))
-  cols_legend <- create_darkend_colour_sequence(grDevices::grey(0.7), n_pos)
+  cols_legend <- create_darkened_colour_sequence(grDevices::grey(0.7), n_pos)
   names(cols_legend) <- levels(plot_data$position)
 
   # in addition, we need to plot some data that uses all the values for the
