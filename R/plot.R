@@ -84,7 +84,10 @@ plot_rank_summary <- function(results,
       ggplot2::aes(
         x = .data$athlete,
         y = .data$count,
-        fill = .data$fill
+        fill = .data$fill,
+        # without explicit group aesthetic, the stacking order of the bars
+        # is wrong.
+        group = .data$fill
       )
     ) +
     ggiraph::geom_col_interactive(
