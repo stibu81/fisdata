@@ -207,7 +207,8 @@ plot_results_summary <- function(results,
     ) +
     ggplot2::labs(x = NULL, y = y_title)
 
-  if (relative && !variable %in% c("cup_points", "race")) {
+  # add percent y-scale where it makes sense
+  if (relative && !variable %in% c("cup_points", "races")) {
     p <- p + ggplot2::scale_y_continuous(labels = scales::label_percent())
   }
 
