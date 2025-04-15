@@ -180,6 +180,35 @@ test_that("parse_event_details() works for an empty string", {
 })
 
 
+test_that("compute_age_at_date() works", {
+  dates <- as.Date(c("2022-05-03", "2023-10-07", "2024-12-03", "2025-02-17"))
+  expect_equal(
+    compute_age_at_date(dates, tibble(birthdate = "2000-10-07")),
+    c(21 + 208/365, 23, 24 + 57/365, 24 + 133/365)
+  )
+  expect_equal(
+    compute_age_at_date(dates, tibble(birthdate = "2000")),
+    c(21, 23, 24, 24)
+  )
+  expect_equal(
+    compute_age_at_date(dates, tibble(birthdate = NA_character_)),
+    rep(NA_real_, length(dates))
+  )
+})
+
+
+test_that("compute_age_at_date() errors work", {
+  expect_error(
+    compute_age_at_date(today(), tibble(birthdate = c("1999", "2000"))),
+    "'athlete' must contain exactly one athlete."
+  )
+  expect_error(
+    compute_age_at_date(today(), tibble(birthdate = c("01.01.2025"))),
+    "invalid format for birthdate."
+  )
+})
+
+
 test_that("is_cancelled() works", {
   html <- read_html(test_path("data", "events_20250201.html.gz"))
   expect_equal(which(is_cancelled(html)), c(17, 25, 38, 42, 46, 62))

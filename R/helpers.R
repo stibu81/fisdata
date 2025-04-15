@@ -265,6 +265,41 @@ get_season_at_date <- function(date = lubridate::today()) {
 }
 
 
+# compute an athletes age at a given date. Note that the birthdate of an
+# athlete is stored as a character, not a date, because sometimes only the
+# birthyear is given. This function takes care of this and works in all
+# situations. When only the birthyear is given, the age is computed assuming
+# the birthdate is in the middle of the year and rounded down to whole years.
+# If the exact date is given, it is given as a fractional number of years.
+
+compute_age_at_date <- function(date, athlete) {
+  # extract the birthdate and remember if  an exacte date was given or not.
+  # if the birthdate is missing, return a vector of missing values
+  birthdate <- athlete$birthdate
+  if (length(birthdate) != 1) {
+    cli::cli_abort("'athlete' must contain exactly one athlete.")
+  }
+  if (is.na(birthdate)) return(rep(NA_real_, length(date)))
+  if (is.character(birthdate)) {
+    if (stringr::str_detect(birthdate, "^\\d{4}$")) {
+      birthdate <- as.Date(glue::glue("{birthdate}-07-01"))
+      bd_format <- "year_only"
+    } else if (stringr::str_detect(birthdate, "^\\d{4}-\\d{2}-\\d{2}$")) {
+      birthdate <- as.Date(birthdate)
+      bd_format <- "full_date"
+    } else {
+      cli::cli_abort("invalid format for birthdate.")
+    }
+  }
+
+  age <- lubridate::interval(birthdate, date) / lubridate::years(1)
+
+  if (bd_format == "year_only") age <- floor(age)
+
+  age
+}
+
+
 # determine if events were cancelled
 is_cancelled <- function(table_rows) {
   status <- table_rows %>%
