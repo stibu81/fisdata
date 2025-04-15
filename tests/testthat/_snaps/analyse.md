@@ -34,13 +34,13 @@
     Code
       print(debuts, width = Inf, n = Inf)
     Output
-      # A tibble: 4 x 11
-        athlete      date       place       nation sector category           
-        <chr>        <date>     <chr>       <chr>  <chr>  <chr>              
-      1 Cuche Didier 2009-12-18 Val Gardena ITA    AL     World Cup          
-      2 Cuche Didier 2009-02-07 Val d'Isère FRA    AL     World Championships
-      3 Cuche Didier 2009-02-04 Val d'Isère FRA    AL     World Championships
-      4 Cuche Didier 2009-01-24 Kitzbuehel  AUT    AL     World Cup          
+      # A tibble: 4 x 12
+        athlete      date         age place       nation sector category           
+        <chr>        <date>     <dbl> <chr>       <chr>  <chr>  <chr>              
+      1 Cuche Didier 2009-12-18    35 Val Gardena ITA    AL     World Cup          
+      2 Cuche Didier 2009-02-07    34 Val d'Isère FRA    AL     World Championships
+      3 Cuche Didier 2009-02-04    34 Val d'Isère FRA    AL     World Championships
+      4 Cuche Didier 2009-01-24    34 Kitzbuehel  AUT    AL     World Cup          
         discipline  rank fis_points cup_points race_id
         <chr>      <int>      <dbl>      <dbl> <chr>  
       1 Super G       NA          0         NA 5      

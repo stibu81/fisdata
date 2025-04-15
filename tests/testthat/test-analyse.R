@@ -215,18 +215,18 @@ test_that("get_debuts() works with default settings", {
   local_mocked_bindings(
     query_results = function(...) cuche_res
   )
-  cuche <- tibble(name = "Cuche Didier")
+  cuche <- tibble(name = "Cuche Didier", birthdate = "1974")
   debuts <- get_debuts(cuche)
 
   expect_s3_class(debuts, "tbl_df")
 
-  expected_names <- c("athlete", "date", "place", "nation", "sector",
+  expected_names <- c("athlete", "date", "age", "place", "nation", "sector",
                       "category", "discipline", "rank", "fis_points",
                       "cup_points", "race_id")
   expect_named(debuts, expected_names)
 
-  expected_types <- rep("character", 11) %>%
-    replace(c(2, 8:10), c("Date", "integer", "double", "double"))
+  expected_types <- rep("character", 12) %>%
+    replace(c(2:3, 9:11), c("Date", "double", "integer", "double", "double"))
   for (i in seq_along(expected_names)) {
     if (expected_types[i] == "Date") {
       expect_s3_class(debuts[[!!expected_names[i]]], expected_types[i])
@@ -236,6 +236,7 @@ test_that("get_debuts() works with default settings", {
   }
 
   expect_in(debuts$athlete, "Cuche Didier")
+  expect_true(all(between(debuts$age, 10, 40)))
   expect_in(debuts$nation, nations$code)
   expect_in(debuts$sector, "AL")
   expect_in(debuts$category, c("World Cup", "World Championships"))
@@ -252,7 +253,7 @@ test_that("get_debuts() works with different groupings", {
   local_mocked_bindings(
     query_results = function(...) cuche_res
   )
-  cuche <- tibble(name = "Cuche Didier")
+  cuche <- tibble(name = "Cuche Didier", birthdate = "1974")
   grp_cols <- c("category", "discipline")
 
   debuts_no_grp <- get_debuts(cuche, by = c())
@@ -273,7 +274,7 @@ test_that("get_debuts() works for all types", {
   local_mocked_bindings(
     query_results = function(...) cuche_res
   )
-  cuche <- tibble(name = "Cuche Didier")
+  cuche <- tibble(name = "Cuche Didier", birthdate = "1974")
 
   debuts_podium <- get_debuts(cuche, type = "podium")
   expect_in(debuts_podium$rank, 1:3)

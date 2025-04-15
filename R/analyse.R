@@ -207,7 +207,9 @@ get_debuts <- function(athlete,
   results %>%
     dplyr::filter(.data$date == min(.data$date),
                   .by = dplyr::all_of(grp_by)) %>%
-    dplyr::arrange(dplyr::desc(.data$date))
+    dplyr::arrange(dplyr::desc(.data$date)) %>%
+    dplyr::mutate(age = compute_age_at_date(.data$date, !!athlete),
+                  .after = "date")
 }
 
 
