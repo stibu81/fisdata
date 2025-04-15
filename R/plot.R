@@ -149,15 +149,9 @@ plot_results_summary <- function(results,
   by <- match_groupings(by, c("category", "discipline"))
 
   plot_data <- results %>%
-    summarise_results(by = by, show_pos = 1) %>%
-    dplyr::rename(victories = "pos1") %>%
-    dplyr::mutate(
-      dplyr::across(
-        c("podiums", "victories", "dnf", "cup_points"),
-        \(x) x / .data$races,
-        .names = "{.col}_rel"
-      )
-    )
+    summarise_results(by = by, show_pos = 1, add_relative = TRUE) %>%
+    dplyr::rename(victories = "pos1",
+                  victories_rel = "pos1_rel")
 
   cols <- cb_pal_set1[1:n_athletes]
   names(cols) <- unique(plot_data$athlete)

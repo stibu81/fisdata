@@ -11,7 +11,8 @@ summarise_results(
   show_dnf = TRUE,
   show_podiums = TRUE,
   show_races = TRUE,
-  show_points = TRUE
+  show_points = TRUE,
+  add_relative = FALSE
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ be returned?}
 \item{show_races}{logical, should the number of races be returned?}
 
 \item{show_points}{logical, should the sum of the cup points be returned?}
+
+\item{add_relative}{add relative values, i.e., the value divided by the
+number of races, for all summary columns except "races".}
 }
 \value{
 a \code{tibble} which always contains \code{athlete} as its first column. In addition,

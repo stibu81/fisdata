@@ -22,6 +22,8 @@
 #'  be counted?
 #' @param show_races logical, should the number of races be returned?
 #' @param show_points logical, should the sum of the cup points be returned?
+#' @param add_relative add relative values, i.e., the value divided by the
+#'  number of races, for all summary columns except "races".
 #'
 #' @returns
 #' a `tibble` which always contains `athlete` as its first column. In addition,
@@ -51,7 +53,8 @@ summarise_results <- function(results,
                               show_dnf = TRUE,
                               show_podiums = TRUE,
                               show_races = TRUE,
-                              show_points = TRUE) {
+                              show_points = TRUE,
+                              add_relative = FALSE) {
 
   grp_by <- c(
     "athlete",
@@ -111,7 +114,8 @@ summarise_results <- function(results,
     res[["dnf"]] <- is.na(res$rank)
   }
 
-  if (show_races) {
+  # if add_relative is TRUE, we need the number of races
+  if (show_races || add_relative) {
     res[["races"]] <- 1L
   }
 
@@ -120,12 +124,33 @@ summarise_results <- function(results,
     res <- res %>% dplyr::relocate("cup_points", .after = dplyr::last_col())
   }
 
-  res %>%
+  summary <- res %>%
     dplyr::select(-"rank") %>%
     dplyr::summarise(
       dplyr::across(dplyr::everything(), \(x) sum(x, na.rm = TRUE)),
     .by = dplyr::all_of(grp_by)
     )
+
+  if (add_relative) {
+    # add the relative columns in a loop such that each can be placed after
+    # the corresponding absolute value
+    sum_cols <- setdiff(names(summary), c(grp_by, "races"))
+    for  (col in sum_cols) {
+      summary <- summary %>%
+        dplyr::mutate(
+          "{col}_rel" := .data[[col]] / .data$races,
+          .after = dplyr::all_of(col)
+        )
+    }
+  }
+
+  # remove the column races, if it was not requested
+  if (!show_races) {
+    summary <- summary %>%
+      dplyr::select(-dplyr::any_of("races"))
+  }
+
+  summary
 }
 
 
