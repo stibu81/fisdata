@@ -125,9 +125,8 @@ plot_results_summary <- function(results,
   by <- match_groupings(by, c("category", "discipline"))
 
   plot_data <- results %>%
-    summarise_results(by = by, show_pos = 1, add_relative = TRUE) %>%
-    dplyr::rename(victories = "pos1",
-                  victories_rel = "pos1_rel")
+    summarise_results(by = by, show_pos = c(), show_victories = TRUE,
+                      add_relative = TRUE)
 
   cols <- cb_pal_set1[1:n_athletes]
   names(cols) <- unique(plot_data$athlete)

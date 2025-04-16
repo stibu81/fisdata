@@ -122,44 +122,52 @@ test_that("summarise_results() works with different summaries", {
 
   expect_named(
     summarise_results(cuche_res, show_pos = FALSE, show_dnf = FALSE,
-                      show_podiums = FALSE, show_races = FALSE,
-                      show_points = FALSE),
+                      show_victories = FALSE, show_podiums = FALSE,
+                      show_races = FALSE, show_points = FALSE),
     base_names
   )
   expect_named(
     summarise_results(cuche_res, show_pos = FALSE, show_dnf = TRUE,
-                      show_podiums = FALSE, show_races = FALSE,
-                      show_points = FALSE),
+                      show_victories = FALSE, show_podiums = FALSE,
+                      show_races = FALSE, show_points = FALSE),
     c(base_names, "dnf")
   )
   expect_named(
     summarise_results(cuche_res, show_pos = FALSE, show_dnf = FALSE,
-                      show_podiums = TRUE, show_races = FALSE,
-                      show_points = FALSE),
+                      show_victories = TRUE, show_podiums = FALSE,
+                      show_races = FALSE, show_points = FALSE),
+    c(base_names, "victories")
+  )
+  expect_named(
+    summarise_results(cuche_res, show_pos = FALSE, show_dnf = FALSE,
+                      show_victories = FALSE, show_podiums = TRUE,
+                      show_races = FALSE, show_points = FALSE),
     c(base_names, "podiums")
   )
   expect_named(
     summarise_results(cuche_res, show_pos = FALSE, show_dnf = FALSE,
-                      show_podiums = FALSE, show_races = TRUE,
-                      show_points = FALSE),
+                      show_victories = FALSE, show_podiums = FALSE,
+                      show_races = TRUE, show_points = FALSE),
     c(base_names, "races")
   )
   expect_named(
     summarise_results(cuche_res, show_pos = FALSE, show_dnf = FALSE,
-                      show_podiums = FALSE, show_races = FALSE,
-                      show_points = TRUE),
+                      show_victories = FALSE, show_podiums = FALSE,
+                      show_races = FALSE, show_points = TRUE),
     c(base_names, "cup_points")
   )
 })
 
 
 test_that("summarise_results() works with relative results", {
-  cuche_sum <- summarise_results(cuche_res, add_relative = TRUE)
+  cuche_sum <- summarise_results(cuche_res, show_victories = TRUE,
+                                 add_relative = TRUE)
 
     expect_s3_class(cuche_sum, "tbl_df")
 
     expected_names <- c(
-      "athlete", "season", "category", "discipline", "podiums", "podiums_rel",
+      "athlete", "season", "category", "discipline",
+      "victories", "victories_rel", "podiums", "podiums_rel",
       paste0(
         rep(
           c(paste0("pos", 1:3), paste0("top", c(5, 10, 20, 30))),
@@ -172,7 +180,7 @@ test_that("summarise_results() works with relative results", {
     expect_named(cuche_sum, expected_names)
 
     expected_types <- c("character", "integer", "character", "character",
-                        rep(c("integer", "double"), 10), "double", "double")
+                        rep(c("integer", "double"), 11), "double", "double")
     for (i in seq_along(expected_names)) {
       expect_type(cuche_sum[[!!expected_names[i]]], expected_types[i])
     }
@@ -209,6 +217,21 @@ test_that("summarise_results() works with different relative summaries", {
     c(base_names, "races")
   )
 })
+
+
+test_that(
+  "summarise_results() gives consistent results for equivalent summaries",
+  {
+    expect_equal(
+      summarise_results(cuche_res, show_pos = FALSE, show_victories = TRUE)$victories,
+      summarise_results(cuche_res, show_pos = 1)$pos1
+    )
+    expect_equal(
+      summarise_results(cuche_res, show_pos = FALSE)$podiums,
+      summarise_results(cuche_res, show_pos = 3, show_victories = TRUE)$top3
+    )
+  }
+)
 
 
 test_that("get_debuts() works with default settings", {

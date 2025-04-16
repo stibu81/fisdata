@@ -16,6 +16,8 @@
 #'  counts for the number of ranks that are at least as good as each break
 #'  point and worse then the next better break point. Set this value to an
 #'  empty vector (`c()`) or `FALSE` to not include the position summaries.
+#' @param show_victories logical, should the count of victories (rank 1) be
+#'  returned?
 #' @param show_podiums logical,  should the count of podiums (ranks 1 to 3)
 #'  be returned?
 #' @param show_dnf logical, should the races where the athlete did not finish
@@ -51,6 +53,7 @@ summarise_results <- function(results,
                               by = c("season", "category", "discipline"),
                               show_pos = c(1, 2, 3, 5, 10, 20, 30),
                               show_dnf = TRUE,
+                              show_victories = FALSE,
                               show_podiums = TRUE,
                               show_races = TRUE,
                               show_points = TRUE,
@@ -83,6 +86,10 @@ summarise_results <- function(results,
     dplyr::mutate(season = get_season_at_date(.data$date)) %>%
     dplyr::select(dplyr::all_of(grp_by), "rank",
                   if (show_points) "cup_points")
+
+  if (show_victories) {
+    res[["victories"]] <- res$rank == 1
+  }
 
   if (show_podiums) {
     res[["podiums"]] <- res$rank <= 3

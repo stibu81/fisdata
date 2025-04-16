@@ -9,6 +9,7 @@ summarise_results(
   by = c("season", "category", "discipline"),
   show_pos = c(1, 2, 3, 5, 10, 20, 30),
   show_dnf = TRUE,
+  show_victories = FALSE,
   show_podiums = TRUE,
   show_races = TRUE,
   show_points = TRUE,
@@ -34,6 +35,9 @@ empty vector (\code{c()}) or \code{FALSE} to not include the position summaries.
 
 \item{show_dnf}{logical, should the races where the athlete did not finish
 be counted?}
+
+\item{show_victories}{logical, should the count of victories (rank 1) be
+returned?}
 
 \item{show_podiums}{logical,  should the count of podiums (ranks 1 to 3)
 be returned?}
