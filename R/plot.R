@@ -53,19 +53,16 @@ plot_rank_summary <- function(results,
       position = factor(.data$position, levels = unique(.data$position))
     )
 
-  cols <- create_athlete_pos_colour_scale(plot_data$athlete, plot_data$position)
-
-  # use monochrome colours for the legend
-  n_pos <- length(levels(plot_data$position))
-  cols_legend <- create_darkened_colour_sequence(grDevices::grey(0.7), n_pos)
-  names(cols_legend) <- levels(plot_data$position)
+  col_scales <- create_athlete_pos_colour_scale(
+    plot_data$athlete, plot_data$position
+  )
 
   # in addition, we need to plot some data that uses all the values for the
   # the legend.
   data_legend <- dplyr::tibble(
     athlete = plot_data$athlete[1],
     count = 0,
-    position = factor(names(cols_legend), levels = names(cols_legend)),
+    position = factor(names(col_scales$mono), levels = names(col_scales$mono)),
     fill = .data$position,
     discipline = if ("discipline" %in% by) plot_data$discipline[1],
     category = if ("category" %in% by) plot_data$category[1]
@@ -100,7 +97,7 @@ plot_rank_summary <- function(results,
       cols = if ("discipline" %in% by) dplyr::vars(.data$discipline),
       scales = "free_y"
     ) +
-    ggplot2::scale_fill_manual(values = cols, guide = "none") +
+    ggplot2::scale_fill_manual(values = col_scales$cols, guide = "none") +
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
     ) +
@@ -112,7 +109,7 @@ plot_rank_summary <- function(results,
       alpha = 0
     ) +
     ggplot2::scale_fill_manual(
-      values = cols_legend,
+      values = col_scales$mono,
       guide = ggplot2::guide_legend(override.aes = list(alpha = 1))
     )
 

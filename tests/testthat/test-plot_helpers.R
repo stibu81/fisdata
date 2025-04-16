@@ -28,13 +28,30 @@ test_that("create_athlete_pos_colour_scale() works", {
     athlete = rep(athletes, each = length(positions)),
     position = rep(positions, times = length(athletes))
   )
+
   col_scale <- create_athlete_pos_colour_scale(df_ap$athlete, df_ap$position)
-  expect_length(col_scale, length(athletes) * length(positions))
-  expect_equal(sum(duplicated(names(col_scale))), 0)
+  expect_type(col_scale, "list")
+  expect_named(col_scale, c("cols", "mono"))
+
+  # check the colour part
+  expect_type(col_scale$cols, "character")
+  expect_length(col_scale$cols, length(athletes) * length(positions))
+  expect_equal(sum(duplicated(names(col_scale$cols))), 0)
   expect_equal(
-    col_scale[str_detect(names(col_scale), positions[1])],
+    col_scale$cols[str_detect(names(col_scale$cols), positions[1])],
     cb_pal_set1[seq_along(athletes)],
     ignore_attr = "names"
+  )
+
+  # check the monochrome part
+  expect_type(col_scale$mono, "character")
+  expect_length(col_scale$mono, length(positions))
+  expect_equal(sum(duplicated(names(col_scale$mono))), 0)
+  # check that the colours are all greys
+  expect_equal(
+    col2rgb(col_scale$mono),
+    col2rgb(col_scale$mono)[rep(1, length(positions)), ],
+    ignore_attr = "dimnames"
   )
 
   expect_snapshot(col_scale)
