@@ -7,10 +7,16 @@
 #'  (on rows) and "discipline" (on columns). Values are partially matched.
 #'  Set this value to an empty vector (`c()`) or `NA` to create a plot with
 #'  a single facet.
-#' @param pos numeric that controls the summary of ranks. Indicate the
-#'  break points for the ranks to summarise. The plot will then show the
-#'  counts for the number of ranks that are at least as good as each break
-#'  point and worse then the next better break point.
+#' @param pos numeric that controls the summary of ranks. It has a slightly
+#'  different meaning for `plot_rank_summary()` and `plot_results_summary()`:
+#'  * `plot_rank_summary()`: one or multiple break points for the ranks to
+#'    summarise. The plot will then show the
+#'    counts for the number of ranks that are at least as good as each break
+#'    point and worse than the next better break point.
+#'  * `plot_results_summary()`: the position to show in the plot. Depending
+#'    on  the value of "variable", the plot will show the number of times
+#'    exactly this rank (variable = "position") or a rank at least as good
+#'    (variable = "top") was achieved.
 #' @param interactive logical indicating whether an interactive plot (with
 #'  ggiraph) should be returned. If `FALSE`, a static ggplot is returned that
 #'  can be turned into an interactive plot with [ggiraph::girafe()].
@@ -96,7 +102,11 @@ plot_rank_summary <- function(results,
 }
 
 
-#' @param variable character giving the variable to plot on the y-axis.
+#' @param variable character giving the variable to plot on the y-axis. For
+#'  "position" and "top", the value of the argument "pos" is also relevant:
+#'  for "position", the plot will show the number of times  exactly the rank
+#'  given by "pos" was achieved, for "top" the number of times a rank at least
+#'  as good as "pos" was achieved.
 #' @param relative use relative scale for points, victories, podiums or dnf?
 #' @rdname plot_results
 #' @export
@@ -104,16 +114,15 @@ plot_rank_summary <- function(results,
 plot_results_summary <- function(results,
                                  by = c("category", "discipline"),
                                  variable = c("points", "races", "victories",
-                                              "podiums", "dnf"),
+                                              "podiums", "dnf",
+                                              "position", "top"),
+                                 pos = 1,
                                  relative = FALSE,
                                  interactive = TRUE,
                                  width = NULL,
                                  height = NULL) {
 
   variable <- match.arg(variable)
-  # make sure variable corresponds to a column in the output from
-  # summarise_results()
-  if (variable == "points") variable <- "cup_points"
 
   # up to 9 athletes are supported. Abort if there are more.
   n_athletes <- dplyr::n_distinct(results$athlete)
@@ -124,8 +133,22 @@ plot_results_summary <- function(results,
 
   by <- match_groupings(by, c("category", "discipline"))
 
+  # some variables need special preparation
+  use_pos <- c()
+  if (variable == "points") {
+    variable <- "cup_points"
+  } else if (variable == "top") {
+    use_pos <- pos
+    variable <- paste0(if (pos == 1) "pos" else "top", pos)
+  } else if (variable == "position") {
+    use_pos <- c(pos - 1, pos)
+    variable <- paste0("pos", pos)
+  } else if (variable == "victories") {
+    use_pos <- 1
+  }
+
   plot_data <- results %>%
-    summarise_results(by = by, show_pos = c(), show_victories = TRUE,
+    summarise_results(by = by, show_pos = use_pos, show_victories = TRUE,
                       add_relative = TRUE)
 
   cols <- cb_pal_set1[1:n_athletes]

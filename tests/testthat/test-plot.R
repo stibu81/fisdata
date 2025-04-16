@@ -123,6 +123,17 @@ test_that("plot_results_summary() works", {
   )
 
   expect_doppelganger(
+    "plot_results_summary() for a given position",
+    plot_results_summary(results, variable = "position", pos = 2,
+                         interactive = FALSE)
+  )
+  expect_doppelganger(
+    "plot_results_summary() for a range of positions",
+    plot_results_summary(results, variable = "top", pos = 4,
+                         interactive = FALSE)
+  )
+
+  expect_doppelganger(
     "plot_results_summary() for points with realtive scale",
     plot_results_summary(results, variable = "points", relative = TRUE,
                          interactive = FALSE)

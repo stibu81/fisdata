@@ -17,7 +17,8 @@ plot_rank_summary(
 plot_results_summary(
   results,
   by = c("category", "discipline"),
-  variable = c("points", "races", "victories", "podiums", "dnf"),
+  variable = c("points", "races", "victories", "podiums", "dnf", "position", "top"),
+  pos = 1,
   relative = FALSE,
   interactive = TRUE,
   width = NULL,
@@ -34,10 +35,18 @@ multiple athletes can be combined with \code{\link[dplyr:bind_rows]{dplyr::bind_
 Set this value to an empty vector (\code{c()}) or \code{NA} to create a plot with
 a single facet.}
 
-\item{pos}{numeric that controls the summary of ranks. Indicate the
-break points for the ranks to summarise. The plot will then show the
+\item{pos}{numeric that controls the summary of ranks. It has a slightly
+different meaning for \code{plot_rank_summary()} and \code{plot_results_summary()}:
+\itemize{
+\item \code{plot_rank_summary()}: one or multiple break points for the ranks to
+summarise. The plot will then show the
 counts for the number of ranks that are at least as good as each break
-point and worse then the next better break point.}
+point and worse than the next better break point.
+\item \code{plot_results_summary()}: the position to show in the plot. Depending
+on  the value of "variable", the plot will show the number of times
+exactly this rank (variable = "position") or a rank at least as good
+(variable = "top") was achieved.
+}}
 
 \item{interactive}{logical indicating whether an interactive plot (with
 ggiraph) should be returned. If \code{FALSE}, a static ggplot is returned that
@@ -46,7 +55,11 @@ can be turned into an interactive plot with \code{\link[ggiraph:girafe]{ggiraph:
 \item{width, height}{dimensions for the interactive plot in inches, passed on
 to \code{\link[ggiraph:girafe]{ggiraph::girafe()}}. The default values are 6 and 5 inches, respectively.}
 
-\item{variable}{character giving the variable to plot on the y-axis.}
+\item{variable}{character giving the variable to plot on the y-axis. For
+"position" and "top", the value of the argument "pos" is also relevant:
+for "position", the plot will show the number of times  exactly the rank
+given by "pos" was achieved, for "top" the number of times a rank at least
+as good as "pos" was achieved.}
 
 \item{relative}{use relative scale for points, victories, podiums or dnf?}
 }
