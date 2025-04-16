@@ -143,8 +143,6 @@ plot_results_summary <- function(results,
   } else if (variable == "position") {
     use_pos <- c(pos - 1, pos)
     variable <- paste0("pos", pos)
-  } else if (variable == "victories") {
-    use_pos <- 1
   }
 
   plot_data <- results %>%
