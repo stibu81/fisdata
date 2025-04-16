@@ -42,16 +42,10 @@ plot_rank_summary <- function(results,
     plot_data$athlete, plot_data$position
   )
 
-  # in addition, we need to plot some data that uses all the values for the
-  # the legend.
-  data_legend <- dplyr::tibble(
-    athlete = plot_data$athlete[1],
-    count = 0,
-    position = factor(names(col_scales$mono), levels = names(col_scales$mono)),
-    fill = .data$position,
-    discipline = if ("discipline" %in% by) plot_data$discipline[1],
-    category = if ("category" %in% by) plot_data$category[1]
-  )
+  # we need to plot some data that uses all the values for the the legend.
+  data_legend <- plot_data %>%
+    dplyr::slice_head(n = 1, by = "position") %>%
+    dplyr::mutate(fill = .data$position, count = 0)
 
   p <- plot_data %>%
     dplyr::mutate(
