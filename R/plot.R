@@ -27,31 +27,10 @@ plot_rank_summary <- function(results,
                               width = NULL,
                               height = NULL) {
 
-  # up to 9 athletes are supported. Abort if there are more.
-  n_athletes <- dplyr::n_distinct(results$athlete)
-  if (n_athletes > 9) {
-    cli::cli_abort("Only up to 9 athletes are supported, you provided
-                   {n_athletes}.")
-  }
-
   by <- match_groupings(by, c("category", "discipline"))
 
   plot_data <- results %>%
-    summarise_results(by = by, show_pos = pos) %>%
-    dplyr::select(
-      "athlete", dplyr::all_of(by), dplyr::matches("^(pos|top)")
-    ) %>%
-    dplyr::mutate(
-      n_results = rowSums(dplyr::pick(dplyr::matches("^(pos|top)")))
-    ) %>%
-    dplyr::filter(.data$n_results > 0) %>%
-    tidyr::pivot_longer(dplyr::matches("^(pos|top)"),
-                        names_to = "position",
-                        values_to = "count") %>%
-    dplyr::mutate(
-      athlete = factor(.data$athlete, levels = unique(.data$athlete)),
-      position = factor(.data$position, levels = unique(.data$position))
-    )
+    prepare_rank_plot_data(by = by, pos = pos)
 
   col_scales <- create_athlete_pos_colour_scale(
     plot_data$athlete, plot_data$position

@@ -64,3 +64,36 @@ fis_plot <- function(p, interactive, width = NULL, height = NULL) {
     )
   )
 }
+
+
+# prepare data for plot_rank_summary() and plot_ranks_by_season()
+
+prepare_rank_plot_data <- function(results,
+                                   by = c("category", "discipline"),
+                                   pos = 1:3,
+                                   error_call = rlang::caller_env()) {
+
+  # up to 9 athletes are supported. Abort if there are more.
+  n_athletes <- dplyr::n_distinct(results$athlete)
+  if (n_athletes > 9) {
+    cli::cli_abort("Only up to 9 athletes are supported, you provided
+                   {n_athletes}.")
+  }
+
+  results %>%
+    summarise_results(by = by, show_pos = pos) %>%
+    dplyr::select(
+      "athlete", dplyr::all_of(by), dplyr::matches("^(pos|top)")
+    ) %>%
+    dplyr::mutate(
+      n_results = rowSums(dplyr::pick(dplyr::matches("^(pos|top)")))
+    ) %>%
+    dplyr::filter(.data$n_results > 0) %>%
+    tidyr::pivot_longer(dplyr::matches("^(pos|top)"),
+                        names_to = "position",
+                        values_to = "count") %>%
+    dplyr::mutate(
+      athlete = factor(.data$athlete, levels = unique(.data$athlete)),
+      position = factor(.data$position, levels = unique(.data$position))
+    )
+}
