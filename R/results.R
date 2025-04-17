@@ -91,6 +91,17 @@ query_results <- function(athlete,
                     "i" ="Results may be incomplete."))
   }
 
+  # complete the athlete info
+  athlete_info <- attr(results, "athlete")
+  if (!is.null(athlete_info)) {
+    attr(results, "athlete") <- athlete_info %>%
+      dplyr::mutate(
+        name = athlete_name,
+        sector = athlete$sector,
+        competitor_id = athlete$competitor_id
+      )
+  }
+
   # add the url as an attribute
   attr(results, "url") <- url
 
@@ -155,8 +166,8 @@ extract_results <- function(url) {
     return(cached)
   }
 
-  table_rows <- url %>%
-    rvest::read_html() %>%
+  html <- rvest::read_html(url)
+  table_rows <- html %>%
     rvest::html_element(css = "div.table__body") %>%
     rvest::html_elements(css = "a.table-row")
 
@@ -211,9 +222,50 @@ extract_results <- function(url) {
                   cup_points = parse_number(.data$cup_points),
                   race_id = race_ids)
 
+  # extract some info on the athlete and add it as an attribute for
+  # use by other functions. If query_results() is called with an athlete, this
+  # is obsolete, because the athlete already contains the relevant information.
+  # But if it is called with another input, this is needed. Since we don't
+  # know here, how the function was called, we extract it in any case.
+  attr(results_df, "athlete") <- extract_athlete_info(html)
+
   set_cache(url, results_df)
 
   results_df
+}
+
+
+extract_athlete_info <- function(html) {
+  # note: name, sector, and competitor_id are tedious to extract.
+  # Since they are known inside query_results, we add them there.
+  profile_header <- html %>% rvest::html_element(".athlete-profile__header")
+  profile_info <- html %>% rvest::html_element(".profile-info")
+  dplyr::tibble(
+    active = extract_profile_info_val(profile_info, "Status") == "Active",
+    fis_code = extract_profile_info_val(profile_info, "FIS Code"),
+    name = NA_character_,
+    nation = rvest::html_element(html, ".country__name-short") %>%
+      rvest::html_text2(),
+    birthdate = extract_profile_info_val(profile_info, "Birthdate"),
+    gender = extract_profile_info_val(profile_info, "Gender") %>%
+      stringr::str_sub(1, 1),
+    sector = NA_character_,
+    club = rvest::html_element(profile_header, ".athlete-profile__team") %>%
+      rvest::html_text2(),
+    brand = extract_profile_info_val(profile_info, "Skis"),
+    competitor_id = NA_character_
+  )
+}
+
+
+extract_profile_info_val <- function(profile_info, variable) {
+  profile_info %>%
+    # the #-syntax for id does not work, because it may contain spaces.
+    rvest::html_element(
+      glue::glue(".profile-info__entry[id='{variable}']")
+    ) %>%
+    rvest::html_element("span.profile-info__value") %>%
+    rvest::html_text2()
 }
 
 

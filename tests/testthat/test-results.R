@@ -1,9 +1,21 @@
 library(dplyr, warn.conflicts = FALSE)
 
+# full athlete data for didier cuche which is used in multiple tests
+cuche <- tibble(
+  active = FALSE,
+  fis_code = "510030",
+  name = "Cuche Didier",
+  nation = "SUI",
+  birthdate = "1974",
+  gender = "M",
+  sector = "AL",
+  club = "Chasseral Dombresson",
+  brand = "Head",
+  competitor_id = "11795"
+)
+
+
 test_that("get_results_url() works with valid inputs", {
-  cuche <- tibble(name = "Cuche Didier",
-                  sector = "AL",
-                  competitor_id = "11795")
   expect_equal(
     get_results_url(cuche),
     paste0("https://www.fis-ski.com/DB/general/athlete-biography.html?",
@@ -43,13 +55,9 @@ test_that("ensure_one_athlete() works", {
 test_that(
   "query_results() works for alpine skiing results for all categories",
   {
-
     local_mocked_bindings(
       get_results_url = function(...) test_path("data", "results_al_all.html.gz")
     )
-    cuche <- tibble(name = "Cuche Didier",
-                    sector = "AL",
-                    competitor_id = "11795")
     dh <- query_results(cuche)
 
     expect_s3_class(dh, "tbl_df")
@@ -83,6 +91,7 @@ test_that(
     expect_in(na.omit(dh$cup_points), 0:100)
     expect_match(dh$race_id, "^\\d+$")
 
+    expect_equal(attr(dh, "athlete"), cuche)
     expect_equal(attr(dh, "url"), get_results_url())
 
     expect_snapshot(print(dh, width = Inf, n = Inf))
@@ -97,9 +106,6 @@ test_that(
     local_mocked_bindings(
       get_results_url = function(...) test_path("data", "results_al_tra.html.gz")
     )
-    cuche <- tibble(name = "Cuche Didier",
-                    sector = "AL",
-                    competitor_id = "11795")
     tra <- query_results(cuche)
 
     expect_s3_class(tra, "tbl_df")
@@ -133,6 +139,7 @@ test_that(
     expect_in(tra$cup_points, NA_real_)
     expect_match(tra$race_id, "^\\d+$")
 
+    expect_equal(attr(tra, "athlete"), cuche)
     expect_equal(attr(tra, "url"), get_results_url())
 
     expect_snapshot(print(tra, width = Inf, n = Inf))
@@ -148,9 +155,6 @@ test_that(
     local_mocked_bindings(
       get_results_url = function(...) test_path("data", "results_al_wsc.html.gz")
     )
-    cuche <- tibble(name = "Cuche Didier",
-                    sector = "AL",
-                    competitor_id = "11795")
     wsc <- query_results(cuche)
 
     expect_s3_class(wsc, "tbl_df")
@@ -181,6 +185,7 @@ test_that(
     expect_in(wsc$cup_points, NA_real_)
     expect_match(wsc$race_id, "^\\d+$")
 
+    expect_equal(attr(wsc, "athlete"), cuche)
     expect_equal(attr(wsc, "url"), get_results_url())
 
     expect_snapshot(print(wsc, width = Inf, n = Inf))
@@ -211,9 +216,6 @@ test_that(
     local_mocked_bindings(
       get_results_url = function(...) test_path("data", "results_empty.html.gz")
     )
-    cuche <- tibble(name = "Cuche Didier",
-                    sector = "AL",
-                    competitor_id = "11795")
     empty <- query_results(cuche)
 
     expect_s3_class(empty, "tbl_df")
@@ -244,9 +246,6 @@ test_that("query_results() warns for large result", {
     extract_results = function(...) tibble(category = 1:2001)
   )
 
-  cuche <- tibble(name = "Cuche Didier",
-                  sector = "AL",
-                  competitor_id = "11795")
   expect_warning(
     query_results(cuche),
     "Maximum number of 2'000 results reached"
