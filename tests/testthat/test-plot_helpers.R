@@ -21,7 +21,7 @@ test_that("create_darkened_colour_sequence() works", {
 })
 
 
-test_that("create_athlete_pos_colour_scale() works", {
+test_that("create_athlete_pos_colour_scale() works for multiple athletes", {
   athletes <- c("Odermatt Marco", "Kristoffersen Henrik", "Meillard Loic")
   positions <- paste0("top", 1:3)
   df_ap <- tibble(
@@ -31,7 +31,7 @@ test_that("create_athlete_pos_colour_scale() works", {
 
   col_scale <- create_athlete_pos_colour_scale(df_ap$athlete, df_ap$position)
   expect_type(col_scale, "list")
-  expect_named(col_scale, c("cols", "mono"))
+  expect_named(col_scale, c("cols", "legend"))
 
   # check the colour part
   expect_type(col_scale$cols, "character")
@@ -43,18 +43,40 @@ test_that("create_athlete_pos_colour_scale() works", {
     ignore_attr = "names"
   )
 
-  # check the monochrome part
-  expect_type(col_scale$mono, "character")
-  expect_length(col_scale$mono, length(positions))
-  expect_equal(sum(duplicated(names(col_scale$mono))), 0)
+  # check the legend part (monochrome in this case)
+  expect_type(col_scale$legend, "character")
+  expect_length(col_scale$legend, length(positions))
+  expect_equal(sum(duplicated(names(col_scale$legend))), 0)
   # check that the colours are all greys
   expect_equal(
-    col2rgb(col_scale$mono),
-    col2rgb(col_scale$mono)[rep(1, length(positions)), ],
+    col2rgb(col_scale$legend),
+    col2rgb(col_scale$legend)[rep(1, length(positions)), ],
     ignore_attr = "dimnames"
   )
 
   expect_snapshot(col_scale)
+})
+
+
+test_that("create_athlete_pos_colour_scale() works for a single athlete", {
+  df_ap <- tibble(
+    athlete = "Odermatt Marco",
+    position = paste0("top", 1:3)
+  )
+
+  col_scale <- create_athlete_pos_colour_scale(df_ap$athlete, df_ap$position)
+  expect_type(col_scale, "list")
+  expect_named(col_scale, c("cols", "legend"))
+
+  # check the colour part
+  expect_type(col_scale$cols, "character")
+  expect_length(col_scale$cols, nrow(df_ap))
+  expect_equal(sum(duplicated(names(col_scale$cols))), 0)
+  expect_equal(col_scale$cols[1], cb_pal_set1[1], ignore_attr = "names")
+
+  # check the legend part (coloured in this case)
+  expect_equal(col_scale$cols, col_scale$legend, ignore_attr = "names")
+  expect_named(col_scale$legend, df_ap$position)
 })
 
 

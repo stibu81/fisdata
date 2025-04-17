@@ -3,7 +3,8 @@ cb_pal_set1 <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00",
                  "#FFFF33", "#A65628", "#F781BF", "#999999")
 
 # create an athlete-position-colour-scale
-# also return a monochrome scale that can be used for the legend
+# also return a scale that can be used for the legend: it is monochrome if there
+# are multiple athletes and coloured, if there is only one.
 
 create_athlete_pos_colour_scale <- function(athletes, positions) {
 
@@ -23,11 +24,15 @@ create_athlete_pos_colour_scale <- function(athletes, positions) {
                        rep(positions, times = n_athletes),
                        sep = "_")
 
-  # monochrome scale for the legend
-  mono <- create_darkened_colour_sequence(grDevices::grey(0.7), n_pos)
-  names(mono) <- positions
+  # scale for the legend
+  if (n_athletes == 1) {
+    legend <- cols
+  } else {
+    legend <- create_darkened_colour_sequence(grDevices::grey(0.7), n_pos)
+  }
+  names(legend) <- positions
 
-  list(cols = cols, mono = mono)
+  list(cols = cols, legend = legend)
 }
 
 

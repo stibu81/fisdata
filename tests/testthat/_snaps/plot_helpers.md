@@ -1,4 +1,4 @@
-# create_athlete_pos_colour_scale() works
+# create_athlete_pos_colour_scale() works for multiple athletes
 
     Code
       col_scale
@@ -11,7 +11,7 @@
              Meillard Loic_top1        Meillard Loic_top2        Meillard Loic_top3 
                       "#4DAF4A"                 "#407F3F"                 "#1A5718" 
       
-      $mono
+      $legend
            top1      top2      top3 
       "#B3B3B3" "#838383" "#565656" 
       

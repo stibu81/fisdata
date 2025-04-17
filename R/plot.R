@@ -88,7 +88,7 @@ plot_rank_summary <- function(results,
       alpha = 0
     ) +
     ggplot2::scale_fill_manual(
-      values = col_scales$mono,
+      values = col_scales$legend,
       guide = ggplot2::guide_legend(override.aes = list(alpha = 1))
     )
 
