@@ -198,3 +198,94 @@ plot_results_summary <- function(results,
 
   fis_plot(p, interactive, width, height)
 }
+
+
+#' Plot athlete's results over time
+#'
+#' @export
+
+plot_ranks_over_time <- function(results,
+                                 by = c("discipline", "category", "athlete"),
+                                 pos = 1:3,
+                                 interactive = TRUE,
+                                 width = NULL,
+                                 height = NULL) {
+
+  by <- match.arg(by)
+
+  # if there is no faceting by athlete, only accept a single athlete.
+  n_athletes <- dplyr::n_distinct(results$athlete)
+  if (by != "athlete" && n_athletes > 1) {
+    cli::cli_abort("Multiple athletes are only supported when
+                   by = 'athlete'.")
+  }
+  # up to 9 athletes are supported. Abort if there are more.
+  if (n_athletes > 9) {
+    cli::cli_abort("Only up to 9 athletes are supported, you provided
+                   {n_athletes}.")
+  }
+
+  grp_by <- c("season", by) %>%
+    # remove athlete from the grouping, since prepare_rank_plot_data()
+    # always groups by athlete
+    setdiff("athlete")
+
+  plot_data <- results %>%
+    prepare_rank_plot_data(by = grp_by, pos = pos)
+
+  col_scales <- create_athlete_pos_colour_scale(
+    plot_data$athlete, plot_data$position
+  )
+
+  # we need to plot some data that uses all the values for the the legend.
+  data_legend <- plot_data %>%
+    dplyr::slice_head(n = 1, by = "position") %>%
+    dplyr::mutate(colour = .data$position, count = 0)
+
+  p <- plot_data %>%
+    dplyr::mutate(
+      colour = interaction(.data$athlete, .data$position, sep = "_"),
+      tooltip = glue::glue(
+        "athlete: {.data$athlete}
+         season: {.data$season}
+         position: {.data$position}
+         count: {.data$count}"
+      )
+    ) %>%
+    ggplot2::ggplot(
+      ggplot2::aes(
+        x = .data$season,
+        y = .data$count,
+        colour = .data$colour
+      )
+    ) +
+    ggplot2::geom_line() +
+    ggiraph::geom_point_interactive(
+      ggplot2::aes(
+        tooltip = .data$tooltip,
+        data_id = interaction(.data$position, .data$season, sep = "_")
+      ),
+      size = 2
+    ) +
+    ggplot2::facet_grid(
+      rows = dplyr::vars(.data[[by]]),
+      scales = "free_y"
+    ) +
+    ggplot2::scale_colour_manual(values = col_scales$cols, guide = "none") +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
+    ) +
+    ggplot2::labs(x = NULL) +
+    ggnewscale::new_scale_colour() +
+    ggplot2::geom_point(
+      data = data_legend,
+      ggplot2::aes(colour = .data$position),
+      alpha = 0
+    ) +
+    ggplot2::scale_colour_manual(
+      values = col_scales$legend,
+      guide = ggplot2::guide_legend(override.aes = list(alpha = 1))
+    )
+
+  fis_plot(p, interactive, width, height)
+}
