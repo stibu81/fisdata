@@ -7,6 +7,7 @@
 plot_ranks_over_time(
   results,
   by = c("discipline", "category", "athlete"),
+  time = c("season", "age"),
   pos = 1:3,
   interactive = TRUE,
   width = NULL,

@@ -206,12 +206,14 @@ plot_results_summary <- function(results,
 
 plot_ranks_over_time <- function(results,
                                  by = c("discipline", "category", "athlete"),
+                                 time = c("season", "age"),
                                  pos = 1:3,
                                  interactive = TRUE,
                                  width = NULL,
                                  height = NULL) {
 
   by <- match.arg(by)
+  time <- match.arg(time)
 
   # if there is no faceting by athlete, only accept a single athlete.
   n_athletes <- dplyr::n_distinct(results$athlete)
@@ -225,7 +227,7 @@ plot_ranks_over_time <- function(results,
                    {n_athletes}.")
   }
 
-  grp_by <- c("season", by) %>%
+  grp_by <- c("season", "age", by) %>%
     # remove athlete from the grouping, since prepare_rank_plot_data()
     # always groups by athlete
     setdiff("athlete")
@@ -248,13 +250,14 @@ plot_ranks_over_time <- function(results,
       tooltip = glue::glue(
         "athlete: {.data$athlete}
          season: {.data$season}
+         age: {.data$age}
          position: {.data$position}
          count: {.data$count}"
       )
     ) %>%
     ggplot2::ggplot(
       ggplot2::aes(
-        x = .data$season,
+        x = .data[[time]],
         y = .data$count,
         colour = .data$colour
       )
@@ -263,7 +266,7 @@ plot_ranks_over_time <- function(results,
     ggiraph::geom_point_interactive(
       ggplot2::aes(
         tooltip = .data$tooltip,
-        data_id = interaction(.data$position, .data$season, sep = "_")
+        data_id = interaction(.data$position, .data[[time]], sep = "_")
       ),
       size = 2
     ) +
