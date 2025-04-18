@@ -202,6 +202,19 @@ plot_results_summary <- function(results,
 
 #' Plot athlete's results over time
 #'
+#' Plot the results of one or several athletes over time.
+#'
+#' @inheritParams plot_rank_summary
+#' @param pos numeric that controls the summary of ranks. Indicate one or
+#'  multiple break points for the ranks to summarise. The plot will then show
+#'  the counts for the number of ranks that are at least as good as each break
+#'  point and worse than the next better break point.
+#' @param time the variable to use for the x-axis. Possible values are
+#'  "season" and "age". The function uses the age at the beginning of the
+#'  season for the entire season.
+#' @param cumulative should cumulative counts be plotted?
+#'
+#' @rdname plot_results_over_time
 #' @export
 
 plot_ranks_over_time <- function(results,
