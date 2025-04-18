@@ -62,13 +62,13 @@ test_that(
 
     expect_s3_class(dh, "tbl_df")
 
-    expected_names <- c("athlete", "date", "place", "nation", "sector",
+    expected_names <- c("athlete", "date", "age", "place", "nation", "sector",
                         "category", "discipline", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(dh, expected_names)
 
-    expected_types <- rep("character", 11) %>%
-      replace(c(2, 8:10), c("Date", "integer", "double", "double"))
+    expected_types <- rep("character", 12) %>%
+      replace(c(2:3, 9:11), c("Date", "double", "integer", "double", "double"))
     for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Date") {
         expect_s3_class(dh[[!!expected_names[i]]], expected_types[i])
@@ -83,6 +83,7 @@ test_that(
     expect_true(
       all(between(dh$date, as.Date("2009-11-01"), as.Date("2010-03-31")))
     )
+    expect_in(dh$age, 15:40)
     expect_in(dh$sector, "AL")
     expect_in(dh$category, c(categories$description, "World Cup Speed Event"))
     expect_in(dh$discipline, "Downhill")
@@ -106,7 +107,7 @@ test_that(
     local_mocked_bindings(
       get_results_url = function(...) test_path("data", "results_al_tra.html.gz")
     )
-    tra <- query_results(cuche)
+    tra <- query_results(cuche, add_age = FALSE)
 
     expect_s3_class(tra, "tbl_df")
 
@@ -159,13 +160,13 @@ test_that(
 
     expect_s3_class(wsc, "tbl_df")
 
-    expected_names <- c("athlete", "date", "place", "nation", "sector",
+    expected_names <- c("athlete", "date", "age", "place", "nation", "sector",
                         "category", "discipline", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(wsc, expected_names)
 
-    expected_types <- rep("character", 11) %>%
-      replace(c(2, 8:10), c("Date", "integer", "double", "double"))
+    expected_types <- rep("character", 12) %>%
+      replace(c(2:3, 9:11), c("Date", "double", "integer", "double", "double"))
     for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Date") {
         expect_s3_class(wsc[[!!expected_names[i]]], expected_types[i])
@@ -176,6 +177,7 @@ test_that(
 
     expect_in(wsc$athlete, "Cuche Didier")
     expect_match(cuche$name, "cuche", ignore.case = TRUE)
+    expect_in(wsc$age, 15:40)
     expect_in(wsc$nation, nations$code)
     expect_in(wsc$sector, "AL")
     expect_in(wsc$category, "World Championships")
@@ -220,13 +222,13 @@ test_that(
 
     expect_s3_class(empty, "tbl_df")
 
-    expected_names <- c("athlete", "date", "place", "nation", "sector",
+    expected_names <- c("athlete", "date", "age", "place", "nation", "sector",
                         "category", "discipline", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(empty, expected_names)
 
-    expected_types <- rep("character", 11) %>%
-      replace(c(2, 8:10), c("Date", "integer", "double", "double"))
+    expected_types <- rep("character", 12) %>%
+      replace(c(2:3, 9:11), c("Date", "double", "integer", "double", "double"))
     for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Date") {
         expect_s3_class(empty[[!!expected_names[i]]], expected_types[i])
@@ -247,7 +249,7 @@ test_that("query_results() warns for large result", {
   )
 
   expect_warning(
-    query_results(cuche),
+    query_results(cuche, add_age = FALSE),
     "Maximum number of 2'000 results reached"
   )
 })

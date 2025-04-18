@@ -20,6 +20,10 @@
 #'  (see 'Details').
 #' @param discipline abbreviation for the discipline, e.g., "DH" for
 #'  "Downhill". See the dataset [disciplines] for possible values.
+#' @param add_age should a column with the athletes age be added
+#'  for each race? The age is given in decimal years. Note that for some
+#'  athletes, only the birth year is known, in which case the age will be
+#'  estimated.
 #'
 #' @details
 #' All filter arguments are set to `""` by default. Setting an argument to
@@ -40,7 +44,8 @@
 #' @returns
 #' A tibble with the following columns: `athlete`, `date`, `place`, `nation`,
 #' `sector`, `category`, `discipline`, `rank`, `fis_points`, `cup_points`,
-#' and `race_id`.
+#' and `race_id`. If `add_age` is `TRUE`, it also contains the column `age`
+#' after `date`.
 #'
 #' @examples
 #' \dontrun{
@@ -73,7 +78,8 @@ query_results <- function(athlete,
                           season = fd_def("season"),
                           category = fd_def("category"),
                           place = "",
-                          discipline = fd_def("discipline")) {
+                          discipline = fd_def("discipline"),
+                          add_age = TRUE) {
 
   athlete <- ensure_one_athlete(athlete)
 
@@ -100,6 +106,23 @@ query_results <- function(athlete,
         sector = athlete$sector,
         competitor_id = athlete$competitor_id
       )
+  }
+
+  # add age if requested
+  if (add_age) {
+    if (nrow(results) == 0) {
+      results <- results %>%
+        dplyr::mutate(age = numeric(0), .after = "date")
+    } else {
+      if (is.null(athlete_info)) {
+        cli::cli_abort("cannot add age because athlete info is missing")
+      }
+      results <- results %>%
+        dplyr::mutate(
+          age = compute_age_at_date(.data$date, athlete_info),
+          .after = "date"
+        )
+    }
   }
 
   # add the url as an attribute
@@ -246,7 +269,8 @@ extract_athlete_info <- function(html) {
     name = NA_character_,
     nation = rvest::html_element(html, ".country__name-short") %>%
       rvest::html_text2(),
-    birthdate = extract_profile_info_val(profile_info, "Birthdate"),
+    birthdate = extract_profile_info_val(profile_info, "Birthdate") %>%
+      format_birthdate(),
     gender = extract_profile_info_val(profile_info, "Gender") %>%
       stringr::str_sub(1, 1),
     sector = NA_character_,
