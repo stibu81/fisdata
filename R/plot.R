@@ -208,6 +208,7 @@ plot_ranks_over_time <- function(results,
                                  by = c("discipline", "category", "athlete"),
                                  time = c("season", "age"),
                                  pos = 1:3,
+                                 cumulative = FALSE,
                                  interactive = TRUE,
                                  width = NULL,
                                  height = NULL) {
@@ -235,6 +236,13 @@ plot_ranks_over_time <- function(results,
   plot_data <- results %>%
     prepare_rank_plot_data(by = grp_by, pos = pos)
 
+  if (cumulative) {
+    plot_data <- plot_data %>%
+      dplyr::arrange(.data$athlete, .data$season) %>%
+      dplyr::mutate(count = cumsum(.data$count),
+                    .by = c(by, "position"))
+  }
+
   col_scales <- create_athlete_pos_colour_scale(
     plot_data$athlete, plot_data$position
   )
@@ -252,7 +260,7 @@ plot_ranks_over_time <- function(results,
          season: {.data$season}
          age: {.data$age}
          position: {.data$position}
-         count: {.data$count}"
+         {if (cumulative) 'cumulative ' else ''}count: {.data$count}"
       )
     ) %>%
     ggplot2::ggplot(
@@ -278,7 +286,8 @@ plot_ranks_over_time <- function(results,
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
     ) +
-    ggplot2::labs(x = NULL) +
+    ggplot2::labs(x = time,
+                  y = paste(if (cumulative) "cumulative", "count")) +
     ggnewscale::new_scale_colour() +
     ggplot2::geom_point(
       data = data_legend,
