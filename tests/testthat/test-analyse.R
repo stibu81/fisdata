@@ -20,6 +20,8 @@ cuche_res <- tribble(
   "2012-02-11",        "Sochi",    "RUS",           "World Cup",  "Downhill",   12L,          22
   ) %>%
   mutate(date = as.Date(date)) %>%
+  mutate(age = compute_age_at_date(date, tibble(birthdate = "1974")),
+         .after = "date") %>%
   mutate(athlete = "Cuche Didier", .before = 1) %>%
   mutate(sector = "AL", .after = "nation") %>%
   mutate(fis_points = 0, .after = "rank") %>%
@@ -86,13 +88,14 @@ test_that("messages in summarise_results() work", {
                  "show_pos must be a vector of integer values")
   expect_error(summarise_results(cuche_res, show_pos = c(1, "a")),
                  "show_pos must be a vector of integer values")
-  expect_error(summarise_results(cuche_res, by = c("a", "b", "c", "d")),
-               "Invalid grouping variables: 'a' and 'b'")
+  # "a", "c", "d" match "age", "category", "discipline", respectively.
+  expect_error(summarise_results(cuche_res, by = c("a", "b", "c", "d", "e")),
+               "Invalid grouping variables: 'b' and 'e'")
 })
 
 
 test_that("summarise_results() works with different groupings", {
-  grp_cols <- c("season", "category", "discipline", "place", "nation")
+  grp_cols <- c("season", "age", "category", "discipline", "place", "nation")
 
   cuche_no_grp <- summarise_results(cuche_res, by = c(), show_pos = FALSE)
   expect_named(cuche_no_grp[1], "athlete")
@@ -113,6 +116,28 @@ test_that("summarise_results() works with different groupings", {
   expect_named(
     summarise_results(cuche_res, by = c("d", "n", "c"), show_pos = FALSE)[1:4],
     c("athlete", "discipline", "nation", "category")
+  )
+})
+
+
+test_that("summarise_results() works with age", {
+  cuche_sum <- summarise_results(cuche_res, by = c("season", "age"),
+                                 show_pos = c())
+  expect_named(
+    cuche_sum,
+    c("athlete", "season", "age", "podiums", "dnf", "races", "cup_points")
+  )
+  # the age should be the age at the beginning of the season. Since the variable
+  # "season" conrresponds to the year where the season ends, we have to subtract
+  # one.
+  expect_equal(cuche_sum$age, (cuche_sum$season - 1) - 1974)
+})
+
+
+test_that("check error in summarise_results() when age is missing", {
+  expect_error(
+    summarise_results(cuche_res %>% select(-age), by = "age"),
+    "column 'age' is not present"
   )
 })
 

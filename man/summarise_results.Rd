@@ -22,7 +22,7 @@ function can also handle the results from multiple athletes that are
 combined into a single tibble with \code{\link[dplyr:bind_rows]{dplyr::bind_rows()}}.}
 
 \item{by}{variables to groups the results by. Possible values are "season",
-"category", "discipline", "place", and "nation".
+"age", "category", "discipline", "place", and "nation".
 Values are partially matched. In addition, the function always groups by
 athlete. Set this value to an empty vector (\code{c()}) or \code{NA} to summarise
 without additional grouping (i.e., only by athlete).}

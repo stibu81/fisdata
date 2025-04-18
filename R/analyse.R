@@ -7,7 +7,7 @@
 #'  function can also handle the results from multiple athletes that are
 #'  combined into a single tibble with [dplyr::bind_rows()].
 #' @param by variables to groups the results by. Possible values are "season",
-#'  "category", "discipline", "place", and "nation".
+#'  "age", "category", "discipline", "place", and "nation".
 #'  Values are partially matched. In addition, the function always groups by
 #'  athlete. Set this value to an empty vector (`c()`) or `NA` to summarise
 #'  without additional grouping (i.e., only by athlete).
@@ -61,8 +61,19 @@ summarise_results <- function(results,
 
   grp_by <- c(
     "athlete",
-    match_groupings(by, c("season", "category", "discipline", "place", "nation"))
+    match_groupings(
+      by,
+      c("season", "age", "category", "discipline", "place", "nation")
+    )
   )
+
+  # if grouping by age, the column must be present
+  if ("age" %in% grp_by && !"age" %in% names(results)) {
+    cli::cli_abort(
+      c("x" = "Cannot group by age, because the column 'age' is not present.",
+        "i" = "Call query_results() with age = TRUE.")
+    )
+  }
 
   # prepare show_pos: should positions be summarised?
   # if so, sort, remove duplicates, handle invalid inputs
@@ -83,7 +94,21 @@ summarise_results <- function(results,
 
   res <- results %>%
     dplyr::filter(.data$category != "Training") %>%
-    dplyr::mutate(season = get_season_at_date(.data$date)) %>%
+    dplyr::mutate(season = get_season_at_date(.data$date))
+
+  # age should be the same for an entire season: => use the age in integer years
+  # at the begining of the season, i.e., in the first race
+  if ("age" %in% grp_by) {
+    age_by_season <- res %>%
+      dplyr::summarise(season_age = floor(min(.data$age)),
+                       .by = c("season", "athlete"))
+    res <- res %>%
+      dplyr::left_join(age_by_season, by = c("season", "athlete")) %>%
+      dplyr::mutate(age = .data$season_age) %>%
+      dplyr::select(-"season_age")
+  }
+
+  res <- res %>%
     dplyr::select(dplyr::all_of(grp_by), "rank",
                   if (show_points) "cup_points")
 
@@ -200,7 +225,8 @@ get_debuts <- function(athlete,
 
   # get results for all seasons independent of defaults
   results <- query_results(athlete, season = "", category = category,
-                           place = "", discipline = discipline) %>%
+                           place = "", discipline = discipline,
+                           add_age = TRUE) %>%
     dplyr::filter(.data$category != "Training")
 
   # limit the races to those of the requested type, i.e., all races,
@@ -214,9 +240,7 @@ get_debuts <- function(athlete,
   results %>%
     dplyr::filter(.data$date == min(.data$date),
                   .by = dplyr::all_of(grp_by)) %>%
-    dplyr::arrange(dplyr::desc(.data$date)) %>%
-    dplyr::mutate(age = compute_age_at_date(.data$date, !!athlete),
-                  .after = "date")
+    dplyr::arrange(dplyr::desc(.data$date))
 }
 
 

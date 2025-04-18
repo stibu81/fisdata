@@ -114,9 +114,6 @@ query_results <- function(athlete,
       results <- results %>%
         dplyr::mutate(age = numeric(0), .after = "date")
     } else {
-      if (is.null(athlete_info)) {
-        cli::cli_abort("cannot add age because athlete info is missing")
-      }
       results <- results %>%
         dplyr::mutate(
           age = compute_age_at_date(.data$date, athlete_info),
