@@ -209,6 +209,8 @@ plot_results_summary <- function(results,
 #'  multiple break points for the ranks to summarise. The plot will then show
 #'  the counts for the number of ranks that are at least as good as each break
 #'  point and worse than the next better break point.
+#' @param type character giving the type of the plot. Use "lines" for a lines
+#'  plot with points and "bars" for a bar plot.
 #' @param time the variable to use for the x-axis. Possible values are
 #'  "season" and "age". The function uses the age at the beginning of the
 #'  season for the entire season.
@@ -221,6 +223,7 @@ plot_ranks_over_time <- function(results,
                                  by = c("discipline", "category", "athlete"),
                                  time = c("season", "age"),
                                  pos = 1:3,
+                                 type = c("lines", "bars"),
                                  cumulative = FALSE,
                                  interactive = TRUE,
                                  width = NULL,
@@ -228,6 +231,7 @@ plot_ranks_over_time <- function(results,
 
   by <- match.arg(by)
   time <- match.arg(time)
+  type <- match.arg(type)
 
   # if there is no faceting by athlete, only accept a single athlete.
   n_athletes <- dplyr::n_distinct(results$athlete)
@@ -279,38 +283,66 @@ plot_ranks_over_time <- function(results,
     ggplot2::ggplot(
       ggplot2::aes(
         x = .data[[time]],
-        y = .data$count,
-        colour = .data$colour
+        y = .data$count
       )
-    ) +
-    ggplot2::geom_line() +
-    ggiraph::geom_point_interactive(
-      ggplot2::aes(
-        tooltip = .data$tooltip,
-        data_id = interaction(.data$position, .data[[time]], sep = "_")
-      ),
-      size = 2
     ) +
     ggplot2::facet_grid(
       rows = dplyr::vars(.data[[by]]),
       scales = "free_y"
     ) +
-    ggplot2::scale_colour_manual(values = col_scales$cols, guide = "none") +
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
     ) +
     ggplot2::labs(x = time,
-                  y = paste(if (cumulative) "cumulative", "count")) +
-    ggnewscale::new_scale_colour() +
-    ggplot2::geom_point(
-      data = data_legend,
-      ggplot2::aes(colour = .data$position),
-      alpha = 0
-    ) +
-    ggplot2::scale_colour_manual(
-      values = col_scales$legend,
-      guide = ggplot2::guide_legend(override.aes = list(alpha = 1))
-    )
+                  y = paste(if (cumulative) "cumulative", "count"))
+
+  # add the geoms
+  if (type == "lines") {
+    p <- p +
+      ggplot2::geom_line(
+        ggplot2::aes(colour = .data$colour)
+      ) +
+      ggiraph::geom_point_interactive(
+        ggplot2::aes(
+          colour = .data$colour,
+          tooltip = .data$tooltip,
+          data_id = interaction(.data$position, .data[[time]], sep = "_")
+        ),
+        size = 2
+      ) +
+      ggplot2::scale_colour_manual(values = col_scales$cols, guide = "none") +
+      ggnewscale::new_scale_colour() +
+      ggplot2::geom_point(
+        data = data_legend,
+        ggplot2::aes(colour = .data$position),
+        alpha = 0
+      ) +
+      ggplot2::scale_colour_manual(
+        values = col_scales$legend,
+        guide = ggplot2::guide_legend(override.aes = list(alpha = 1))
+      )
+  } else {
+    p <- p +
+      ggiraph::geom_col_interactive(
+        ggplot2::aes(
+          fill = .data$colour,
+          tooltip = .data$tooltip,
+          data_id = interaction(.data$position, .data[[time]], sep = "_")
+        ),
+        position = "stack"
+      ) +
+      ggplot2::scale_fill_manual(values = col_scales$cols, guide = "none") +
+      ggnewscale::new_scale_fill() +
+      ggplot2::geom_col(
+        data = data_legend,
+        ggplot2::aes(fill = .data$position),
+        alpha = 0
+      ) +
+      ggplot2::scale_fill_manual(
+        values = col_scales$legend,
+        guide = ggplot2::guide_legend(override.aes = list(alpha = 1))
+      )
+  }
 
   fis_plot(p, interactive, width, height)
 }

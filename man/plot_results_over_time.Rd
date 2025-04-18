@@ -9,6 +9,7 @@ plot_ranks_over_time(
   by = c("discipline", "category", "athlete"),
   time = c("season", "age"),
   pos = 1:3,
+  type = c("lines", "bars"),
   cumulative = FALSE,
   interactive = TRUE,
   width = NULL,
@@ -33,6 +34,9 @@ season for the entire season.}
 multiple break points for the ranks to summarise. The plot will then show
 the counts for the number of ranks that are at least as good as each break
 point and worse than the next better break point.}
+
+\item{type}{character giving the type of the plot. Use "lines" for a lines
+plot with points and "bars" for a bar plot.}
 
 \item{cumulative}{should cumulative counts be plotted?}
 
