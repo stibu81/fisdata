@@ -21,8 +21,8 @@ plot_ranks_over_time(
 for one athlete can be created with \code{\link[=query_results]{query_results()}} and the tibble for
 multiple athletes can be combined with \code{\link[dplyr:bind_rows]{dplyr::bind_rows()}}.}
 
-\item{by}{variables to groups the plots by. Possible values are "category"
-(on rows) and "discipline" (on columns). Values are partially matched.
+\item{by}{variable to groups the plot by. Possible values are "discipline",
+"category", and "athlete". Values are partially matched.
 Set this value to an empty vector (\code{c()}) or \code{NA} to create a plot with
 a single facet.}
 

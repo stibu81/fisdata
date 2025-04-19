@@ -3,7 +3,7 @@
 #' @param results a tibble with the results of one or more athletes. The tibble
 #'  for one athlete can be created with [query_results()] and the tibble for
 #'  multiple athletes can be combined with [dplyr::bind_rows()].
-#' @param by variables to groups the plots by. Possible values are "category"
+#' @param by variables to groups the plot by. Possible values are "category"
 #'  (on rows) and "discipline" (on columns). Values are partially matched.
 #'  Set this value to an empty vector (`c()`) or `NA` to create a plot with
 #'  a single facet.
@@ -205,6 +205,10 @@ plot_results_summary <- function(results,
 #' Plot the results of one or several athletes over time.
 #'
 #' @inheritParams plot_rank_summary
+#' @param by variable to groups the plot by. Possible values are "discipline",
+#'  "category", and "athlete". Values are partially matched.
+#'  Set this value to an empty vector (`c()`) or `NA` to create a plot with
+#'  a single facet.
 #' @param pos numeric that controls the summary of ranks. Indicate one or
 #'  multiple break points for the ranks to summarise. The plot will then show
 #'  the counts for the number of ranks that are at least as good as each break
@@ -229,13 +233,15 @@ plot_ranks_over_time <- function(results,
                                  width = NULL,
                                  height = NULL) {
 
-  by <- match.arg(by)
+  if (length(by) > 0 || isTRUE(is.na(by))) {
+    by <- match.arg(by)
+  }
   time <- match.arg(time)
   type <- match.arg(type)
 
   # if there is no faceting by athlete, only accept a single athlete.
   n_athletes <- dplyr::n_distinct(results$athlete)
-  if (by != "athlete" && n_athletes > 1) {
+  if (!"athlete" %in% by && n_athletes > 1) {
     cli::cli_abort("Multiple athletes are only supported when
                    by = 'athlete'.")
   }
@@ -257,7 +263,7 @@ plot_ranks_over_time <- function(results,
     plot_data <- plot_data %>%
       dplyr::arrange(.data$athlete, .data$season) %>%
       dplyr::mutate(count = cumsum(.data$count),
-                    .by = c(by, "position"))
+                    .by = dplyr::all_of(c(by, "position")))
   }
 
   col_scales <- create_athlete_pos_colour_scale(
@@ -287,7 +293,7 @@ plot_ranks_over_time <- function(results,
       )
     ) +
     ggplot2::facet_grid(
-      rows = dplyr::vars(.data[[by]]),
+      rows = if (length(by) > 0) dplyr::vars(.data[[by]]),
       scales = "free_y"
     ) +
     ggplot2::theme(
