@@ -102,3 +102,45 @@ prepare_rank_plot_data <- function(results,
       position = factor(.data$position, levels = unique(.data$position))
     )
 }
+
+
+# function to add a colour/fill scale with a manual legend.
+
+add_col_scale_and_legend <- function(plot,
+                                     col_scales) {
+
+  # determine the appropriate scale from the type of geom used in the plot
+  scale <- if (inherits(plot$layers[[1]]$geom, "GeomBar")) "fill" else "colour"
+
+  # we need to plot some data that uses all the values for the the legend
+  data_legend <- plot$data %>%
+    dplyr::slice_head(n = 1, by = "position") %>%
+    dplyr::mutate("{scale}" := .data$position, count = 0)
+
+  # select functions based on the scale
+  if (scale == "colour") {
+    new_scale <- ggnewscale::new_scale_colour
+    legend_geom <- ggplot2::geom_point
+    col_fill_scale <- ggplot2::scale_colour_manual
+  } else {
+    new_scale <- ggnewscale::new_scale_fill
+    legend_geom <- ggplot2::geom_col
+    col_fill_scale <- ggplot2::scale_fill_manual
+  }
+
+  plot +
+    col_fill_scale(values = col_scales$cols, guide = "none") +
+    new_scale() +
+    legend_geom(
+      data = data_legend,
+      ggplot2::aes(fill = if (scale == "fill") .data$position,
+                   colour = if (scale == "colour") .data$position),
+      alpha = 0
+    ) +
+    col_fill_scale(
+      "position",
+      values = col_scales$legend,
+      guide = ggplot2::guide_legend(override.aes = list(alpha = 1))
+    )
+}
+

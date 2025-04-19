@@ -42,11 +42,6 @@ plot_rank_summary <- function(results,
     plot_data$athlete, plot_data$position
   )
 
-  # we need to plot some data that uses all the values for the the legend.
-  data_legend <- plot_data %>%
-    dplyr::slice_head(n = 1, by = "position") %>%
-    dplyr::mutate(fill = .data$position, count = 0)
-
   p <- plot_data %>%
     dplyr::mutate(
       fill = interaction(.data$athlete, .data$position, sep = "_"),
@@ -76,21 +71,12 @@ plot_rank_summary <- function(results,
       cols = if ("discipline" %in% by) dplyr::vars(.data$discipline),
       scales = "free_y"
     ) +
-    ggplot2::scale_fill_manual(values = col_scales$cols, guide = "none") +
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
     ) +
-    ggplot2::labs(x = NULL) +
-    ggnewscale::new_scale_fill() +
-    ggplot2::geom_col(
-      data = data_legend,
-      ggplot2::aes(fill = .data$position),
-      alpha = 0
-    ) +
-    ggplot2::scale_fill_manual(
-      values = col_scales$legend,
-      guide = ggplot2::guide_legend(override.aes = list(alpha = 1))
-    )
+    ggplot2::labs(x = NULL)
+
+  p <- p %>% add_col_scale_and_legend(col_scales)
 
   fis_plot(p, interactive, width, height)
 }
@@ -270,11 +256,6 @@ plot_ranks_over_time <- function(results,
     plot_data$athlete, plot_data$position
   )
 
-  # we need to plot some data that uses all the values for the the legend.
-  data_legend <- plot_data %>%
-    dplyr::slice_head(n = 1, by = "position") %>%
-    dplyr::mutate(colour = .data$position, count = 0)
-
   p <- plot_data %>%
     dplyr::mutate(
       colour = interaction(.data$athlete, .data$position, sep = "_"),
@@ -315,17 +296,6 @@ plot_ranks_over_time <- function(results,
           data_id = interaction(.data$position, .data[[time]], sep = "_")
         ),
         size = 2
-      ) +
-      ggplot2::scale_colour_manual(values = col_scales$cols, guide = "none") +
-      ggnewscale::new_scale_colour() +
-      ggplot2::geom_point(
-        data = data_legend,
-        ggplot2::aes(colour = .data$position),
-        alpha = 0
-      ) +
-      ggplot2::scale_colour_manual(
-        values = col_scales$legend,
-        guide = ggplot2::guide_legend(override.aes = list(alpha = 1))
       )
   } else {
     p <- p +
@@ -336,19 +306,10 @@ plot_ranks_over_time <- function(results,
           data_id = interaction(.data$position, .data[[time]], sep = "_")
         ),
         position = "stack"
-      ) +
-      ggplot2::scale_fill_manual(values = col_scales$cols, guide = "none") +
-      ggnewscale::new_scale_fill() +
-      ggplot2::geom_col(
-        data = data_legend,
-        ggplot2::aes(fill = .data$position),
-        alpha = 0
-      ) +
-      ggplot2::scale_fill_manual(
-        values = col_scales$legend,
-        guide = ggplot2::guide_legend(override.aes = list(alpha = 1))
       )
   }
+
+  p <- p %>% add_col_scale_and_legend(col_scales)
 
   fis_plot(p, interactive, width, height)
 }
