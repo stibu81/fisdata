@@ -76,6 +76,7 @@ fis_plot <- function(p, interactive, width = NULL, height = NULL) {
 prepare_rank_plot_data <- function(results,
                                    by = c("category", "discipline"),
                                    pos = 1:3,
+                                   cumulative = FALSE,
                                    error_call = rlang::caller_env()) {
 
   # up to 9 athletes are supported. Abort if there are more.
@@ -86,7 +87,7 @@ prepare_rank_plot_data <- function(results,
   }
 
   results %>%
-    summarise_results(by = by, show_pos = pos) %>%
+    summarise_results(by = by, show_pos = pos, cumulative = cumulative) %>%
     dplyr::select(
       "athlete", dplyr::all_of(by), dplyr::matches("^(pos|top)")
     ) %>%

@@ -243,14 +243,7 @@ plot_ranks_over_time <- function(results,
     setdiff("athlete")
 
   plot_data <- results %>%
-    prepare_rank_plot_data(by = grp_by, pos = pos)
-
-  if (cumulative) {
-    plot_data <- plot_data %>%
-      dplyr::arrange(.data$athlete, .data$season) %>%
-      dplyr::mutate(count = cumsum(.data$count),
-                    .by = dplyr::all_of(c(by, "position")))
-  }
+    prepare_rank_plot_data(by = grp_by, pos = pos, cumulative = cumulative)
 
   col_scales <- create_athlete_pos_colour_scale(
     plot_data$athlete, plot_data$position

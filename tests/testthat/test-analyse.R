@@ -244,6 +244,52 @@ test_that("summarise_results() works with different relative summaries", {
 })
 
 
+test_that("summarise_results() works with cumulative summaries", {
+  cuche_sum <- summarise_results(cuche_res, show_pos = 3)
+  cuche_cumsum <- summarise_results(cuche_res, show_pos = 3, cumulative = TRUE)
+  expect_equal(
+    cuche_cumsum,
+    cuche_sum %>%
+      arrange(season) %>%
+      mutate(across(podiums:cup_points, cumsum),
+             .by = c("athlete", "category", "discipline"))
+  )
+  expect_true(
+    cuche_cumsum %>%
+      summarise(across(podiums:cup_points, \(x) all(diff(x) >= 0)),
+                .by = c("category", "discipline")) %>%
+      select(podiums:cup_points) %>%
+      all()
+  )
+
+  # the result should be the same if grouping by age instead of season
+  expect_equal(
+    summarise_results(cuche_res, by = c("age", "category", "discipline"),
+                      show_pos = 3, cumulative = TRUE) %>%
+      select(-age),
+    cuche_cumsum %>% select(-season)
+  )
+})
+
+
+test_that(
+  "summarise_results() works with cumulative summaries and relative values",
+  {
+    cuche_cumsum_rel <- summarise_results(
+        cuche_res, show_pos = 3,
+        cumulative = TRUE, add_relative = TRUE
+      )
+    cuche_cumsum <- summarise_results(cuche_res, show_pos = 3, cumulative = TRUE)
+    expect_equal(cuche_cumsum_rel[names(cuche_cumsum)], cuche_cumsum)
+    for (rel_col in str_subset(names(cuche_cumsum_rel), "_rel$")) {
+      expect_equal(
+        cuche_cumsum_rel[[!!rel_col]],
+        cuche_cumsum[[!!str_remove(rel_col, "_rel$")]] / cuche_cumsum$races
+      )
+    }
+})
+
+
 test_that(
   "summarise_results() gives consistent results for equivalent summaries",
   {
@@ -254,6 +300,19 @@ test_that(
     expect_equal(
       summarise_results(cuche_res, show_pos = FALSE)$podiums,
       summarise_results(cuche_res, show_pos = 3, show_victories = TRUE)$top3
+    )
+  }
+)
+
+
+test_that(
+  "summarise_results() works with cumulative = TRUE and no grouping by time",
+  {
+    expect_equal(
+      summarise_results(cuche_res, by = c("discipline", "category"),
+                        show_pos = 5, cumulative = TRUE),
+      summarise_results(cuche_res, by = c("discipline", "category"),
+                        show_pos = 5, cumulative = FALSE)
     )
   }
 )

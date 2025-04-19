@@ -13,7 +13,8 @@ summarise_results(
   show_podiums = TRUE,
   show_races = TRUE,
   show_points = TRUE,
-  add_relative = FALSE
+  add_relative = FALSE,
+  cumulative = FALSE
 )
 }
 \arguments{
@@ -48,6 +49,10 @@ be returned?}
 
 \item{add_relative}{add relative values, i.e., the value divided by the
 number of races, for all summary columns except "races".}
+
+\item{cumulative}{should a cumulative sum over time be used for all summary
+variables. This has no effect, if not at least one of "season" or "age"
+is used in \code{by}.}
 }
 \value{
 a \code{tibble} which always contains \code{athlete} as its first column. In addition,

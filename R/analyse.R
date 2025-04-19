@@ -26,6 +26,9 @@
 #' @param show_points logical, should the sum of the cup points be returned?
 #' @param add_relative add relative values, i.e., the value divided by the
 #'  number of races, for all summary columns except "races".
+#' @param cumulative should a cumulative sum over time be used for all summary
+#'  variables. This has no effect, if not at least one of "season" or "age"
+#'  is used in `by`.
 #'
 #' @returns
 #' a `tibble` which always contains `athlete` as its first column. In addition,
@@ -57,7 +60,8 @@ summarise_results <- function(results,
                               show_podiums = TRUE,
                               show_races = TRUE,
                               show_points = TRUE,
-                              add_relative = FALSE) {
+                              add_relative = FALSE,
+                              cumulative = FALSE) {
 
   grp_by <- c(
     "athlete",
@@ -162,6 +166,23 @@ summarise_results <- function(results,
       dplyr::across(dplyr::everything(), \(x) sum(x, na.rm = TRUE)),
     .by = dplyr::all_of(grp_by)
     )
+
+  # compute cumulative values if requested AND grouping by time
+  time_vars <- c("season", "age")
+  if (cumulative && any(time_vars %in% grp_by)) {
+    srt_var <- intersect(time_vars, grp_by)[1]
+    # sorting only by the time variable will still break the order of the
+    # athletes. In order to prevent this, we convert athletes into a factor,
+    # also sort by athlete, and then convert back into a character.
+    summary <- summary %>%
+      dplyr::mutate(athlete = factor(.data$athlete, levels = unique(.data$athlete))) %>%
+      dplyr::arrange(.data$athlete, .data[[srt_var]]) %>%
+      dplyr::mutate(
+        dplyr::across(-dplyr::any_of(grp_by), cumsum),
+        .by = dplyr::all_of(setdiff(grp_by, time_vars))
+      ) %>%
+      dplyr::mutate(athlete = as.character(.data$athlete))
+  }
 
   if (add_relative) {
     # add the relative columns in a loop such that each can be placed after
