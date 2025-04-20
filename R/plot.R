@@ -92,7 +92,7 @@ plot_rank_summary <- function(results,
 #' @export
 
 plot_results_summary <- function(results,
-                                 by = c("category", "discipline"),
+                                 by = c("discipline", "category"),
                                  variable = c("points", "races", "victories",
                                               "podiums", "dnf",
                                               "position", "top"),
@@ -437,7 +437,7 @@ plot_results_over_time <- function(results,
           tooltip = .data$tooltip,
           data_id = interaction(.data[[y_var]], .data[[time]], sep = "_")
         ),
-        position = "dodge"
+        position = ggplot2::position_dodge2(preserve = "single")
       ) +
       ggplot2::scale_fill_manual(values = cols)
   }
