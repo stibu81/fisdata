@@ -2,6 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot_ranks_over_time}
 \alias{plot_ranks_over_time}
+\alias{plot_results_over_time}
 \title{Plot athlete's results over time}
 \usage{
 plot_ranks_over_time(
@@ -10,6 +11,20 @@ plot_ranks_over_time(
   time = c("season", "age"),
   pos = 1:3,
   type = c("lines", "bars"),
+  cumulative = FALSE,
+  interactive = TRUE,
+  width = NULL,
+  height = NULL
+)
+
+plot_results_over_time(
+  results,
+  by = c("category", "discipline"),
+  variable = c("points", "races", "victories", "podiums", "dnf", "position", "top"),
+  time = c("season", "age"),
+  pos = 1,
+  type = c("lines", "bars"),
+  relative = FALSE,
   cumulative = FALSE,
   interactive = TRUE,
   width = NULL,
@@ -46,6 +61,14 @@ can be turned into an interactive plot with \code{\link[ggiraph:girafe]{ggiraph:
 
 \item{width, height}{dimensions for the interactive plot in inches, passed on
 to \code{\link[ggiraph:girafe]{ggiraph::girafe()}}. The default values are 6 and 5 inches, respectively.}
+
+\item{variable}{character giving the variable to plot on the y-axis. For
+"position" and "top", the value of the argument "pos" is also relevant:
+for "position", the plot will show the number of times  exactly the rank
+given by "pos" was achieved, for "top" the number of times a rank at least
+as good as "pos" was achieved.}
+
+\item{relative}{use relative scale for points, victories, podiums or dnf?}
 }
 \description{
 Plot the results of one or several athletes over time.

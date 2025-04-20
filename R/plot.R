@@ -306,3 +306,146 @@ plot_ranks_over_time <- function(results,
 
   fis_plot(p, interactive, width, height)
 }
+
+
+#' @param variable character giving the variable to plot on the y-axis. For
+#'  "position" and "top", the value of the argument "pos" is also relevant:
+#'  for "position", the plot will show the number of times  exactly the rank
+#'  given by "pos" was achieved, for "top" the number of times a rank at least
+#'  as good as "pos" was achieved.
+#' @param relative use relative scale for points, victories, podiums or dnf?
+#' @rdname plot_results_over_time
+#' @export
+
+plot_results_over_time <- function(results,
+                                   by = c("category", "discipline"),
+                                   variable = c("points", "races", "victories",
+                                                "podiums", "dnf",
+                                                "position", "top"),
+                                   time = c("season", "age"),
+                                   pos = 1,
+                                   type = c("lines", "bars"),
+                                   relative = FALSE,
+                                   cumulative = FALSE,
+                                   interactive = TRUE,
+                                   width = NULL,
+                                   height = NULL) {
+
+  variable <- match.arg(variable)
+  if (length(by) > 0 || isTRUE(is.na(by))) {
+    by <- match.arg(by)
+  }
+  time <- match.arg(time)
+  type <- match.arg(type)
+
+  # up to 9 athletes are supported. Abort if there are more.
+  n_athletes <- dplyr::n_distinct(results$athlete)
+  if (n_athletes > 9) {
+    cli::cli_abort("Only up to 9 athletes are supported, you provided
+                   {n_athletes}.")
+  }
+
+  grp_by <- c("season", "age", by) %>%
+    # remove athlete from the grouping, since prepare_rank_plot_data()
+    # always groups by athlete
+    setdiff("athlete")
+
+  # some variables need special preparation
+  use_pos <- c()
+  if (variable == "points") {
+    variable <- "cup_points"
+  } else if (variable == "top") {
+    use_pos <- pos
+    variable <- paste0(if (pos == 1) "pos" else "top", pos)
+  } else if (variable == "position") {
+    use_pos <- c(pos - 1, pos)
+    variable <- paste0("pos", pos)
+  }
+
+  plot_data <- results %>%
+    summarise_results(by = grp_by, show_pos = use_pos, show_victories = TRUE,
+                      cumulative = cumulative, add_relative = TRUE)
+
+  cols <- cb_pal_set1[1:n_athletes]
+  names(cols) <- unique(plot_data$athlete)
+
+  # prepare variable name and title for the y-axis
+  y_var <- if (relative && variable != "races") {
+    paste0(variable, "_rel")
+  } else {
+    variable
+  }
+  y_title <- dplyr::case_when(
+    y_var == "cup_points_rel" ~ "cup points per race",
+    .default = stringr::str_replace_all(variable, "_", " ")
+  )
+
+  # define a prefix for the labels indicating whether variables are cumulative
+  # or not
+  clb <- if (cumulative) 'cumulative ' else ''
+
+  p <- plot_data %>%
+    dplyr::mutate(
+      tooltip = glue::glue(
+        "athlete: {.data$athlete}
+         season: {.data$season}
+         age: {.data$age}
+         {clb}races: {.data$races}
+         {clb}cup points: {format(.data$cup_points, big.mark = \"'\")}
+         per race: {round(.data$cup_points_rel)}
+         {clb}victories: {.data$victories} ({(round(100 * .data$victories_rel, 1))}%)
+         {clb}podiums: {.data$podiums} ({(round(100 * .data$podiums_rel, 1))}%)
+         {clb}dnf: {.data$dnf} ({(round(100 * .data$dnf_rel, 1))}%)"
+      )
+    ) %>%
+    ggplot2::ggplot(
+      ggplot2::aes(
+        x = .data[[time]],
+        y = .data[[y_var]],
+      )
+    ) +
+    ggplot2::facet_grid(
+      rows = if (length(by) > 0) dplyr::vars(.data[[by]]),
+      scales = "free_y"
+    ) +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
+    ) +
+    ggplot2::labs(x = NULL,
+                  y = paste(if (cumulative) "cumulative", y_title))
+
+    # add the geoms
+  if (type == "lines") {
+    p <- p +
+      ggplot2::geom_line(
+        ggplot2::aes(colour = .data$athlete)
+      ) +
+      ggiraph::geom_point_interactive(
+        ggplot2::aes(
+          colour = .data$athlete,
+          tooltip = .data$tooltip,
+          data_id = interaction(.data[[y_var]], .data[[time]], sep = "_")
+        ),
+        size = 2
+      ) +
+      ggplot2::scale_colour_manual(values = cols)
+  } else {
+    p <- p +
+      ggiraph::geom_col_interactive(
+        ggplot2::aes(
+          fill = .data$athlete,
+          tooltip = .data$tooltip,
+          data_id = interaction(.data[[y_var]], .data[[time]], sep = "_")
+        ),
+        position = "dodge"
+      ) +
+      ggplot2::scale_fill_manual(values = cols)
+  }
+
+  # add percent y-scale where it makes sense
+  if (relative && !variable %in% c("cup_points", "races")) {
+    p <- p + ggplot2::scale_y_continuous(labels = scales::label_percent())
+  }
+
+  fis_plot(p, interactive, width, height)
+}
