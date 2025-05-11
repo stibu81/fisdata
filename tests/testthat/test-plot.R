@@ -201,7 +201,6 @@ test_that("plot_ranks_over_time() works", {
                          interactive = FALSE)
   )
 
-  # Needs more! age, cumulative, bars
   expect_doppelganger(
     "plot_ranks_over_time() by athlete with age on the x-asix",
     results %>%
@@ -231,6 +230,103 @@ test_that("plot_ranks_over_time() errors work", {
   )
   expect_error(
     plot_ranks_over_time(results, by = "athlete"),
+    "Only up to 9 athletes are supported, you provided 10"
+  )
+})
+
+
+test_that("plot_results_over_time() works", {
+  expect_doppelganger(
+    "plot_results_over_time() with defaults",
+    results %>% plot_results_over_time(interactive = FALSE)
+  )
+  expect_doppelganger(
+    "plot_results_over_time() without grouping",
+    plot_results_over_time(results, by = NA, interactive = FALSE)
+  )
+  expect_doppelganger(
+    "plot_results_over_time() by discipline",
+    plot_results_over_time(results, by = "discipline", interactive = FALSE)
+  )
+  expect_doppelganger(
+    "plot_results_over_time() by category",
+    plot_results_over_time(results, by = "category", interactive = FALSE)
+  )
+
+  expect_doppelganger(
+    "plot_results_over_time() for races",
+    plot_results_over_time(results, variable = "races", interactive = FALSE)
+  )
+  expect_doppelganger(
+    "plot_results_over_time() for victories",
+    plot_results_over_time(results, variable = "victories", interactive = FALSE)
+  )
+  expect_doppelganger(
+    "plot_results_over_time() for podiums",
+    plot_results_over_time(results, variable = "podiums", interactive = FALSE)
+  )
+  expect_doppelganger(
+    "plot_results_over_time() for dnf",
+    plot_results_over_time(results, variable = "dnf", interactive = FALSE)
+  )
+
+  expect_doppelganger(
+    "plot_results_over_time() for a given position",
+    plot_results_over_time(results, variable = "position", pos = 2,
+                           interactive = FALSE)
+  )
+  expect_doppelganger(
+    "plot_results_over_time() for a range of positions",
+    plot_results_over_time(results, variable = "top", pos = 4,
+                           interactive = FALSE)
+  )
+
+  expect_doppelganger(
+    "plot_results_over_time() for points with realtive scale",
+    plot_results_over_time(results, variable = "points", relative = TRUE,
+                         interactive = FALSE)
+  )
+  expect_doppelganger(
+    "plot_results_over_time() for podiums with realtive scale",
+    plot_results_over_time(results, variable = "podiums", relative = TRUE,
+                         interactive = FALSE)
+  )
+  expect_doppelganger(
+    "plot_results_over_time() for races should ignore realtive scale",
+    plot_results_over_time(results, variable = "races", relative = TRUE,
+                         interactive = FALSE)
+  )
+
+  expect_doppelganger(
+    "plot_results_over_time() as bar plot",
+    plot_results_over_time(results, type = "bar", interactive = FALSE)
+  )
+  expect_doppelganger(
+    "plot_results_over_time() by discipline and age as bar plot",
+    plot_results_over_time(results, by = "discipline", time = "age",
+                           type = "bar", interactive = FALSE)
+  )
+
+  expect_doppelganger(
+    "plot_results_over_time() for cumulative cup points",
+    plot_results_over_time(results, by = "discipline", time = "age",
+                           cumulative = TRUE, interactive = FALSE)
+  )
+  expect_doppelganger(
+    "plot_results_over_time() for cumulative victories as bar plot",
+    plot_results_over_time(results, by = NA, cumulative = TRUE, type = "bar",
+                           variable = "victories",
+                           interactive = FALSE)
+  )
+})
+
+
+test_that("plot_results_over_time() errors work", {
+  results <- tibble(
+    athlete = paste("Athlete", 1:10)
+  )
+  expect_error(
+    plot_results_over_time(results, by = "category"),
     "Only up to 9 athletes are supported, you provided 10"
   )
 })

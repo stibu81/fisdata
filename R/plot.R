@@ -92,7 +92,7 @@ plot_rank_summary <- function(results,
 #' @export
 
 plot_results_summary <- function(results,
-                                 by = c("discipline", "category"),
+                                 by = c("category", "discipline"),
                                  variable = c("points", "races", "victories",
                                               "podiums", "dnf",
                                               "position", "top"),
@@ -219,9 +219,7 @@ plot_ranks_over_time <- function(results,
                                  width = NULL,
                                  height = NULL) {
 
-  if (length(by) > 0 || isTRUE(is.na(by))) {
-    by <- match.arg(by)
-  }
+  by <- if (length(by) > 0 && all(!is.na(by))) match.arg(by)
   time <- match.arg(time)
   type <- match.arg(type)
 
@@ -332,9 +330,7 @@ plot_results_over_time <- function(results,
                                    height = NULL) {
 
   variable <- match.arg(variable)
-  if (length(by) > 0 || isTRUE(is.na(by))) {
-    by <- match.arg(by)
-  }
+  by <- if (length(by) > 0 && all(!is.na(by))) match.arg(by)
   time <- match.arg(time)
   type <- match.arg(type)
 
