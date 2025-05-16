@@ -3,7 +3,7 @@ template:
   bootstrap: 5
 
 reference:
-- title: Querying Functions
+- title: Query
   desc: Functions that download data from the FIS page
   contents:
   - query_athletes
@@ -12,6 +12,18 @@ reference:
   - query_competitions
   - query_standings
   - query_race
+  - get_debuts
+
+- title: Analyse
+  desc: Functions to analyse query results
+  contents:
+  - summarise_results
+
+- title: Visualise
+  desc: Functions to visualise query results
+  contents:
+  - plot_rank_summary
+  - plot_ranks_over_time
 
 - title: Other Functions
   contents:
