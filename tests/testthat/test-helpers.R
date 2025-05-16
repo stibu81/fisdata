@@ -104,24 +104,24 @@ test_that("parse_gender_list() works", {
 
 
 test_that("get_half_of_the_year_at_date() works", {
-  expect_equal(
+  expect_identical(
     get_half_of_the_year_at_date(as.Date("2021-05-02"))[[1]],
-    c(2021, 1)
+    c(2021L, 1L)
   )
-  expect_equal(
+  expect_identical(
     get_half_of_the_year_at_date(
       as.Date(c("2023-03-07", "2020-06-30", "2021-11-07", "2020-07-01"))
     ),
-    list(c(2023, 1), c(2020, 1), c(2021, 2), c(2020, 2))
+    list(c(2023L, 1L), c(2020L, 1L), c(2021L, 2L), c(2020L, 2L))
   )
 })
 
 
 test_that("get_season_at_date() works", {
-  expect_equal(get_season_at_date(as.Date("2023-04-03")), 2023)
-  expect_equal(
+  expect_identical(get_season_at_date(as.Date("2023-04-03")), 2023L)
+  expect_identical(
     get_season_at_date(as.Date(c("2025-04-06", "2024-10-15"))),
-    c(2025, 2025)
+    c(2025L, 2025L)
   )
 })
 
@@ -136,7 +136,7 @@ test_that("parse_event_dates() works", {
 
   # test during the first half of the year
   local_mocked_bindings(
-    get_half_of_the_year_at_date = function(x) list(c(2025, 1))
+    get_half_of_the_year_at_date = function(x) list(c(2025L, 1L))
   )
 
   expected <- tibble(
@@ -153,7 +153,7 @@ test_that("parse_event_dates() works", {
 
   # test during the second half of the year
   local_mocked_bindings(
-    get_half_of_the_year_at_date = function(x) list(c(2024, 2))
+    get_half_of_the_year_at_date = function(x) list(c(2024L, 2L))
   )
   expect_equal(parse_event_dates(test_dates), expected)
 })
@@ -177,6 +177,35 @@ test_that("parse_event_details() works for an empty string", {
     disciplines = c("8xDH / 4xSG", "")
   )
   expect_equal(parse_event_details(event_details), expected)
+})
+
+
+test_that("compute_age_at_date() works", {
+  dates <- as.Date(c("2022-05-03", "2023-10-07", "2024-12-03", "2025-02-17"))
+  expect_equal(
+    compute_age_at_date(dates, tibble(birthdate = "2000-10-07")),
+    c(21 + 208/365, 23, 24 + 57/365, 24 + 133/365)
+  )
+  expect_equal(
+    compute_age_at_date(dates, tibble(birthdate = "2000")),
+    c(21, 23, 24, 24)
+  )
+  expect_equal(
+    compute_age_at_date(dates, tibble(birthdate = NA_character_)),
+    rep(NA_real_, length(dates))
+  )
+})
+
+
+test_that("compute_age_at_date() errors work", {
+  expect_error(
+    compute_age_at_date(today(), tibble(birthdate = c("1999", "2000"))),
+    "'athlete' must contain exactly one athlete."
+  )
+  expect_error(
+    compute_age_at_date(today(), tibble(birthdate = c("01.01.2025"))),
+    "invalid format for birthdate."
+  )
 })
 
 

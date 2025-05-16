@@ -29,12 +29,18 @@ Imports:
     cli,
     magrittr,
     clipr,
-    cachem
+    cachem,
+    ggplot2,
+    scales,
+    colorspace,
+    ggnewscale,
+    ggiraph 
 Suggests: 
     roxygen2,
     spelling,
     withr,
     testthat (>= 3.0.0),
+    vdiffr,
     knitr,
     rmarkdown,
     DiagrammeR

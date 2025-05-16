@@ -111,7 +111,7 @@ test_that("query_standings() works with caching", {
 
 test_that("query_standings() for athlete works with caching", {
   local_mocked_bindings(
-    get_standings_url = function(...) test_path("data", "standings_odermatt.html.gz")
+    get_athlete_standings_url = function(...) test_path("data", "athlete_standings_odermatt.html.gz")
   )
   odermatt <- tibble(
       name = "Odermatt Marco",

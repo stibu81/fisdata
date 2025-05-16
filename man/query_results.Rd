@@ -9,7 +9,8 @@ query_results(
   season = fd_def("season"),
   category = fd_def("category"),
   place = "",
-  discipline = fd_def("discipline")
+  discipline = fd_def("discipline"),
+  add_age = TRUE
 )
 }
 \arguments{
@@ -33,11 +34,17 @@ support special characters, but many are handled automatically
 
 \item{discipline}{abbreviation for the discipline, e.g., "DH" for
 "Downhill". See the dataset \link{disciplines} for possible values.}
+
+\item{add_age}{should a column with the athletes age be added
+for each race? The age is given in decimal years. Note that for some
+athletes, only the birth year is known, in which case the age will be
+estimated.}
 }
 \value{
 A tibble with the following columns: \code{athlete}, \code{date}, \code{place}, \code{nation},
 \code{sector}, \code{category}, \code{discipline}, \code{rank}, \code{fis_points}, \code{cup_points},
-and \code{race_id}.
+and \code{race_id}. If \code{add_age} is \code{TRUE}, it also contains the column \code{age}
+after \code{date}.
 }
 \description{
 Query results for an athlete using various filters. Omitting a filter means

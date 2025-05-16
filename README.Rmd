@@ -9,7 +9,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  fig.dpi = 180
 )
 ```
 
@@ -89,6 +90,25 @@ alpine skiing world cup in the season 2022/23:
 query_standings(sector = "AL", season = 2023,
                 category = "WC", gender = "M") %>% 
   select(athlete, nation, all_rank:dh_points)
+```
+
+
+## Visualisation
+
+fisdata also offers functions that can be used to visualise athlete results.
+The following plot shows the number of World Cup podiums per discipline for
+multiple athletes:
+
+```{r fig-podiums-by-discipline}
+bind_rows(
+    query_athletes("cuche", "didier") %>%
+      query_results(category = "WC"),
+    query_athletes("odermatt", "marco") %>% 
+      query_results(category = "WC"),
+    query_athletes("feuz", "beat") %>% 
+      query_results(category = "WC"),
+  ) %>% 
+  plot_rank_summary(by = "discipline", interactive = FALSE)
 ```
 
 

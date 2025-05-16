@@ -1,9 +1,21 @@
 library(dplyr, warn.conflicts = FALSE)
 
+# full athlete data for didier cuche which is used in multiple tests
+cuche <- tibble(
+  active = FALSE,
+  fis_code = "510030",
+  name = "Cuche Didier",
+  nation = "SUI",
+  birthdate = "1974",
+  gender = "M",
+  sector = "AL",
+  club = "Chasseral Dombresson",
+  brand = "Head",
+  competitor_id = "11795"
+)
+
+
 test_that("get_results_url() works with valid inputs", {
-  cuche <- tibble(name = "Cuche Didier",
-                  sector = "AL",
-                  competitor_id = "11795")
   expect_equal(
     get_results_url(cuche),
     paste0("https://www.fis-ski.com/DB/general/athlete-biography.html?",
@@ -43,24 +55,20 @@ test_that("ensure_one_athlete() works", {
 test_that(
   "query_results() works for alpine skiing results for all categories",
   {
-
     local_mocked_bindings(
       get_results_url = function(...) test_path("data", "results_al_all.html.gz")
     )
-    cuche <- tibble(name = "Cuche Didier",
-                    sector = "AL",
-                    competitor_id = "11795")
     dh <- query_results(cuche)
 
     expect_s3_class(dh, "tbl_df")
 
-    expected_names <- c("athlete", "date", "place", "nation", "sector",
+    expected_names <- c("athlete", "date", "age", "place", "nation", "sector",
                         "category", "discipline", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(dh, expected_names)
 
-    expected_types <- rep("character", 11) %>%
-      replace(c(2, 8:10), c("Date", "integer", "double", "double"))
+    expected_types <- rep("character", 12) %>%
+      replace(c(2:3, 9:11), c("Date", "double", "integer", "double", "double"))
     for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Date") {
         expect_s3_class(dh[[!!expected_names[i]]], expected_types[i])
@@ -75,6 +83,7 @@ test_that(
     expect_true(
       all(between(dh$date, as.Date("2009-11-01"), as.Date("2010-03-31")))
     )
+    expect_in(dh$age, 15:40)
     expect_in(dh$sector, "AL")
     expect_in(dh$category, c(categories$description, "World Cup Speed Event"))
     expect_in(dh$discipline, "Downhill")
@@ -83,6 +92,7 @@ test_that(
     expect_in(na.omit(dh$cup_points), 0:100)
     expect_match(dh$race_id, "^\\d+$")
 
+    expect_equal(attr(dh, "athlete"), cuche)
     expect_equal(attr(dh, "url"), get_results_url())
 
     expect_snapshot(print(dh, width = Inf, n = Inf))
@@ -97,10 +107,7 @@ test_that(
     local_mocked_bindings(
       get_results_url = function(...) test_path("data", "results_al_tra.html.gz")
     )
-    cuche <- tibble(name = "Cuche Didier",
-                    sector = "AL",
-                    competitor_id = "11795")
-    tra <- query_results(cuche)
+    tra <- query_results(cuche, add_age = FALSE)
 
     expect_s3_class(tra, "tbl_df")
 
@@ -133,6 +140,7 @@ test_that(
     expect_in(tra$cup_points, NA_real_)
     expect_match(tra$race_id, "^\\d+$")
 
+    expect_equal(attr(tra, "athlete"), cuche)
     expect_equal(attr(tra, "url"), get_results_url())
 
     expect_snapshot(print(tra, width = Inf, n = Inf))
@@ -148,20 +156,17 @@ test_that(
     local_mocked_bindings(
       get_results_url = function(...) test_path("data", "results_al_wsc.html.gz")
     )
-    cuche <- tibble(name = "Cuche Didier",
-                    sector = "AL",
-                    competitor_id = "11795")
     wsc <- query_results(cuche)
 
     expect_s3_class(wsc, "tbl_df")
 
-    expected_names <- c("athlete", "date", "place", "nation", "sector",
+    expected_names <- c("athlete", "date", "age", "place", "nation", "sector",
                         "category", "discipline", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(wsc, expected_names)
 
-    expected_types <- rep("character", 11) %>%
-      replace(c(2, 8:10), c("Date", "integer", "double", "double"))
+    expected_types <- rep("character", 12) %>%
+      replace(c(2:3, 9:11), c("Date", "double", "integer", "double", "double"))
     for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Date") {
         expect_s3_class(wsc[[!!expected_names[i]]], expected_types[i])
@@ -172,6 +177,7 @@ test_that(
 
     expect_in(wsc$athlete, "Cuche Didier")
     expect_match(cuche$name, "cuche", ignore.case = TRUE)
+    expect_in(wsc$age, 15:40)
     expect_in(wsc$nation, nations$code)
     expect_in(wsc$sector, "AL")
     expect_in(wsc$category, "World Championships")
@@ -181,6 +187,7 @@ test_that(
     expect_in(wsc$cup_points, NA_real_)
     expect_match(wsc$race_id, "^\\d+$")
 
+    expect_equal(attr(wsc, "athlete"), cuche)
     expect_equal(attr(wsc, "url"), get_results_url())
 
     expect_snapshot(print(wsc, width = Inf, n = Inf))
@@ -211,20 +218,17 @@ test_that(
     local_mocked_bindings(
       get_results_url = function(...) test_path("data", "results_empty.html.gz")
     )
-    cuche <- tibble(name = "Cuche Didier",
-                    sector = "AL",
-                    competitor_id = "11795")
     empty <- query_results(cuche)
 
     expect_s3_class(empty, "tbl_df")
 
-    expected_names <- c("athlete", "date", "place", "nation", "sector",
+    expected_names <- c("athlete", "date", "age", "place", "nation", "sector",
                         "category", "discipline", "rank", "fis_points",
                         "cup_points", "race_id")
     expect_named(empty, expected_names)
 
-    expected_types <- rep("character", 11) %>%
-      replace(c(2, 8:10), c("Date", "integer", "double", "double"))
+    expected_types <- rep("character", 12) %>%
+      replace(c(2:3, 9:11), c("Date", "double", "integer", "double", "double"))
     for (i in seq_along(expected_names)) {
       if (expected_types[i] == "Date") {
         expect_s3_class(empty[[!!expected_names[i]]], expected_types[i])
@@ -244,11 +248,8 @@ test_that("query_results() warns for large result", {
     extract_results = function(...) tibble(category = 1:2001)
   )
 
-  cuche <- tibble(name = "Cuche Didier",
-                  sector = "AL",
-                  competitor_id = "11795")
   expect_warning(
-    query_results(cuche),
+    query_results(cuche, add_age = FALSE),
     "Maximum number of 2'000 results reached"
   )
 })
