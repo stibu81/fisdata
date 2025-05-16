@@ -56,19 +56,19 @@ library(dplyr)
 query_athletes("cuche", "didier") %>% 
   query_results(discipline = "DH") %>% 
   select(athlete:place, category:rank, cup_points)
-#> # A tibble: 303 × 7
-#>    athlete      date       place      category  discipline  rank cup_points
-#>    <chr>        <date>     <chr>      <chr>     <chr>      <int>      <dbl>
-#>  1 Cuche Didier 2012-03-14 Schladming World Cup Downhill      17         NA
-#>  2 Cuche Didier 2012-03-13 Schladming Training  Downhill       1         NA
-#>  3 Cuche Didier 2012-03-03 Kvitfjell  World Cup Downhill      10         26
-#>  4 Cuche Didier 2012-03-01 Kvitfjell  Training  Downhill       2         NA
-#>  5 Cuche Didier 2012-02-29 Kvitfjell  Training  Downhill       3         NA
-#>  6 Cuche Didier 2012-02-11 Sochi      World Cup Downhill      12         22
-#>  7 Cuche Didier 2012-02-10 Sochi      Training  Downhill       7         NA
-#>  8 Cuche Didier 2012-02-08 Sochi      Training  Downhill       2         NA
-#>  9 Cuche Didier 2012-02-04 Chamonix   World Cup Downhill       7         36
-#> 10 Cuche Didier 2012-02-03 Chamonix   World Cup Downhill       3         60
+#> # A tibble: 303 × 8
+#>    athlete      date         age place      category discipline  rank cup_points
+#>    <chr>        <date>     <dbl> <chr>      <chr>    <chr>      <int>      <dbl>
+#>  1 Cuche Didier 2012-03-14    37 Schladming World C… Downhill      17         NA
+#>  2 Cuche Didier 2012-03-13    37 Schladming Training Downhill       1         NA
+#>  3 Cuche Didier 2012-03-03    37 Kvitfjell  World C… Downhill      10         26
+#>  4 Cuche Didier 2012-03-01    37 Kvitfjell  Training Downhill       2         NA
+#>  5 Cuche Didier 2012-02-29    37 Kvitfjell  Training Downhill       3         NA
+#>  6 Cuche Didier 2012-02-11    37 Sochi      World C… Downhill      12         22
+#>  7 Cuche Didier 2012-02-10    37 Sochi      Training Downhill       7         NA
+#>  8 Cuche Didier 2012-02-08    37 Sochi      Training Downhill       2         NA
+#>  9 Cuche Didier 2012-02-04    37 Chamonix   World C… Downhill       7         36
+#> 10 Cuche Didier 2012-02-03    37 Chamonix   World C… Downhill       3         60
 #> # ℹ 293 more rows
 ```
 
@@ -119,6 +119,26 @@ query_standings(sector = "AL", season = 2023,
 #> 10 Zenhaeusern Ramon       SUI          10        467      NA        NA
 #> # ℹ 150 more rows
 ```
+
+## Visualisation
+
+fisdata also offers functions that can be used to visualise athlete
+results. The following plot shows the number of World Cup podiums per
+discipline for multiple athletes:
+
+``` r
+bind_rows(
+    query_athletes("cuche", "didier") %>%
+      query_results(category = "WC"),
+    query_athletes("odermatt", "marco") %>% 
+      query_results(category = "WC"),
+    query_athletes("feuz", "beat") %>% 
+      query_results(category = "WC"),
+  ) %>% 
+  plot_rank_summary(by = "discipline", interactive = FALSE)
+```
+
+<img src="man/figures/README-fig-podiums-by-discipline-1.png" width="100%" />
 
 ## Learn more
 
