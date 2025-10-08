@@ -167,7 +167,7 @@ parse_event_dates <- function(x) {
   #    * if today is between Jul-Dec:
   #      * if date is Jan-Jun => next year
   #      * if date is Jul-Dec => current year
-  choy <- get_half_of_the_year_at_date(lubridate::today())[[1]]
+  choy <- get_half_of_the_year_at_date(today())[[1]]
   m1 <- "(Jan|Feb|Mar|Apr|May|Jun)$"
   m2 <- "(Jul|Aug|Sep|Oct|Nov|Dec)$"
   x2 <- dplyr::case_when(
@@ -253,15 +253,22 @@ parse_event_details <- function(x) {
 
 # get the current year and half of the year
 
-get_half_of_the_year_at_date <- function(date = lubridate::today()) {
+get_half_of_the_year_at_date <- function(date = today()) {
   years <- as.integer(lubridate::year(date))
   hoy <- as.integer(lubridate::month(date) > 6) + 1L
   purrr::map2(years, hoy, \(y, h) c(y, h))
 }
 
 
-get_season_at_date <- function(date = lubridate::today()) {
+get_season_at_date <- function(date = today()) {
   as.integer(lubridate::year(date) + (lubridate::month(date) > 6))
+}
+
+
+# create a local version of lubridate::today() because it needs to be
+# mocked for some tests.
+today <- function(tzone = "") {
+  lubridate::today(tzone = tzone)
 }
 
 

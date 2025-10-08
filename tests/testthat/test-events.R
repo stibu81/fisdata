@@ -51,8 +51,13 @@ test_that("get_events_url() errors work", {
 
 test_that("query_events() works with events from many sectors", {
   local_mocked_bindings(
-    get_events_url = function(...) test_path("data", "events_20250201.html.gz")
+    get_events_url = function(...) test_path("data", "events_20250201.html.gz"),
+    # because dates in the current season are handled differently from other
+    # dates, we also need to mock today() to make fisdata believe
+    # that we are still in the season 2025/26
+    today = function(...) as.Date("2025-04-01")
   )
+
   date <- as.Date("2025-02-01")
   events_20250201 <- query_events(date = date)
 

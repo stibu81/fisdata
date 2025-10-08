@@ -46,7 +46,7 @@ set_fisdata_defaults <- function(sector = NULL,
     if (season == "") {
       options(fisdata_season = "")
     } else if (is.na(season_int) | season_int < 1950 |
-        season_int > lubridate::year(lubridate::today()) + 1) {
+        season_int > lubridate::year(today()) + 1) {
       cli::cli_warn("'{season}' is not a valid season.")
     } else {
       options(fisdata_season = as.character(season_int))

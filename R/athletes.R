@@ -168,10 +168,13 @@ extract_athletes <- function(url) {
   df_names <- utils::head(names(empty_df), -1)
   athletes_df <- athletes %>%
     purrr::map(
-      function(a)
+      function(a) {
+        # the birthyear is duplicated and is removed here
+        a <- a[-7]
         a %>%
           tibble::as_tibble_row(.name_repair = "minimal") %>%
           magrittr::set_names(df_names)
+      }
     ) %>%
     dplyr::bind_rows() %>%
     dplyr::mutate(competitor_id = competitor_ids)
