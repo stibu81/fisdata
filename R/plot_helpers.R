@@ -119,18 +119,16 @@ add_col_scale_and_legend <- function(plot,
 
   # select functions based on the scale
   if (scale == "colour") {
-    new_scale <- ggnewscale::new_scale_colour
     legend_geom <- ggplot2::geom_point
     col_fill_scale <- ggplot2::scale_colour_manual
   } else {
-    new_scale <- ggnewscale::new_scale_fill
     legend_geom <- ggplot2::geom_col
     col_fill_scale <- ggplot2::scale_fill_manual
   }
 
   plot +
     col_fill_scale(values = col_scales$cols, guide = "none") +
-    new_scale() +
+    ggnewscale::new_scale(scale) +
     legend_geom(
       data = data_legend,
       ggplot2::aes(fill = if (scale == "fill") .data$position,
