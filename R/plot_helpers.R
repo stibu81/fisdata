@@ -115,7 +115,6 @@ add_col_scale_and_legend <- function(plot,
 
   # we need to plot some data that uses all the values for the the legend
   data_legend <- plot$data %>%
-    dplyr::slice_head(n = 1, by = "position") %>%
     dplyr::mutate("{scale}" := .data$position, count = 0)
 
   # select functions based on the scale
