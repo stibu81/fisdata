@@ -162,3 +162,8 @@ test_that("query_competitions() works with caching", {
     expect_equal(query_competitions(wengen_2025), competitions)
   )
 })
+
+# note: some of the test here use files that will be used again in later tests.
+# to make sure that those later tests are not influenced by the cache from this
+# file, the cache is deleted.
+fisdata:::cache$reset()
