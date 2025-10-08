@@ -284,19 +284,19 @@ for the Super G can be obtained as follows:</p>
 <span>  <span class="fu"><a href="../reference/query_race.html">query_race</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">sg_res</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">rank</span>, <span class="va">bib</span>, <span class="va">name</span><span class="op">:</span><span class="va">diff_time</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 47 × 8</span></span></span>
-<span><span class="co">#&gt;     rank   bib name               brand    birth_year nation time      diff_time</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;Period&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;Period&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1     3 Von Allmen Franjo  Head           <span style="text-decoration: underline;">2</span>001 SUI    1M 47.65S 0S       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     2     6 Kriechmayr Vincent Head           <span style="text-decoration: underline;">1</span>991 AUT    1M 47.75S 0.1S     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     3    11 Rogentin Stefan    Fischer        <span style="text-decoration: underline;">1</span>994 SUI    1M 48.23S 0.58S    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     4     1 Crawford James     Head           <span style="text-decoration: underline;">1</span>997 CAN    1M 48.27S 0.62S    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     5     9 Paris Dominik      Nordica        <span style="text-decoration: underline;">1</span>989 ITA    1M 48.28S 0.63S    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     6     8 Casse Mattia       Rossign…       <span style="text-decoration: underline;">1</span>990 ITA    1M 48.57S 0.92S    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     7    13 Odermatt Marco     Stoeckli       <span style="text-decoration: underline;">1</span>997 SUI    1M 48.69S 1.04S    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     8    16 Alexander Cameron  Rossign…       <span style="text-decoration: underline;">1</span>997 CAN    1M 48.78S 1.13S    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     9     2 Monney Alexis      Stoeckli       <span style="text-decoration: underline;">2</span>000 SUI    1M 48.92S 1.27S    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>    10    26 Feurstein Lukas    Head           <span style="text-decoration: underline;">2</span>001 AUT    1M 48.97S 1.32S    </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 47 × 7</span></span></span>
+<span><span class="co">#&gt;     rank   bib name               birth_year nation time      diff_time</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;Period&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;Period&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1     3 Von Allmen Franjo        <span style="text-decoration: underline;">2</span>001 SUI    1M 47.65S 0S       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     2     6 Kriechmayr Vincent       <span style="text-decoration: underline;">1</span>991 AUT    1M 47.75S 0.1S     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     3    11 Rogentin Stefan          <span style="text-decoration: underline;">1</span>994 SUI    1M 48.23S 0.58S    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     4     1 Crawford James           <span style="text-decoration: underline;">1</span>997 CAN    1M 48.27S 0.62S    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     5     9 Paris Dominik            <span style="text-decoration: underline;">1</span>989 ITA    1M 48.28S 0.63S    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     6     8 Casse Mattia             <span style="text-decoration: underline;">1</span>990 ITA    1M 48.57S 0.92S    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     7    13 Odermatt Marco           <span style="text-decoration: underline;">1</span>997 SUI    1M 48.69S 1.04S    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     8    16 Alexander Cameron        <span style="text-decoration: underline;">1</span>997 CAN    1M 48.78S 1.13S    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     9     2 Monney Alexis            <span style="text-decoration: underline;">2</span>000 SUI    1M 48.92S 1.27S    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>    10    26 Feurstein Lukas          <span style="text-decoration: underline;">2</span>001 AUT    1M 48.97S 1.32S    </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 37 more rows</span></span></span></code></pre></div>
 <p>Note that the objects created by the querying functions always
 include the URL that was downloaded. This URL can be obtained as
@@ -328,15 +328,14 @@ covered. For example, it usually cannot handle team races:</p>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> These columns might not be processed as expected.</span></span>
 <span><span class="co">#&gt; Warning in process_race_column(name, race_df): NAs introduced by coercion</span></span>
 <span><span class="co">#&gt; Warning in process_race_column(name, race_df): NAs introduced by coercion</span></span>
-<span><span class="co">#&gt; Warning in process_race_column(name, race_df): NAs introduced by coercion</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `dplyr::as_tibble()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Column names `nation` and `time` must not be duplicated.</span></span>
 <span><span class="co">#&gt; Use `.name_repair` to specify repair.</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">Caused by error in `repaired_names()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Names must be unique.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> These names are duplicated:</span></span>
-<span><span class="co">#&gt;   * "nation" at locations 7 and 8.</span></span>
-<span><span class="co">#&gt;   * "time" at locations 9 and 10.</span></span></code></pre></div>
+<span><span class="co">#&gt;   * "nation" at locations 6 and 7.</span></span>
+<span><span class="co">#&gt;   * "time" at locations 8 and 9.</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -349,7 +348,7 @@ covered. For example, it usually cannot handle team races:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
