@@ -1,4 +1,5 @@
 library(tibble)
+fisdata:::clear_cache()
 
 test_that("get_competitions_url() works with valid inputs", {
   wengen_2025 <- tibble(sector = "AL", place = "Wengen", event_id = 55595)

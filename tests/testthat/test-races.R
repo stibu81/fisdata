@@ -1,5 +1,6 @@
 library(dplyr, warn.conflicts = FALSE)
 library(withr)
+fisdata:::clear_cache()
 
 test_that("get_races_url() works with valid inputs", {
   cuche <- tibble(name = "Cuche Didier",

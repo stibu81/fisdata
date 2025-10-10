@@ -1,5 +1,6 @@
 library(tibble)
 library(stringr)
+fisdata:::clear_cache()
 
 test_that("get_standings_url() works with valid inputs", {
   expect_equal(

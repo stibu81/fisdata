@@ -1,6 +1,7 @@
 library(tibble)
 library(glue)
 library(cachem)
+fisdata:::clear_cache()
 
 test_that("url_to_key() works for", {
   expect_equal(url_to_key("abc:123"), "abc_123")
@@ -15,9 +16,6 @@ test_that("url_to_key() works for", {
 
 test_that("set_cache() and get_cache() work", {
 
-  on.exit(cache$reset())
-
-  cache$reset()
   expect_equal(cache$keys(), character(0))
 
   set_cache("a", 1)
@@ -162,8 +160,3 @@ test_that("query_competitions() works with caching", {
     expect_equal(query_competitions(wengen_2025), competitions)
   )
 })
-
-# note: some of the test here use files that will be used again in later tests.
-# to make sure that those later tests are not influenced by the cache from this
-# file, the cache is deleted.
-fisdata:::cache$reset()

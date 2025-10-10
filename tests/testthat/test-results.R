@@ -1,4 +1,5 @@
 library(dplyr, warn.conflicts = FALSE)
+fisdata:::clear_cache()
 
 # full athlete data for didier cuche which is used in multiple tests
 cuche <- tibble(

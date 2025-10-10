@@ -1,5 +1,6 @@
 library(dplyr, warn.conflicts = FALSE)
 library(stringr)
+fisdata:::clear_cache()
 
 test_that("get_events_url() works with valid inputs", {
   expect_equal(

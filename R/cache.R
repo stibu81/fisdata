@@ -24,3 +24,10 @@ url_to_key <- function(url) {
     stringr::str_to_lower() %>%
     stringr::str_replace_all("[^a-z0-9]", "_")
 }
+
+
+# clear the cache. The function is not exported as there is no acutal need
+# for users to do this. But it is useful for testing and debugging.
+clear_cache <- function() {
+  cache$reset()
+}

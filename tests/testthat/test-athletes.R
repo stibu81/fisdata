@@ -1,4 +1,5 @@
 library(tibble)
+fisdata:::clear_cache()
 
 test_that("get_athletes_url() works with valid inputs", {
   expect_equal(

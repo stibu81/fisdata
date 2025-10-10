@@ -1,6 +1,7 @@
 library(lubridate, warn.conflicts = FALSE)
 library(dplyr, warn.conflicts = FALSE)
 library(rvest)
+fisdata:::clear_cache()
 
 test_that("show_url() works", {
   local_mocked_bindings(
