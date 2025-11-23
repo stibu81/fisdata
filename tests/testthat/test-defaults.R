@@ -1,19 +1,20 @@
 library(stringr)
 library(lubridate, warn.conflicts = FALSE)
+library(tibble)
 library(glue)
+
+fd_opts <- paste0(
+  "fisdata_",
+  c("sector", "season", "gender", "category", "discipline", "active_only")
+)
 
 test_that("initial setup of options works", {
   opts <- options()
   # check that all options exist
-  expect_setequal(
-    str_subset(names(opts), "^fisdata_"),
-    paste0("fisdata_",
-           c("sector", "season", "gender", "category", "discipline"))
-  )
-  # check that they are all set to ""
-  expect_in(
-    opts[str_subset(names(opts), "^fisdata_")], ""
-  )
+  expect_setequal(str_subset(names(opts), "^fisdata_"), fd_opts)
+  # check that they are all set to the appropriate values
+  expect_in(opts[fd_opts[1:5]], "")
+  expect_in(opts[fd_opts[6]], FALSE)
 })
 
 
@@ -81,9 +82,11 @@ test_that("set_fisdata_defaults() works with reset = TRUE", {
 
 test_that("reset_fisdata_defaults() works", {
   set_fisdata_defaults(sector = "CC", season = 2024, gender = "M",
-                       category = "WC", discipline = "DH")
+                       category = "WC", discipline = "DH", active_only = TRUE)
   reset_fisdata_defaults()
-  expect_in(options()[str_detect(names(options()), "^fisdata_")], "")
+  opts <- options()
+  expect_in(opts[fd_opts[1:5]], "")
+  expect_in(opts[fd_opts[6]], FALSE)
 })
 
 
@@ -110,22 +113,27 @@ test_that("set_fisdata_defaults() works with invalid inputs", {
   expect_warning(set_fisdata_defaults(season = in2years),
                  glue("'{in2years}' is not a valid season"))
   expect_equal(getOption("fisdata_season"), "2024")
+
+  expect_warning(set_fisdata_defaults(active_only = "no"),
+                 "'no' is not valid for active_only")
+  expect_equal(getOption("fisdata_active_only"), FALSE)
 })
 
 
 test_that("get_fisdata_defaults() works", {
   set_fisdata_defaults(sector = "CC", season = 2024, gender = "M",
-                       category = "WC", discipline = "DH")
+                       category = "WC", discipline = "DH", active_only = TRUE)
   expect_equal(
     get_fisdata_defaults(),
-    c(sector = "CC", season = "2024", gender = "M",
-      category = "WC", discipline = "DH")
+    tibble(sector = "CC", season = "2024", gender = "M",
+      category = "WC", discipline = "DH", active_only = TRUE)
   )
 
   reset_fisdata_defaults()
   expect_equal(
     get_fisdata_defaults(),
-    c(sector = "", season = "", gender = "", category = "", discipline = "")
+    tibble(sector = "", season = "", gender = "",
+           category = "", discipline = "", active_only = FALSE)
   )
 })
 
@@ -137,14 +145,16 @@ test_that("fd_def() works", {
   expect_equal(fd_def("gender"), "")
   expect_equal(fd_def("category"), "")
   expect_equal(fd_def("discipline"), "")
+  expect_equal(fd_def("active_only"), FALSE)
 
   set_fisdata_defaults(sector = "CC", season = 2024, gender = "M",
-                       category = "WC", discipline = "DH")
+                       category = "WC", discipline = "DH", active_only = TRUE)
   expect_equal(fd_def("sector"), "CC")
   expect_equal(fd_def("season"), "2024")
   expect_equal(fd_def("gender"), "M")
   expect_equal(fd_def("category"), "WC")
   expect_equal(fd_def("discipline"), "DH")
+  expect_equal(fd_def("active_only"), TRUE)
 
   expect_error(fd_def("badvalue"))
 })

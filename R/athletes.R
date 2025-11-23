@@ -80,7 +80,7 @@ query_athletes <- function(last_name = "",
                            gender = fd_def("gender"),
                            birth_year = "",
                            brand = "",
-                           active_only = FALSE) {
+                           active_only = fd_def("active_only")) {
 
   url <- get_athletes_url(last_name, first_name, sector, nation,
                           gender, birth_year, brand, active_only)

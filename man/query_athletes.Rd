@@ -12,7 +12,7 @@ query_athletes(
   gender = fd_def("gender"),
   birth_year = "",
   brand = "",
-  active_only = FALSE
+  active_only = fd_def("active_only")
 )
 }
 \arguments{

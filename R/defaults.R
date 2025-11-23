@@ -26,6 +26,7 @@ set_fisdata_defaults <- function(sector = NULL,
                                  gender = NULL,
                                  category = NULL,
                                  discipline = NULL,
+                                 active_only = NULL,
                                  reset = FALSE) {
 
   if (reset) {
@@ -69,6 +70,14 @@ set_fisdata_defaults <- function(sector = NULL,
   if (!is.null(discipline)) {
     options(fisdata_discipline = toupper(discipline))
   }
+
+  if (!is.null(active_only)) {
+    if (!active_only %in% c(TRUE, FALSE)) {
+      cli::cli_warn("'{active_only}' is not valid for active_only.")
+    } else {
+      options(fisdata_active_only = active_only)
+    }
+  }
 }
 
 
@@ -77,9 +86,9 @@ set_fisdata_defaults <- function(sector = NULL,
 
 get_fisdata_defaults <- function() {
   opt_names <- paste0("fisdata_", eval(formals(fd_def)$name))
-  opt_values <- unlist(rlang::exec(options, !!!opt_names))
+  opt_values <- rlang::exec(options, !!!opt_names)
   names(opt_values) <- stringr::str_remove(opt_names, "fisdata_")
-  opt_values
+  tibble::as_tibble(opt_values)
 }
 
 
@@ -88,7 +97,7 @@ get_fisdata_defaults <- function() {
 
 reset_fisdata_defaults <- function() {
   set_fisdata_defaults(sector = "", season = "", gender = "",
-                       category = "", discipline = "")
+                       category = "", discipline = "", active_only = FALSE)
 }
 
 
@@ -97,7 +106,7 @@ reset_fisdata_defaults <- function() {
 #' @export
 
 fd_def <- function(name = c("sector", "season", "gender",
-                            "category", "discipline")) {
+                            "category", "discipline", "active_only")) {
   name <- match.arg(name)
   getOption(paste0("fisdata_", name))
 }

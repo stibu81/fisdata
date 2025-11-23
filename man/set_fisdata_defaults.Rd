@@ -13,6 +13,7 @@ set_fisdata_defaults(
   gender = NULL,
   category = NULL,
   discipline = NULL,
+  active_only = NULL,
   reset = FALSE
 )
 
@@ -20,7 +21,9 @@ get_fisdata_defaults()
 
 reset_fisdata_defaults()
 
-fd_def(name = c("sector", "season", "gender", "category", "discipline"))
+fd_def(
+  name = c("sector", "season", "gender", "category", "discipline", "active_only")
+)
 }
 \arguments{
 \item{sector}{abbreviation of the sector, e.g., "AL" for
@@ -37,6 +40,8 @@ alpine skiing. See the dataset \link{sectors} for possible values.}
 
 \item{discipline}{abbreviation for the discipline, e.g., "DH" for
 "Downhill". See the dataset \link{disciplines} for possible values.}
+
+\item{active_only}{should the query be restricted to active athletes.}
 
 \item{reset}{if \code{TRUE}, the defaults are set to those that are passed to the
 function, i.e., all arguments that are omitted are set to \code{""}. If \code{FALSE},

@@ -26,13 +26,7 @@ cache <- new.env()
   )
 
   # set options to default values
-  options(
-    fisdata_sector = "",
-    fisdata_season = "",
-    fisdata_gender = "",
-    fisdata_category = "",
-    fisdata_discipline = ""
-  )
+  reset_fisdata_defaults()
 }
 
 # nocov end
