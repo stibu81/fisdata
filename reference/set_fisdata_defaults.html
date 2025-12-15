@@ -17,7 +17,7 @@ function's main use is as default argument in the querying functions."><meta pro
 
     <a class="navbar-brand me-2" href="../index.html">fisdata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,6 +59,7 @@ function's main use is as default argument in the querying functions.</p>
 <span>  gender <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  category <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  discipline <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  active_only <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  reset <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -66,7 +67,9 @@ function's main use is as default argument in the querying functions.</p>
 <span></span>
 <span><span class="fu">reset_fisdata_defaults</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">fd_def</span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sector"</span>, <span class="st">"season"</span>, <span class="st">"gender"</span>, <span class="st">"category"</span>, <span class="st">"discipline"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">fd_def</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sector"</span>, <span class="st">"season"</span>, <span class="st">"gender"</span>, <span class="st">"category"</span>, <span class="st">"discipline"</span>, <span class="st">"active_only"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -98,6 +101,10 @@ alpine skiing. See the dataset <a href="sectors.html">sectors</a> for possible v
 "Downhill". See the dataset <a href="disciplines.html">disciplines</a> for possible values.</p></dd>
 
 
+<dt id="arg-active-only">active_only<a class="anchor" aria-label="anchor" href="#arg-active-only"></a></dt>
+<dd><p>should the query be restricted to active athletes.</p></dd>
+
+
 <dt id="arg-reset">reset<a class="anchor" aria-label="anchor" href="#arg-reset"></a></dt>
 <dd><p>if <code>TRUE</code>, the defaults are set to those that are passed to the
 function, i.e., all arguments that are omitted are set to <code>""</code>. If <code>FALSE</code>,
@@ -119,7 +126,7 @@ all the others are left unchanged.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
