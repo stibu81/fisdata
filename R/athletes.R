@@ -109,16 +109,12 @@ get_athletes_url <- function(last_name = "",
                              active_only = FALSE,
                              error_call = rlang::caller_env()) {
 
+  sector <- find_code(sector, "sector")
+  nation <- find_code(nation, "nation")
+
   # active athletes are found by querying with "O"
   active <- if (active_only) "O" else ""
   gender <- standardise_gender(gender)
-
-  # if an invalid sector is used, the FIS-page returns results for all sectors.
-  # to avoid this, catch invalid sectors here.
-  if (!toupper(sector) %in% c("", fisdata::sectors$code)) {
-    cli::cli_abort("'{sector}' is not a valid sector.",
-                   call = error_call)
-  }
 
   glue::glue(
     "{fis_db_url}/biographies.html?",

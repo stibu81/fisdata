@@ -42,10 +42,20 @@ test_that("get_athletes_url() works with valid inputs", {
 })
 
 
-test_that("get_athletes_url() errors work", {
-  expect_error(
-    get_athletes_url(sector = "XY"),
-    "'XY' is not a valid sector."
+test_that("get_athletes_url() works with inputs that must be matched", {
+  expect_equal(
+    get_athletes_url("Meillard", "Loïc", sector = "alpine", active_only = TRUE),
+    paste0("https://www.fis-ski.com/DB/general/biographies.html?",
+           "lastname=meillard&firstname=loic&sectorcode=AL&gendercode=&",
+           "birthyear=&skiclub=&skis=&nationcode=&fiscode=&status=O&",
+           "search=true")
+  )
+  expect_equal(
+    get_athletes_url("Meillard", "Mélanie", nation = "swi", gender = "F"),
+    paste0("https://www.fis-ski.com/DB/general/biographies.html?",
+           "lastname=meillard&firstname=melanie&sectorcode=&gendercode=W&",
+           "birthyear=&skiclub=&skis=&nationcode=SUI&fiscode=&status=&",
+           "search=true")
   )
 })
 

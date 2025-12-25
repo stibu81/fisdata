@@ -33,14 +33,26 @@ test_that("get_standings_url() works with valid inputs", {
 })
 
 
+test_that("get_standings_url() works with inputs that must be matched", {
+  expect_equal(
+    get_standings_url(sector = "jumping", season = 2023,
+                     category = "Wcup", gender = "W"),
+    paste0("https://www.fis-ski.com/DB/general/cup-standings.html?",
+           "sectorcode=JP&seasoncode=2023&cupcode=WC&gendercode=W")
+  )
+  expect_equal(
+    get_standings_url(sector = "alpine", category = "wrldcp",
+                      type = "nations"),
+    paste0("https://www.fis-ski.com/DB/general/cup-standings.html?",
+           "sectorcode=AL&seasoncode=&cupcode=NC-WC&gendercode=")
+  )
+})
+
+
 test_that("get_standings_url() errors work", {
   expect_error(
     get_standings_url(),
     "'sector' must not be empty."
-  )
-  expect_error(
-    get_standings_url(sector = "XY"),
-    "'XY' is not a valid sector."
   )
   expect_error(
     get_standings_url(sector = "AL", gender = "A"),

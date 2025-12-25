@@ -31,7 +31,27 @@ test_that("get_results_url() works with valid inputs", {
            "limit=2000")
   )
   expect_equal(
-    get_results_url(cuche, discipline = "DH", season = "2010", place = "Kitzbühel"),
+    get_results_url(cuche, discipline = "DH", season = "2010",
+                    place = "Kitzbühel"),
+    paste0("https://www.fis-ski.com/DB/general/athlete-biography.html?",
+           "sectorcode=AL&seasoncode=2010&competitorid=11795&type=result&",
+           "categorycode=&sort=&place=kitzbuehel&disciplinecode=DH&",
+           "position=&limit=2000")
+  )
+})
+
+
+test_that("get_results_url() works with inputs that must be matched", {
+  expect_equal(
+    get_results_url(cuche, category = "wcup", discipline = "super g"),
+    paste0("https://www.fis-ski.com/DB/general/athlete-biography.html?",
+           "sectorcode=AL&seasoncode=&competitorid=11795&type=result&",
+           "categorycode=WC&sort=&place=&disciplinecode=SG&position=&",
+           "limit=2000")
+  )
+  expect_equal(
+    get_results_url(cuche, discipline = "dhill", season = "2010",
+                    place = "Kitzbühel"),
     paste0("https://www.fis-ski.com/DB/general/athlete-biography.html?",
            "sectorcode=AL&seasoncode=2010&competitorid=11795&type=result&",
            "categorycode=&sort=&place=kitzbuehel&disciplinecode=DH&",
