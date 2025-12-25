@@ -147,6 +147,8 @@ get_standings_url <- function(sector = "",
                               type = "ranking",
                               error_call = rlang::caller_env()) {
 
+  sector <- find_code(sector, "sector")
+  category <- find_code(category, "category")
   gender <- standardise_gender(gender)
 
   # gender = "A" is only supported for the nations cup.
@@ -159,10 +161,6 @@ get_standings_url <- function(sector = "",
   # alpine skiing by default
   if (sector == "") {
     cli::cli_abort("'sector' must not be empty.",
-                   call = error_call)
-  }
-  if (!toupper(sector) %in% c(fisdata::sectors$code)) {
-    cli::cli_abort("'{sector}' is not a valid sector.",
                    call = error_call)
   }
 
@@ -306,6 +304,7 @@ get_athlete_standings_url <- function(athlete,
 
   competitor_id <- athlete$competitor_id
   sector <- athlete$sector
+  category <- find_code(category, "category")
 
   # if type is "start-list", the category code must be adapted.
   # "nations" is not supported here.

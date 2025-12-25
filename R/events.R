@@ -122,6 +122,9 @@ get_events_url <- function(selection = c("all", "results", "upcoming"),
   selection <- match.arg(selection)
   if (selection == "all") selection <- ""
   gender <- standardise_gender(gender)
+  sector <- find_code(sector, "sector")
+  category <- find_code(category, "category")
+  discipline <- find_code(discipline, "discipline")
 
   # bring the date to standard format
   # for the date filter to work, also the season must be set explicitly
@@ -138,13 +141,6 @@ get_events_url <- function(selection = c("all", "results", "upcoming"),
         paste(formatC(month, width = 2, flag = "0"), season - 1, sep = "-")
       }
     }
-  }
-
-  # if an invalid sector is used, the FIS-page returns results for all sectors.
-  # to avoid this, catch invalid sectors here.
-  if (!toupper(sector) %in% c("", fisdata::sectors$code)) {
-    cli::cli_abort("'{sector}' is not a valid sector.",
-                   call = error_call)
   }
 
   glue::glue(
