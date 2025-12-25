@@ -34,12 +34,8 @@ set_fisdata_defaults <- function(sector = NULL,
   }
 
   if (!is.null(sector)) {
-    use_sector <- toupper(sector)
-    if (!use_sector %in% c("", fisdata::sectors$code)) {
-      cli::cli_warn("'{sector}' is not a valid sector.")
-    } else {
-      options(fisdata_sector = use_sector)
-    }
+    use_sector <- find_code(sector, "sector")
+    options(fisdata_sector = use_sector)
   }
 
   if (!is.null(season)) {
@@ -64,11 +60,13 @@ set_fisdata_defaults <- function(sector = NULL,
   }
 
   if (!is.null(category)) {
-    options(fisdata_category = toupper(category))
+    use_category <- find_code(category, "category")
+    options(fisdata_category = use_category)
   }
 
   if (!is.null(discipline)) {
-    options(fisdata_discipline = toupper(discipline))
+    use_discipline <- find_code(discipline, "discipline")
+    options(fisdata_discipline = use_discipline)
   }
 
   if (!is.null(active_only)) {
