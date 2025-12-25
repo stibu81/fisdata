@@ -14,8 +14,8 @@ find_code <- function(char,
     codes <- fisdata::sectors$code
     descs <- fisdata::sectors$description
   } else if (type == "discipline") {
-    codes <- fisdata::sectors$code
-    descs <- fisdata::sectors$description
+    codes <- fisdata::disciplines$code
+    descs <- fisdata::disciplines$description
   } else if (type == "category") {
     codes <- fisdata::categories$code
     descs <- fisdata::categories$description
@@ -24,9 +24,10 @@ find_code <- function(char,
     descs <- fisdata::nations$country
   }
 
-  # check: if char is a valid code, return it as is (with capitalisation)
-  if (toupper(char) %in% codes) {
-    return(toupper(char))
+  # check: if char is a valid code
+  i_code <- which(toupper(char) == toupper(codes))
+  if (length(i_code) > 0) {
+    return(codes[i_code[1]])
   }
 
   # otherwise, find the closest matching description by computing the distance
