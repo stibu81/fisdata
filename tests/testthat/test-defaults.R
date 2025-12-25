@@ -93,9 +93,6 @@ test_that("reset_fisdata_defaults() works", {
 test_that("set_fisdata_defaults() works with invalid inputs", {
   set_fisdata_defaults(sector = "CC", season = 2024, gender = "M",
                        category = "WC", discipline = "DH")
-  expect_warning(set_fisdata_defaults(sector = "XY"),
-                 "'XY' is not a valid sector")
-  expect_equal(getOption("fisdata_sector"), "CC")
 
   expect_warning(set_fisdata_defaults(gender = "U"),
                  "'U' is not a valid gender")
@@ -117,6 +114,18 @@ test_that("set_fisdata_defaults() works with invalid inputs", {
   expect_warning(set_fisdata_defaults(active_only = "no"),
                  "'no' is not valid for active_only")
   expect_equal(getOption("fisdata_active_only"), FALSE)
+})
+
+
+test_that("set_fisdata_defaults() works with inputs that must be matched", {
+  set_fisdata_defaults(sector = "para al")
+  expect_equal(getOption("fisdata_sector"), "PAL")
+
+  set_fisdata_defaults(category = "olympics")
+  expect_equal(getOption("fisdata_category"), "OWG")
+
+  set_fisdata_defaults(discipline = "bigair")
+  expect_equal(getOption("fisdata_discipline"), "BA")
 })
 
 
@@ -162,3 +171,4 @@ test_that("fd_def() works", {
 
 # reset all defaults to their initial state
 reset_fisdata_defaults()
+
