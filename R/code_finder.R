@@ -22,26 +22,12 @@ find_code <- function(char,
   }
 
   type <- match.arg(type)
-
-  # determine the codes and descriptions to use
-  if (type == "sector") {
-    codes <- fisdata::sectors$code
-    descs <- fisdata::sectors$description
-  } else if (type == "discipline") {
-    codes <- fisdata::disciplines$code
-    descs <- fisdata::disciplines$description
-  } else if (type == "category") {
-    codes <- fisdata::categories$code
-    descs <- fisdata::categories$description
-  } else if (type == "nation") {
-    codes <- fisdata::nations$code
-    descs <- fisdata::nations$description
-  }
+  code_table <- get_code_table(type)
 
   # check: if char is a valid code
-  i_code <- which(toupper(char) == toupper(codes))
+  i_code <- which(toupper(char) == toupper(code_table$code))
   if (length(i_code) > 0) {
-    return(codes[i_code[1]])
+    return(code_table$code[i_code[1]])
   }
 
   # otherwise, find the closest matching description by computing the distance
@@ -52,13 +38,13 @@ find_code <- function(char,
   # 2. subtract twice the number of leading characters where char agrees with the
   #    description. This assumes that the user is likely to use the first or
   #    first few characters of the term.
-  dist <- utils::adist(char, descs,
+  dist <- utils::adist(char, code_table$description,
                        costs = list(ins = 1, del = 5, sub = 6),
                        ignore.case = TRUE)
-  n_match <- count_leading_matches(char, descs)
+  n_match <- count_leading_matches(char, code_table$description)
   i_best <- which.min(dist - 2 * n_match)
-  desc <- descs[i_best]
-  code <- codes[i_best]
+  desc <- code_table$description[i_best]
+  code <- code_table$code[i_best]
 
   return(code)
 
@@ -75,4 +61,18 @@ count_leading_matches <- function(x, y) {
 
   # count the number of matches
   purrr::map_dbl(y_split, \(z) min(which(z != x_split), lx + 1)) - 1
+}
+
+
+# get code table by name
+get_code_table <- function(type) {
+  if (type == "sector") {
+    fisdata::sectors
+  } else if (type == "discipline") {
+    fisdata::disciplines
+  } else if (type == "category") {
+    fisdata::categories
+  } else if (type == "nation") {
+    fisdata::nations
+  }
 }
