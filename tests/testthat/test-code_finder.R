@@ -39,6 +39,24 @@ test_that("find_code() works with more complex matches", {
 })
 
 
+test_that("find_code() works with special values", {
+  expect_equal(find_code(NULL), "")
+  expect_equal(find_code(NA), "")
+  expect_equal(find_code(NA_character_), "")
+  expect_equal(find_code(""), "")
+  expect_equal(find_code("   "), "")
+})
+
+
+test_that("find_code() works with invalid inputs", {
+  expect_error(find_code(1), "must be a character")
+  expect_error(find_code(character(0)), "must have length one.")
+  expect_error(find_code(c("a", "b")), "must have length one.")
+  expect_error(find_code(c(NA, NA)), "must have length one.")
+  expect_error(find_code(c("a", NA)), "must have length one.")
+})
+
+
 test_that("count_leading_matches() works", {
   expect_equal(
     count_leading_matches(

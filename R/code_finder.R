@@ -2,9 +2,23 @@
 find_code <- function(char,
                       type = c("sector", "discipline", "category", "nation")) {
 
-  # if called with an empty string, NA or NULL, just return the value
-  if (char == "" || is.na(char) || is.null(char)) {
-    return(char)
+  # if char is NULL or NA, return an empty string
+  if (is.null(char) || isTRUE(is.na(char))) {
+    return("")
+  }
+
+  # if char is not a character or is not a scalar, throw an error
+  if (length(char) != 1) {
+    cli::cli_abort("`char` must have length one.")
+  }
+  if (!is.character(char)) {
+    cli::cli_abort("`char` must be a character.")
+  }
+
+  # remove whitespace, return if char is empty string
+  char <- stringr::str_squish(char)
+  if (char == "") {
+    return("")
   }
 
   type <- match.arg(type)
