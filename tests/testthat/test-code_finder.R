@@ -73,3 +73,12 @@ test_that("count_leading_matches() works", {
     5:0
   )
 })
+
+
+test_that("get_code_table() works", {
+  expect_equal(get_code_table("sector"), sectors)
+  expect_equal(get_code_table("nation"), nations)
+  expect_equal(get_code_table("discipline"), disciplines)
+  expect_equal(get_code_table("category"), categories)
+  expect_equal(get_code_table("invalid"), NULL)
+})
