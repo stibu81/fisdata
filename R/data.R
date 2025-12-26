@@ -27,7 +27,7 @@
 #'  `r ncol(nations)` variables:
 #' \describe{
 #' \item{code}{IOC country code consisting of three capital letters}
-#' \item{country}{name of the country}
+#' \item{description}{name of the country}
 #' \item{current}{is this a code that is currently in use?}
 #' }
 #'

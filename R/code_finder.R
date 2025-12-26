@@ -35,7 +35,7 @@ find_code <- function(char,
     descs <- fisdata::categories$description
   } else if (type == "nation") {
     codes <- fisdata::nations$code
-    descs <- fisdata::nations$country
+    descs <- fisdata::nations$description
   }
 
   # check: if char is a valid code
