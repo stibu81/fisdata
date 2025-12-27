@@ -14,7 +14,8 @@ set_fisdata_defaults(
   category = NULL,
   discipline = NULL,
   active_only = NULL,
-  reset = FALSE
+  reset = FALSE,
+  verbose = interactive()
 )
 
 get_fisdata_defaults()
@@ -47,6 +48,8 @@ alpine skiing. See the dataset \link{sectors} for possible values.}
 function, i.e., all arguments that are omitted are set to \code{""}. If \code{FALSE},
 only those defaults that are passed to the function are modified, while
 all the others are left unchanged.}
+
+\item{verbose}{should the function generate output about what it does?}
 
 \item{name}{name of the default argument}
 }
