@@ -18,6 +18,7 @@
 #'  function, i.e., all arguments that are omitted are set to `""`. If `FALSE`,
 #'  only those defaults that are passed to the function are modified, while
 #'  all the others are left unchanged.
+#' @param verbose should the function generate output about what it does?
 #'
 #' @export
 
@@ -27,26 +28,33 @@ set_fisdata_defaults <- function(sector = NULL,
                                  category = NULL,
                                  discipline = NULL,
                                  active_only = NULL,
-                                 reset = FALSE) {
+                                 reset = FALSE,
+                                 verbose = interactive()) {
 
   if (reset) {
     reset_fisdata_defaults()
+    if (verbose) {
+      cli::cli_alert_info("All defaults have been reset to ''.")
+    }
   }
 
   if (!is.null(sector)) {
     use_sector <- find_code(sector, "sector")
     options(fisdata_sector = use_sector)
+    alert_default("sector", use_sector, verbose)
   }
 
   if (!is.null(season)) {
     season_int <- suppressWarnings(as.integer(season))
     if (season == "") {
       options(fisdata_season = "")
+      alert_default("season", season, verbose)
     } else if (is.na(season_int) | season_int < 1950 |
         season_int > lubridate::year(today()) + 1) {
       cli::cli_warn("'{season}' is not a valid season.")
     } else {
       options(fisdata_season = as.character(season_int))
+      alert_default("season", season_int, verbose)
     }
   }
 
@@ -56,17 +64,20 @@ set_fisdata_defaults <- function(sector = NULL,
       cli::cli_warn("'{gender}' is not a valid gender code.")
     } else {
       options(fisdata_gender = use_gender)
+      alert_default("gender", use_gender, verbose)
     }
   }
 
   if (!is.null(category)) {
     use_category <- find_code(category, "category")
     options(fisdata_category = use_category)
+      alert_default("category", use_category, verbose)
   }
 
   if (!is.null(discipline)) {
     use_discipline <- find_code(discipline, "discipline")
     options(fisdata_discipline = use_discipline)
+    alert_default("discipline", use_discipline, verbose)
   }
 
   if (!is.null(active_only)) {
@@ -74,6 +85,7 @@ set_fisdata_defaults <- function(sector = NULL,
       cli::cli_warn("'{active_only}' is not valid for active_only.")
     } else {
       options(fisdata_active_only = active_only)
+      alert_default("active_only", active_only, verbose)
     }
   }
 }
@@ -95,7 +107,8 @@ get_fisdata_defaults <- function() {
 
 reset_fisdata_defaults <- function() {
   set_fisdata_defaults(sector = "", season = "", gender = "",
-                       category = "", discipline = "", active_only = FALSE)
+                       category = "", discipline = "", active_only = FALSE,
+                       verbose = FALSE)
 }
 
 
@@ -107,4 +120,30 @@ fd_def <- function(name = c("sector", "season", "gender",
                             "category", "discipline", "active_only")) {
   name <- match.arg(name)
   getOption(paste0("fisdata_", name))
+}
+
+
+# issue a message describing the default value that has been set.
+alert_default <- function(type, value, verbose) {
+
+  if (!verbose) {
+    return(NULL)
+  }
+
+  # if the value is an empty string, issue a message saying this
+  if (value == "") {
+    cli::cli_alert_info("The default for '{type}' has been set to ''.")
+  } else {
+    code_table <- get_code_table(type)
+    if (is.null(code_table)) {
+      cli::cli_alert_info(
+        "The default for '{type}' has been set to '{value}'."
+      )
+    } else {
+      desc <- code_table$description[code_table$code == value][1]
+      cli::cli_alert_info(
+        "The default for '{type}' has been set to '{value}' ({desc})."
+      )
+    }
+  }
 }

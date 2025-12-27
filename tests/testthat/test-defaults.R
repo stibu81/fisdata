@@ -71,12 +71,39 @@ test_that("set_fisdata_defaults() works with \"\"", {
 
 test_that("set_fisdata_defaults() works with reset = TRUE", {
   set_fisdata_defaults(sector = "CC", season = 2024, gender = "M",
-                       category = "WC", discipline = "DH")
+                       category = "WC", discipline = "DH", active_only = TRUE)
   set_fisdata_defaults(sector = "JP", reset = TRUE)
   expect_equal(getOption("fisdata_sector"), "JP")
   other_opts <- paste0("fisdata_",
                        c("season", "gender", "category", "discipline"))
   expect_in(options()[other_opts], "")
+  expect_equal(getOption("fisdata_active_only"), FALSE)
+})
+
+
+test_that("set_fisdata_defaults() produces output", {
+  expect_silent(
+    set_fisdata_defaults(sector = "CC", season = 2024, gender = "M",
+                         category = "WC", discipline = "DH", active_only = TRUE,
+                         verbose = FALSE)
+  )
+  set_fisdata_defaults(sector = "CC", season = 2024, gender = "M",
+                       category = "WC", discipline = "DH", active_only = TRUE,
+                       verbose = TRUE) %>%
+    expect_message("'sector'.*CC.*Cross-Country") %>%
+    expect_message("'season'.*'2024'") %>%
+    expect_message("'gender'.*'M'") %>%
+    expect_message("'category'.*'WC'.*World Cup") %>%
+    expect_message("'discipline'.*'DH'.*Downhill") %>%
+    expect_message("'active_only'.*'TRUE'")
+  expect_message(
+    set_fisdata_defaults(reset = TRUE, verbose = TRUE),
+    "All defaults have been reset to ''"
+  )
+  expect_message(
+    set_fisdata_defaults(sector = "", verbose = TRUE),
+    "'sector'.*set to ''"
+  )
 })
 
 
