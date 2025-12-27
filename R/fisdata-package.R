@@ -2,8 +2,8 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom dplyr  %>% .data
-#' @importFrom rlang :=
+#' @importFrom dplyr  %>%
+#' @importFrom rlang := .data .env
 ## usethis namespace: end
 NULL
 

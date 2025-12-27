@@ -169,7 +169,7 @@ get_results_url <- function(athlete,
   competitor_id <- athlete$competitor_id
   sector <- athlete$sector
   category <- find_code(category, "category")
-  discipline <- find_code(discipline, "discipline")
+  discipline <- find_code(discipline, "discipline", sector = sector)
 
   glue::glue(
     "{fis_db_url}/athlete-biography.html?",

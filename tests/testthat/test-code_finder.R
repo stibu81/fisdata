@@ -39,6 +39,16 @@ test_that("find_code() works with more complex matches", {
 })
 
 
+test_that("find_code() matches disciplines depending on sector", {
+  expect_equal(
+    find_code("team normal", type = "discipline", sector = "NK"), "TEN"
+  )
+  expect_equal(
+    find_code("team normal", type = "discipline", sector = "jumping"), "TN"
+  )
+})
+
+
 test_that("find_code() works with special values", {
   expect_equal(find_code(NULL), "")
   expect_equal(find_code(NA), "")
@@ -79,6 +89,8 @@ test_that("get_code_table() works", {
   expect_equal(get_code_table("sector"), sectors)
   expect_equal(get_code_table("nation"), nations)
   expect_equal(get_code_table("discipline"), disciplines)
+  expect_equal(get_code_table("discipline", sector = "CC"),
+               disciplines[disciplines$sector == "CC", ])
   expect_equal(get_code_table("category"), categories)
   expect_equal(get_code_table("invalid"), NULL)
 })

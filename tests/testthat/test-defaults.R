@@ -70,7 +70,7 @@ test_that("set_fisdata_defaults() works with \"\"", {
 
 
 test_that("set_fisdata_defaults() works with reset = TRUE", {
-  set_fisdata_defaults(sector = "CC", season = 2024, gender = "M",
+  set_fisdata_defaults(sector = "AL", season = 2024, gender = "M",
                        category = "WC", discipline = "DH", active_only = TRUE)
   set_fisdata_defaults(sector = "JP", reset = TRUE)
   expect_equal(getOption("fisdata_sector"), "JP")
@@ -83,14 +83,14 @@ test_that("set_fisdata_defaults() works with reset = TRUE", {
 
 test_that("set_fisdata_defaults() produces output", {
   expect_silent(
-    set_fisdata_defaults(sector = "CC", season = 2024, gender = "M",
+    set_fisdata_defaults(sector = "AL", season = 2024, gender = "M",
                          category = "WC", discipline = "DH", active_only = TRUE,
                          verbose = FALSE)
   )
-  set_fisdata_defaults(sector = "CC", season = 2024, gender = "M",
+  set_fisdata_defaults(sector = "AL", season = 2024, gender = "M",
                        category = "WC", discipline = "DH", active_only = TRUE,
                        verbose = TRUE) %>%
-    expect_message("'sector'.*CC.*Cross-Country") %>%
+    expect_message("'sector'.*AL.*Alpine Skiing") %>%
     expect_message("'season'.*'2024'") %>%
     expect_message("'gender'.*'M'") %>%
     expect_message("'category'.*'WC'.*World Cup") %>%
@@ -151,17 +151,17 @@ test_that("set_fisdata_defaults() works with inputs that must be matched", {
   set_fisdata_defaults(category = "olympics")
   expect_equal(getOption("fisdata_category"), "OWG")
 
-  set_fisdata_defaults(discipline = "bigair")
+  set_fisdata_defaults(discipline = "bigair", sector = "Snowboard")
   expect_equal(getOption("fisdata_discipline"), "BA")
 })
 
 
 test_that("get_fisdata_defaults() works", {
-  set_fisdata_defaults(sector = "CC", season = 2024, gender = "M",
+  set_fisdata_defaults(sector = "AL", season = 2024, gender = "M",
                        category = "WC", discipline = "DH", active_only = TRUE)
   expect_equal(
     get_fisdata_defaults(),
-    tibble(sector = "CC", season = "2024", gender = "M",
+    tibble(sector = "AL", season = "2024", gender = "M",
       category = "WC", discipline = "DH", active_only = TRUE)
   )
 
@@ -183,9 +183,9 @@ test_that("fd_def() works", {
   expect_equal(fd_def("discipline"), "")
   expect_equal(fd_def("active_only"), FALSE)
 
-  set_fisdata_defaults(sector = "CC", season = 2024, gender = "M",
+  set_fisdata_defaults(sector = "AL", season = 2024, gender = "M",
                        category = "WC", discipline = "DH", active_only = TRUE)
-  expect_equal(fd_def("sector"), "CC")
+  expect_equal(fd_def("sector"), "AL")
   expect_equal(fd_def("season"), "2024")
   expect_equal(fd_def("gender"), "M")
   expect_equal(fd_def("category"), "WC")
