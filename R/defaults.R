@@ -75,7 +75,11 @@ set_fisdata_defaults <- function(sector = NULL,
   }
 
   if (!is.null(discipline)) {
-    use_discipline <- find_code(discipline, "discipline")
+    # when matching the discipline, use the default value for the sector
+    # if set_fisdata_defaults has been called with a sector, it's value has
+    # already been set as the default such that it will also be used here
+    use_discipline <- find_code(discipline, "discipline",
+                                sector = fd_def("sector"))
     options(fisdata_discipline = use_discipline)
     alert_default("discipline", use_discipline, verbose)
   }
@@ -134,7 +138,7 @@ alert_default <- function(type, value, verbose) {
   if (value == "") {
     cli::cli_alert_info("The default for '{type}' has been set to ''.")
   } else {
-    code_table <- get_code_table(type)
+    code_table <- get_code_table(type, sector = fd_def("sector"))
     if (is.null(code_table)) {
       cli::cli_alert_info(
         "The default for '{type}' has been set to '{value}'."

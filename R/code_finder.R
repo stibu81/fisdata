@@ -1,6 +1,8 @@
 # find a code by searching through descriptions with a string
+# for discipline, the search can be optionally restricted to a single sector.
 find_code <- function(char,
-                      type = c("sector", "discipline", "category", "nation")) {
+                      type = c("sector", "discipline", "category", "nation"),
+                      sector = "") {
 
   # if char is NULL or NA, return an empty string
   if (is.null(char) || isTRUE(is.na(char))) {
@@ -22,7 +24,8 @@ find_code <- function(char,
   }
 
   type <- match.arg(type)
-  code_table <- get_code_table(type)
+  sector <- find_code(sector, "sector")
+  code_table <- get_code_table(type, sector = sector)
 
   # check: if char is a valid code
   i_code <- which(toupper(char) == toupper(code_table$code))
@@ -65,11 +68,16 @@ count_leading_matches <- function(x, y) {
 
 
 # get code table by name
-get_code_table <- function(type) {
+# codes are unique except for disciplines. They can be made unique by also
+# providing a sector.
+get_code_table <- function(type, sector = "") {
   if (type == "sector") {
     fisdata::sectors
-  } else if (type == "discipline") {
+  } else if (type == "discipline" && sector == "") {
     fisdata::disciplines
+  } else if (type == "discipline") {
+    fisdata::disciplines %>%
+      dplyr::filter(.data$sector == .env$sector)
   } else if (type == "category") {
     fisdata::categories
   } else if (type == "nation") {

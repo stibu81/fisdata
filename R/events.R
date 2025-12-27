@@ -124,7 +124,7 @@ get_events_url <- function(selection = c("all", "results", "upcoming"),
   gender <- standardise_gender(gender)
   sector <- find_code(sector, "sector")
   category <- find_code(category, "category")
-  discipline <- find_code(discipline, "discipline")
+  discipline <- find_code(discipline, "discipline", sector = sector)
 
   # bring the date to standard format
   # for the date filter to work, also the season must be set explicitly
