@@ -30,17 +30,21 @@ query_athletes(
 
 - sector:
 
-  abbreviation of the sector, e.g., "AL" for alpine skiing. See the
-  dataset
+  abbreviation of the sector, e.g., "AL" for alpine skiing. Not
+  case-sensitive. See the dataset
   [sectors](https://stibu81.github.io/fisdata/reference/sectors.md) for
-  possible values.
+  possible values. If a string not matching a sector code is used, a
+  similar string is searched for in the description column of
+  [sectors](https://stibu81.github.io/fisdata/reference/sectors.md).
 
 - nation:
 
   abbreviation of the nation, e.g., "SUI" for Switzerland. The value is
-  matched exactly. See the dataset
+  matched exactly, but not case-sensitive. See the dataset
   [nations](https://stibu81.github.io/fisdata/reference/nations.md) for
-  possible values.
+  possible values. If a string not matching a country code is used, a
+  similar string is searched for in the description column of
+  [nations](https://stibu81.github.io/fisdata/reference/nations.md).
 
 - gender:
 

@@ -68,12 +68,18 @@ automatically (see 'Details').</p></dd>
 
 <dt id="arg-sector">sector<a class="anchor" aria-label="anchor" href="#arg-sector"></a></dt>
 <dd><p>abbreviation of the sector, e.g., "AL" for
-alpine skiing. See the dataset <a href="sectors.html">sectors</a> for possible values.</p></dd>
+alpine skiing. Not case-sensitive.
+See the dataset <a href="sectors.html">sectors</a> for possible values.
+If a string not matching a sector code is used, a similar string
+is searched for in the description column of <a href="sectors.html">sectors</a>.</p></dd>
 
 
 <dt id="arg-nation">nation<a class="anchor" aria-label="anchor" href="#arg-nation"></a></dt>
 <dd><p>abbreviation of the nation, e.g., "SUI" for Switzerland. The
-value is matched exactly. See the dataset <a href="nations.html">nations</a> for possible values.</p></dd>
+value is matched exactly, but not case-sensitive.
+See the dataset <a href="nations.html">nations</a> for possible values.
+If a string not matching a country code is used, a similar string
+is searched for in the description column of <a href="nations.html">nations</a>.</p></dd>
 
 
 <dt id="arg-gender">gender<a class="anchor" aria-label="anchor" href="#arg-gender"></a></dt>

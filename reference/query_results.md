@@ -41,9 +41,11 @@ query_results(
 - category:
 
   abbreviation of the category of the race, e.g., "WC" for "World Cup".
-  See the dataset
+  Not case-sensitive. See the dataset
   [categories](https://stibu81.github.io/fisdata/reference/categories.md)
-  for possible values.
+  for possible values. If a string not matching a category code is used,
+  a similar string is searched for in the description column of
+  [categories](https://stibu81.github.io/fisdata/reference/categories.md).
 
 - place:
 
@@ -52,10 +54,12 @@ query_results(
 
 - discipline:
 
-  abbreviation for the discipline, e.g., "DH" for "Downhill". See the
-  dataset
+  abbreviation for the discipline, e.g., "DH" for "Downhill". Not case
+  sensitive. See the dataset
   [disciplines](https://stibu81.github.io/fisdata/reference/disciplines.md)
-  for possible values.
+  for possible values. If a string not matching a discipline code is
+  used, a similar string is searched for in the description column of
+  [disciplines](https://stibu81.github.io/fisdata/reference/disciplines.md).
 
 - add_age:
 

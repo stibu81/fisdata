@@ -22,7 +22,8 @@ set_fisdata_defaults(
   category = NULL,
   discipline = NULL,
   active_only = NULL,
-  reset = FALSE
+  reset = FALSE,
+  verbose = interactive()
 )
 
 get_fisdata_defaults()
@@ -38,10 +39,12 @@ fd_def(
 
 - sector:
 
-  abbreviation of the sector, e.g., "AL" for alpine skiing. See the
-  dataset
+  abbreviation of the sector, e.g., "AL" for alpine skiing. Not
+  case-sensitive. See the dataset
   [sectors](https://stibu81.github.io/fisdata/reference/sectors.md) for
-  possible values.
+  possible values. If a string not matching a sector code is used, a
+  similar string is searched for in the description column of
+  [sectors](https://stibu81.github.io/fisdata/reference/sectors.md).
 
 - season:
 
@@ -56,16 +59,20 @@ fd_def(
 - category:
 
   abbreviation of the category of the race, e.g., "WC" for "World Cup".
-  See the dataset
+  Not case-sensitive. See the dataset
   [categories](https://stibu81.github.io/fisdata/reference/categories.md)
-  for possible values.
+  for possible values. If a string not matching a category code is used,
+  a similar string is searched for in the description column of
+  [categories](https://stibu81.github.io/fisdata/reference/categories.md).
 
 - discipline:
 
-  abbreviation for the discipline, e.g., "DH" for "Downhill". See the
-  dataset
+  abbreviation for the discipline, e.g., "DH" for "Downhill". Not case
+  sensitive. See the dataset
   [disciplines](https://stibu81.github.io/fisdata/reference/disciplines.md)
-  for possible values.
+  for possible values. If a string not matching a discipline code is
+  used, a similar string is searched for in the description column of
+  [disciplines](https://stibu81.github.io/fisdata/reference/disciplines.md).
 
 - active_only:
 
@@ -77,6 +84,10 @@ fd_def(
   function, i.e., all arguments that are omitted are set to `""`. If
   `FALSE`, only those defaults that are passed to the function are
   modified, while all the others are left unchanged.
+
+- verbose:
+
+  should the function generate output about what it does?
 
 - name:
 

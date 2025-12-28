@@ -18,7 +18,7 @@ A data frame with 223 rows and 3 variables:
 
   IOC country code consisting of three capital letters
 
-- country:
+- description:
 
   name of the country
 

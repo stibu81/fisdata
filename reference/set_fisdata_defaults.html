@@ -60,7 +60,8 @@ function's main use is as default argument in the querying functions.</p>
 <span>  category <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  discipline <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  active_only <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  reset <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  reset <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">get_fisdata_defaults</span><span class="op">(</span><span class="op">)</span></span>
@@ -78,7 +79,10 @@ function's main use is as default argument in the querying functions.</p>
 
 <dl><dt id="arg-sector">sector<a class="anchor" aria-label="anchor" href="#arg-sector"></a></dt>
 <dd><p>abbreviation of the sector, e.g., "AL" for
-alpine skiing. See the dataset <a href="sectors.html">sectors</a> for possible values.</p></dd>
+alpine skiing. Not case-sensitive.
+See the dataset <a href="sectors.html">sectors</a> for possible values.
+If a string not matching a sector code is used, a similar string
+is searched for in the description column of <a href="sectors.html">sectors</a>.</p></dd>
 
 
 <dt id="arg-season">season<a class="anchor" aria-label="anchor" href="#arg-season"></a></dt>
@@ -93,12 +97,18 @@ alpine skiing. See the dataset <a href="sectors.html">sectors</a> for possible v
 
 <dt id="arg-category">category<a class="anchor" aria-label="anchor" href="#arg-category"></a></dt>
 <dd><p>abbreviation of the category of the race, e.g., "WC" for
-"World Cup". See the dataset <a href="categories.html">categories</a> for possible values.</p></dd>
+"World Cup". Not case-sensitive.
+See the dataset <a href="categories.html">categories</a> for possible values.
+If a string not matching a category code is used, a similar string
+is searched for in the description column of <a href="categories.html">categories</a>.</p></dd>
 
 
 <dt id="arg-discipline">discipline<a class="anchor" aria-label="anchor" href="#arg-discipline"></a></dt>
 <dd><p>abbreviation for the discipline, e.g., "DH" for
-"Downhill". See the dataset <a href="disciplines.html">disciplines</a> for possible values.</p></dd>
+"Downhill". Not case sensitive.
+See the dataset <a href="disciplines.html">disciplines</a> for possible values.
+If a string not matching a discipline code is used, a similar string
+is searched for in the description column of <a href="disciplines.html">disciplines</a>.</p></dd>
 
 
 <dt id="arg-active-only">active_only<a class="anchor" aria-label="anchor" href="#arg-active-only"></a></dt>
@@ -110,6 +120,10 @@ alpine skiing. See the dataset <a href="sectors.html">sectors</a> for possible v
 function, i.e., all arguments that are omitted are set to <code>""</code>. If <code>FALSE</code>,
 only those defaults that are passed to the function are modified, while
 all the others are left unchanged.</p></dd>
+
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>should the function generate output about what it does?</p></dd>
 
 
 <dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>
