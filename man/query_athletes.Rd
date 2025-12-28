@@ -21,10 +21,16 @@ The API does not support special characters, but many are handled
 automatically (see 'Details').}
 
 \item{sector}{abbreviation of the sector, e.g., "AL" for
-alpine skiing. See the dataset \link{sectors} for possible values.}
+alpine skiing. Not case-sensitive.
+See the dataset \link{sectors} for possible values.
+If a string not matching a sector code is used, a similar string
+is searched for in the description column of \link{sectors}.}
 
 \item{nation}{abbreviation of the nation, e.g., "SUI" for Switzerland. The
-value is matched exactly. See the dataset \link{nations} for possible values.}
+value is matched exactly, but not case-sensitive.
+See the dataset \link{nations} for possible values.
+If a string not matching a country code is used, a similar string
+is searched for in the description column of \link{nations}.}
 
 \item{gender}{abbreviation of the gender: "M" for male/men,
 "F" or "W" for female/women.}
