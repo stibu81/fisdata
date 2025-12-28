@@ -14,12 +14,18 @@
 #' @param season year when the season ended, i.e., 2020 stands for the season
 #'  2019/2020. It is not possible to filter for multiple seasons at once.
 #' @param category abbreviation of the category of the race, e.g., "WC" for
-#'  "World Cup". See the dataset [categories] for possible values.
+#'  "World Cup". Not case-sensitive.
+#'  See the dataset [categories] for possible values.
+#'  If a string not matching a category code is used, a similar string
+#'  is searched for in the description column of [categories].
 #' @param place location of the race. The API does not
 #'  support special characters, but many are handled automatically
 #'  (see 'Details').
 #' @param discipline abbreviation for the discipline, e.g., "DH" for
-#'  "Downhill". See the dataset [disciplines] for possible values.
+#'  "Downhill". Not case sensitive.
+#'  See the dataset [disciplines] for possible values.
+#'  If a string not matching a discipline code is used, a similar string
+#'  is searched for in the description column of [disciplines].
 #' @param add_age should a column with the athletes age be added
 #'  for each race? The age is given in decimal years. Note that for some
 #'  athletes, only the birth year is known, in which case the age will be

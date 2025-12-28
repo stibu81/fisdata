@@ -31,13 +31,22 @@ query_current_events(
 are available ("results") or upcoming events ("upcoming") or both ("all")?}
 
 \item{sector}{abbreviation of the sector, e.g., "AL" for
-alpine skiing. See the dataset \link{sectors} for possible values.}
+alpine skiing. Not case-sensitive.
+See the dataset \link{sectors} for possible values.
+If a string not matching a sector code is used, a similar string
+is searched for in the description column of \link{sectors}.}
 
 \item{category}{abbreviation of the category of the race, e.g., "WC" for
-"World Cup". See the dataset \link{categories} for possible values.}
+"World Cup". Not case-sensitive.
+See the dataset \link{categories} for possible values.
+If a string not matching a category code is used, a similar string
+is searched for in the description column of \link{categories}.}
 
 \item{discipline}{abbreviation for the discipline, e.g., "DH" for
-"Downhill". See the dataset \link{disciplines} for possible values.}
+"Downhill". Not case sensitive.
+See the dataset \link{disciplines} for possible values.
+If a string not matching a discipline code is used, a similar string
+is searched for in the description column of \link{disciplines}.}
 
 \item{gender}{abbreviation of the gender: "M" for male/men,
 "F" or "W" for female/women.}

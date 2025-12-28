@@ -8,9 +8,15 @@
 #'  The API does not support special characters, but many are handled
 #'  automatically (see 'Details').
 #' @param sector abbreviation of the sector, e.g., "AL" for
-#'  alpine skiing. See the dataset [sectors] for possible values.
+#'  alpine skiing. Not case-sensitive.
+#'  See the dataset [sectors] for possible values.
+#'  If a string not matching a sector code is used, a similar string
+#'  is searched for in the description column of [sectors].
 #' @param nation abbreviation of the nation, e.g., "SUI" for Switzerland. The
-#'  value is matched exactly. See the dataset [nations] for possible values.
+#'  value is matched exactly, but not case-sensitive.
+#'  See the dataset [nations] for possible values.
+#'  If a string not matching a country code is used, a similar string
+#'  is searched for in the description column of [nations].
 #' @param gender abbreviation of the gender: "M" for male/men,
 #'  "F" or "W" for female/women.
 #' @param birth_year birth year. This also supports multiple years separated
