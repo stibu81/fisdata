@@ -2,25 +2,35 @@
 % Please edit documentation in R/helpers.R
 \name{show_url}
 \alias{show_url}
-\title{Show URL associated With a Query}
+\alias{browse_url}
+\title{Show or Browse URL Associated With a Query}
 \usage{
 show_url(fisdata_df)
+
+browse_url(fisdata_df, browser = getOption("browser"))
 }
 \arguments{
 \item{fisdata_df}{a table of fisdata-results produced by one of the
 \verb{query_*()}-functions.}
+
+\item{browser}{a character string giving the name of the browser
+to be used. If omitted, the default browser is used.
+See \code{\link[utils:browseURL]{utils::browseURL()}} for details.}
 }
 \value{
-a character vector of length one with the URL that was used to create the
-table. In an interactive session it also copies the URL to the clipboard
+\code{show_url()} returns a character vector of length one with the URL that
+was used to create the table. In an interactive session it also copies
+the URL to the clipboard as a side effect.
+
+\code{browse_url()} returns \code{NULL} invisibly and opens the URL in a browser
 as a side effect.
 }
 \description{
 All the functions \verb{query_*()} call a URL on the FIS web page to collect
 their data. \code{show_url()} returns the URL that was used to produce a table
-of fisdata-results.
+of fisdata-results. \code{browse_url()} opens the URL in a browser.
 }
 \details{
-If run from an interactive session, the URL is also copied into the
-clipboard such that it can be pasted into a browser.
+If run from an interactive session, \code{show_url()} also copies the URL into
+the clipboard such that it can be pasted into a browser.
 }

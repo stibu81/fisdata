@@ -15,6 +15,23 @@ test_that("show_url() works", {
 })
 
 
+test_that("browse_url() works", {
+  local_mocked_bindings(
+    get_athletes_url = function(...) test_path("data", "athletes_cuche.html.gz")
+  )
+  local_mocked_bindings(
+    browseURL = function(url, browser) {
+      list(url, browser)
+    },
+    .package = "utils"
+  )
+  cuche <- query_athletes()
+
+  expect_equal(browse_url(cuche, "firefox"),
+               list(get_athletes_url(), "firefox"))
+})
+
+
 test_that("replace_special_chars() works", {
   expect_equal(
     replace_special_chars(
