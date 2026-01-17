@@ -31,10 +31,13 @@ Imports:
     clipr,
     cachem,
     ggplot2,
+    grid,
     scales,
     colorspace,
     ggnewscale,
-    ggiraph 
+    ggiraph,
+    png,
+    jpeg
 Suggests: 
     roxygen2,
     spelling,

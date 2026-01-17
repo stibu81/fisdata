@@ -1,0 +1,71 @@
+library(stringr)
+library(vdiffr)
+library(withr)
+
+# mock function for file download that copies a test image
+download.file_mock <- function(url, destfile, ...) {
+  id <- str_extract(url, "(\\d+)\\.html$", group = 1)
+  file <- test_path("data", id)
+  file.copy(file, destfile, overwrite = TRUE)
+}
+
+
+test_that("get_athlete_image() displays images", {
+  local_mocked_bindings(
+    download.file = download.file_mock,
+    .package = "utils"
+  )
+  athlete <- list(competitor_id = "12345")
+  expect_doppelganger("athlete image png", get_athlete_image(athlete)) %>%
+    # expect_doppelganger calls print on the tested code which, in this case,
+    # leads to the output of "NULL", because get_athlete_image() returns NULL.
+    # Using capture_output() suppresses this output.
+    capture_output()
+  athlete <- list(competitor_id = "23456")
+  expect_doppelganger("athlete image jpg", get_athlete_image(athlete)) %>%
+    capture_output()
+})
+
+
+test_that("get_athlete_image() copies images", {
+  local_mocked_bindings(
+    download.file = download.file_mock,
+    .package = "utils"
+  )
+  athlete <- list(competitor_id = "12345")
+  with_file(
+    "skier",
+    {
+      get_athlete_image(athlete, "skier")
+      expect_true(file.exists("skier.png"))
+    }
+  )
+  athlete <- list(competitor_id = "23456")
+  with_file(
+    "skier",
+    {
+      get_athlete_image(athlete, "skier")
+      expect_true(file.exists("skier.jpg"))
+    }
+  )
+})
+
+
+test_that("get_athlete_image() handles invalid file format", {
+  local_mocked_bindings(
+    download.file = download.file_mock,
+    .package = "utils"
+  )
+  athlete <- list(competitor_id = "34567")
+  expect_error(get_athlete_image(athlete), "invalid image file")
+})
+
+
+test_that("get_athlete_image() handles failing download", {
+  local_mocked_bindings(
+    download.file = function(...) stop(),
+    .package = "utils"
+  )
+  athlete <- list(competitor_id = "34567")
+  expect_error(get_athlete_image(athlete), "download of image file failed")
+})
