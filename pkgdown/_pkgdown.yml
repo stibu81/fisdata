@@ -13,6 +13,7 @@ reference:
   - query_standings
   - query_race
   - get_debuts
+  - get_athlete_image
 
 - title: Analyse
   desc: Functions to analyse query results
@@ -28,6 +29,7 @@ reference:
 - title: Other Functions
   contents:
   - show_url
+  - browse_url
   - set_fisdata_defaults
 
 - title: Datasets
