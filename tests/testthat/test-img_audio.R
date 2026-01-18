@@ -21,6 +21,9 @@ test_that("get_athlete_image() displays images", {
     # leads to the output of "NULL", because get_athlete_image() returns NULL.
     # Using capture_output() suppresses this output.
     capture_output()
+  # the jpg on Windows and MacOS is slightly differnet, so the test must
+  # be skipped on those OSes
+  skip_on_os(c("windows", "mac"))
   athlete <- list(competitor_id = "23456")
   expect_doppelganger("athlete image jpg", get_athlete_image(athlete)) %>%
     capture_output()
@@ -34,17 +37,21 @@ test_that("get_athlete_image() copies images", {
   )
   athlete <- list(competitor_id = "12345")
   with_file(
-    "skier",
+    c("skier.png", "dump.pdf"),
     {
+      pdf("dump.pdf")
       get_athlete_image(athlete, "skier")
+      dev.off()
       expect_true(file.exists("skier.png"))
     }
   )
   athlete <- list(competitor_id = "23456")
   with_file(
-    "skier",
+    c("skier.jpg", "dump.pdf"),
     {
+      pdf("dump.pdf")
       get_athlete_image(athlete, "skier")
+      dev.off()
       expect_true(file.exists("skier.jpg"))
     }
   )
