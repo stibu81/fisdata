@@ -175,6 +175,8 @@ Functions that download data from the FIS page
   : Query Race
 - [`get_debuts()`](https://stibu81.github.io/fisdata/reference/get_debuts.md)
   : Get the debut races, podiums or victories for an athlete
+- [`get_athlete_image()`](https://stibu81.github.io/fisdata/reference/get_athlete_image.md)
+  : Get an Image of an Athlete
 
 ## Analyse
 
@@ -197,7 +199,8 @@ Functions to visualise query results
 ## Other Functions
 
 - [`show_url()`](https://stibu81.github.io/fisdata/reference/show_url.md)
-  : Show URL associated With a Query
+  [`browse_url()`](https://stibu81.github.io/fisdata/reference/show_url.md)
+  : Show or Browse URL Associated With a Query
 - [`set_fisdata_defaults()`](https://stibu81.github.io/fisdata/reference/set_fisdata_defaults.md)
   [`get_fisdata_defaults()`](https://stibu81.github.io/fisdata/reference/set_fisdata_defaults.md)
   [`reset_fisdata_defaults()`](https://stibu81.github.io/fisdata/reference/set_fisdata_defaults.md)
