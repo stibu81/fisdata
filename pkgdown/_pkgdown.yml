@@ -14,6 +14,7 @@ reference:
   - query_race
   - get_debuts
   - get_athlete_image
+  - play_athlete_name
 
 - title: Analyse
   desc: Functions to analyse query results
