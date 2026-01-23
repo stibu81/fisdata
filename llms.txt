@@ -177,6 +177,8 @@ Functions that download data from the FIS page
   : Get the debut races, podiums or victories for an athlete
 - [`get_athlete_image()`](https://stibu81.github.io/fisdata/reference/get_athlete_image.md)
   : Get an Image of an Athlete
+- [`play_athlete_name()`](https://stibu81.github.io/fisdata/reference/play_athlete_name.md)
+  : Play Athlete's Name in Browser
 
 ## Analyse
 

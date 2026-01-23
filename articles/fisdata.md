@@ -158,7 +158,7 @@ wengen2025 %>%
 #> # A tibble: 1 × 8
 #>   start_date end_date   place  nation sector categories disciplines    genders
 #>   <date>     <date>     <chr>  <chr>  <chr>  <chr>      <chr>          <chr>  
-#> 1 2025-01-14 2025-01-19 Wengen SUI    AL     TRA / WC   4xDH / SL / SG M
+#> 1 2025-01-14 2025-01-19 Wengen SUI    AL     WC / TRA   4xDH / SG / SL M
 ```
 
 The result includes the `event_id`, which is required as input in order
