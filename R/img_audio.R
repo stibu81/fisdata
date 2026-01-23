@@ -68,7 +68,56 @@ get_athlete_image <- function(athlete, file = NULL) {
 }
 
 
-# the images are sometimes png, sometimes jpg
+#' Play Athlete's Name in Browser
+#'
+#' For some athlete's, an audio file where they speak their name is available
+#' on the FIS page. This functions opens that page in the browser.
+#'
+#' @param athlete a list or data frame with the field/column `competitor_id`
+#'  that describe a *single* athlete. The easiest way to create
+#'  such a data frame is through the functions [query_athletes()],
+#'  [query_race()], or [query_standings()]. These functions
+#'  can return multiple athletes, but `play_athlete_name()` only plays the
+#'  audio file for one athlete. If multiple athletes are passed, only the first
+#'  one will be used.
+#' @param file if given, the audio file will be stored to the given path.
+#'  The file is in the mp3 format and the file ending will be added
+#'  automatically. Any user provided file ending will be ignored.
+#'
+#' @return
+#' `NULL` invisibly. As a side effect, the mp3 file is played in the browser
+#' (if it exists) and, if `file` is given, stored to the requested path.
+#'
+#' @export
+
+play_athlete_name <- function(athlete, file = NULL) {
+  athlete <- ensure_one_athlete(athlete)
+  id <- athlete$competitor_id
+
+  url <- glue::glue(
+    "https://www.fis-ski.com/DB/v2/download/athlete-name-audio/{id}.mp3"
+  )
+
+  # if requested, save the file
+  if (!is.null(file)) {
+      file <- paste0(stringr::str_remove(file, "\\..*$"), ".mp3")
+      download <- suppressWarnings(
+        try(utils::download.file(url, file, quiet = TRUE), silent = TRUE)
+      )
+
+    if (inherits(download, "try-error")) {
+      cli::cli_abort(c("x" = "download of audio file failed"))
+    }
+  }
+
+  utils::browseURL(url)
+
+  invisible(NULL)
+}
+
+
+# the images are sometimes png, sometimes jpg. This function uses the first
+# bytes of the file to determine the format.
 determine_img_format <- function(file) {
 
   signatures <- list(

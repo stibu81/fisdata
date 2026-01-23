@@ -4,7 +4,7 @@ library(withr)
 
 # mock function for file download that copies a test image
 download.file_mock <- function(url, destfile, ...) {
-  id <- str_extract(url, "(\\d+)\\.html$", group = 1)
+  id <- str_extract(url, "(\\d+)\\.(html|mp3)$", group = 1)
   file <- test_path("data", id)
   file.copy(file, destfile, overwrite = TRUE)
 }
@@ -75,4 +75,49 @@ test_that("get_athlete_image() handles failing download", {
   )
   athlete <- list(competitor_id = "34567")
   expect_error(get_athlete_image(athlete), "download of image file failed")
+})
+
+
+
+test_that("play_athlete_name() starts browser", {
+  local_mocked_bindings(
+    # print the url that is sent to the browser such that the test can
+    # capture it
+    browseURL = function(url, ...) message(url),
+    .package = "utils"
+  )
+  athlete <- list(competitor_id = "12345")
+  expect_null(play_athlete_name(athlete)) %>%
+    expect_message(
+      "https://www.fis-ski.com/DB/v2/download/athlete-name-audio/12345.mp3"
+    )
+})
+
+
+test_that("play_athlete_name() copies audio file", {
+  local_mocked_bindings(
+    browseURL = function(...) return(NULL),
+    download.file = download.file_mock,
+    .package = "utils"
+  )
+  athlete <- list(competitor_id = "12345")
+  with_file(
+    "skier.mp3",
+    {
+      play_athlete_name(athlete, "skier")
+      expect_true(file.exists("skier.mp3"))
+    }
+  )
+})
+
+
+test_that("play_athlete_name() handles failing download", {
+  local_mocked_bindings(
+    browseURL = function(...) return(NULL),
+    download.file = function(...) stop(),
+    .package = "utils"
+  )
+  athlete <- list(competitor_id = "34567")
+  expect_error(play_athlete_name(athlete, "skier"),
+               "download of audio file failed")
 })
