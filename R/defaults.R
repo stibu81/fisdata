@@ -127,6 +127,36 @@ fd_def <- function(name = c("sector", "season", "gender",
 }
 
 
+#' Read and Write Defaults from a JSON File
+#'
+#' Default settings can be written to a JSON file and read again from
+#' this file. If the file `.fisdata.json` exists in the user's home
+#' it is read automatically.
+#' 
+#' @param file name of the JSON file to read or write
+#' @param overwrite should an existing file be overwritten?
+#' 
+#' @export
+
+write_current_defaults <- function(file = "~/.fisdata.json",
+                                   overwrite = FALSE) {
+
+  if (file.exists(file) && !overwrite) {
+    cli::cli_abort("The file {file} exists. Use `overwrite = TRUE` to overwrite it.")
+  }
+
+  defaults <- get_fisdata_defaults()
+  json <- defaults %>%
+    # convert to a list to avoid having an unnecessary length-one array
+    as.list() %>% 
+    jsonlite::toJSON(pretty = TRUE, auto_unbox = TRUE)
+
+  writeLines(json, file)
+
+  invisible(json)
+}
+
+
 # issue a message describing the default value that has been set.
 alert_default <- function(type, value, verbose) {
 

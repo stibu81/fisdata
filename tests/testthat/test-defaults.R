@@ -2,6 +2,8 @@ library(stringr)
 library(lubridate, warn.conflicts = FALSE)
 library(tibble)
 library(glue)
+library(withr)
+library(jsonlite)
 
 fd_opts <- paste0(
   "fisdata_",
@@ -195,6 +197,31 @@ test_that("fd_def() works", {
   expect_error(fd_def("badvalue"))
 })
 
+
+test_that("write_current_defaults() works", {
+  reset_fisdata_defaults()
+  set_fisdata_defaults(sector = "AL", gender = "F", category = "WC")
+  ref <- toJSON(
+    list(sector = "AL", season = "", gender = "W", category = "WC",
+         discipline = "", active_only = FALSE),
+    auto_unbox = TRUE,
+    pretty = TRUE
+  )
+  local_file("fisdata.json")
+  expect_equal(write_current_defaults("fisdata.json"), ref)
+  expect_true(file.exists("fisdata.json"))
+  expect_equal(paste(readLines("fisdata.json"), collapse = "\n"), ref,
+               ignore_attr = TRUE)
+})
+
+
+test_that("write_current_defaults() handles existing file", {
+  local_file("fisdata.json")
+  write_current_defaults("fisdata.json")
+  expect_error(write_current_defaults("fisdata.json"),
+               "The file fisdata.json exists.")
+  expect_silent(write_current_defaults("fisdata.json", overwrite = TRUE))
+})
 
 # reset all defaults to their initial state
 reset_fisdata_defaults()

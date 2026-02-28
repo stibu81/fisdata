@@ -37,7 +37,8 @@ Imports:
     ggnewscale,
     ggiraph,
     png,
-    jpeg
+    jpeg,
+    jsonlite
 Suggests: 
     roxygen2,
     spelling,
