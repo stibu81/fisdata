@@ -32,6 +32,10 @@ plot_rank_summary <- function(results,
                               interactive = TRUE,
                               width = NULL,
                               height = NULL) {
+  rlang::check_installed(
+    c("ggplot2", "colorspace", "ggnewscale", "ggiraph"),
+    "to create plots."
+  )
 
   by <- match_groupings(by, c("category", "discipline"))
 
@@ -101,6 +105,10 @@ plot_results_summary <- function(results,
                                  interactive = TRUE,
                                  width = NULL,
                                  height = NULL) {
+  rlang::check_installed(
+    c("ggplot2", "scales", "ggiraph"),
+    "to create plots."
+  )
 
   variable <- match.arg(variable)
 
@@ -218,7 +226,11 @@ plot_ranks_over_time <- function(results,
                                  interactive = TRUE,
                                  width = NULL,
                                  height = NULL) {
-
+  rlang::check_installed(
+    c("ggplot2", "colorspace", "ggnewscale", "ggiraph"),
+    "to create plots."
+  )
+  
   by <- if (length(by) > 0 && all(!is.na(by))) match.arg(by)
   time <- match.arg(time)
   type <- match.arg(type)
@@ -328,6 +340,10 @@ plot_results_over_time <- function(results,
                                    interactive = TRUE,
                                    width = NULL,
                                    height = NULL) {
+  rlang::check_installed(
+    c("ggplot2", "scales", "ggiraph"),
+    "to create plots."
+  )
 
   variable <- match.arg(variable)
   by <- if (length(by) > 0 && all(!is.na(by))) match.arg(by)

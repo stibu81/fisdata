@@ -28,18 +28,18 @@ Imports:
     rlang,
     cli,
     magrittr,
-    clipr,
     cachem,
+    jsonlite
+Suggests:
     ggplot2,
-    grid,
     scales,
     colorspace,
     ggnewscale,
     ggiraph,
+    grid,
     png,
     jpeg,
-    jsonlite
-Suggests: 
+    clipr,
     roxygen2,
     spelling,
     withr,

@@ -25,6 +25,8 @@
 #' @export
 
 get_athlete_image <- function(athlete, file = NULL) {
+  rlang::check_installed(c("grid", "png", "jpeg"), "to process images")
+
   athlete <- ensure_one_athlete(athlete)
   id <- athlete$competitor_id
 

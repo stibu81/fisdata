@@ -24,7 +24,14 @@
 show_url <- function(fisdata_df) {
   url <- attr(fisdata_df, "url")
   if (interactive() && !is.null(url)) {
-    clipr::write_clip(url) # nocov
+    if (rlang::is_installed("clipr")) { # nocov start
+      clipr::write_clip(url)
+    } else {
+      cli::cli_alert_info(
+        c("Install {.pkg clipr} with {.run install.packages(\"clipr\")} ",
+          "to automatically copy the url to the clipboard.")
+      )
+    } # nocov end
   }
   url
 }
