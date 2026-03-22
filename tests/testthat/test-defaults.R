@@ -53,7 +53,7 @@ test_that("set_fisdata_defaults() works with valid inputs", {
 })
 
 
-test_that("set_fisdata_defaults() works with \"\"", {
+test_that('set_fisdata_defaults() works with ""', {
   set_fisdata_defaults(sector = "")
   expect_equal(getOption("fisdata_sector"), "")
 
