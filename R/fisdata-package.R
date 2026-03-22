@@ -30,3 +30,8 @@ cache <- new.env()
 }
 
 # nocov end
+
+
+# reexport %>% for convenience
+#' @export
+dplyr::`%>%`
