@@ -38,58 +38,20 @@ set_fisdata_defaults <- function(sector = NULL,
     }
   }
 
-  if (!is.null(sector)) {
-    use_sector <- find_code(sector, "sector")
-    options(fisdata_sector = use_sector)
-    alert_default("sector", use_sector, verbose)
-  }
-
-  if (!is.null(season)) {
-    season_int <- suppressWarnings(as.integer(season))
-    if (season == "") {
-      options(fisdata_season = "")
-      alert_default("season", season, verbose)
-    } else if (is.na(season_int) | season_int < 1950 |
-        season_int > lubridate::year(today()) + 1) {
-      cli::cli_warn("'{season}' is not a valid season.")
-    } else {
-      options(fisdata_season = as.character(season_int))
-      alert_default("season", season_int, verbose)
-    }
-  }
-
-  if (!is.null(gender)) {
-    use_gender <- standardise_gender(gender)
-    if (!use_gender %in% c("", "M", "W")) {
-      cli::cli_warn("'{gender}' is not a valid gender code.")
-    } else {
-      options(fisdata_gender = use_gender)
-      alert_default("gender", use_gender, verbose)
-    }
-  }
-
-  if (!is.null(category)) {
-    use_category <- find_code(category, "category")
-    options(fisdata_category = use_category)
-      alert_default("category", use_category, verbose)
-  }
-
-  if (!is.null(discipline)) {
-    # when matching the discipline, use the default value for the sector
-    # if set_fisdata_defaults has been called with a sector, it's value has
-    # already been set as the default such that it will also be used here
-    use_discipline <- find_code(discipline, "discipline",
-                                sector = fd_def("sector"))
-    options(fisdata_discipline = use_discipline)
-    alert_default("discipline", use_discipline, verbose)
-  }
-
-  if (!is.null(active_only)) {
-    if (!active_only %in% c(TRUE, FALSE)) {
-      cli::cli_warn("'{active_only}' is not valid for active_only.")
-    } else {
-      options(fisdata_active_only = active_only)
-      alert_default("active_only", active_only, verbose)
+  defs <- prepare_defaults(sector = sector,
+                           season = season,
+                           gender = gender,
+                           category = category,
+                           discipline = discipline,
+                           active_only = active_only)
+  
+  for (name in names(defs)) {
+    value <- defs[[name]]
+    if (!is.null(value)) {
+      options(
+        magrittr::set_names(list(value), paste0("fisdata_", name))
+      )
+      alert_default(name, value, verbose)
     }
   }
 }
@@ -180,4 +142,67 @@ alert_default <- function(type, value, verbose) {
       )
     }
   }
+}
+
+
+# prepare inputs for default values
+prepare_defaults <- function(sector = NULL,
+                             season = NULL,
+                             gender = NULL,
+                             category = NULL,
+                             discipline = NULL,
+                             active_only = NULL) {
+  
+  if (!is.null(sector)) {
+    sector <- find_code(sector, "sector")
+  }
+
+  if (!is.null(season)) {
+    season_int <- suppressWarnings(as.integer(season))
+    if (season == "") {
+      season <- ""
+    } else if (is.na(season_int) | season_int < 1950 |
+        season_int > lubridate::year(today()) + 1) {
+      cli::cli_warn("'{season}' is not a valid season.")
+      season <- NULL
+    } else {
+      season <- as.character(season_int)
+    }
+  }
+
+  if (!is.null(gender)) {
+    std_gender <- standardise_gender(gender)
+    if (!std_gender %in% c("", "M", "W")) {
+      cli::cli_warn("'{gender}' is not a valid gender code.")
+      gender <- NULL
+    } else {
+      gender <- std_gender
+    }
+  }
+
+  if (!is.null(category)) {
+    category <- find_code(category, "category")
+  }
+
+  if (!is.null(discipline)) {
+    # discipline depends on sector. If a sector has been passed to this
+    # function, use it. Otherwise, use the current default.
+    discipline_sector <- if (!is.null(sector)) sector else fd_def("sector")
+    discipline <- find_code(discipline, "discipline",
+                            sector = discipline_sector)
+  }
+
+  if (!is.null(active_only)) {
+    if (!active_only %in% c(TRUE, FALSE)) {
+      cli::cli_warn("'{active_only}' is not valid for active_only.")
+      active_only <- NULL
+    }
+  }
+  
+  list(sector = sector,
+       season = season,
+       gender = gender,
+       category = category,
+       discipline = discipline,
+       active_only = active_only)
 }
