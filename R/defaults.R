@@ -51,7 +51,7 @@ set_fisdata_defaults <- function(sector = NULL,
       options(
         magrittr::set_names(list(value), paste0("fisdata_", name))
       )
-      alert_default(name, value, verbose)
+      alert_default(name, verbose)
     }
   }
 }
@@ -120,11 +120,15 @@ write_current_defaults <- function(file = "~/.fisdata.json",
 
 
 # issue a message describing the default value that has been set.
-alert_default <- function(type, value, verbose) {
+# The function must be called AFTER setting the default.
+alert_default <- function(type, verbose) {
 
   if (!verbose) {
     return(NULL)
   }
+
+  # get the default value that has been set
+  value <- fd_def(type)
 
   # if the value is an empty string, issue a message saying this
   if (value == "") {
