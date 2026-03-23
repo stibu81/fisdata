@@ -102,12 +102,20 @@ fd_def <- function(name = c("sector", "season", "gender",
 
 write_current_defaults <- function(file = "~/.fisdata.json",
                                    overwrite = FALSE) {
+  write_defaults_(get_fisdata_defaults(), file, overwrite)
+}
 
+
+# helper function that writes a list or tibble of defaults to a JSON file
+write_defaults_ <- function(defaults, 
+                            file = "~/.fisdata.json",
+                            overwrite = FALSE,
+                            error_call = rlang::caller_env()) {
+  
   if (file.exists(file) && !overwrite) {
     cli::cli_abort("The file {file} exists. Use `overwrite = TRUE` to overwrite it.")
   }
 
-  defaults <- get_fisdata_defaults()
   json <- defaults %>%
     # convert to a list to avoid having an unnecessary length-one array
     as.list() %>% 
@@ -129,7 +137,7 @@ alert_default <- function(type, verbose) {
 
   # get the default value that has been set
   value <- fd_def(type)
-
+  
   # if the value is an empty string, issue a message saying this
   if (value == "") {
     cli::cli_alert_info("The default for '{type}' has been set to ''.")
