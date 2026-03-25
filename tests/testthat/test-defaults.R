@@ -223,6 +223,42 @@ test_that("write_current_defaults() handles existing file", {
   expect_silent(write_current_defaults("fisdata.json", overwrite = TRUE))
 })
 
+
+test_that("write_defaults() works", {
+  ref <- toJSON(
+    list(sector = "CC", season = "", gender = "M", category = "WC",
+         discipline = "", active_only = FALSE),
+    auto_unbox = TRUE,
+    pretty = TRUE
+  )
+  local_file("fisdata.json")
+  expect_equal(
+    write_defaults("fisdata.json", sector = "CC", gender = "M", category = "WC"),
+    ref
+  )
+  expect_true(file.exists("fisdata.json"))
+  expect_equal(paste(readLines("fisdata.json"), collapse = "\n"), ref,
+               ignore_attr = TRUE)
+})
+
+
+test_that("write_defaults() handles existing file", {
+  local_file("fisdata.json")
+  write_defaults("fisdata.json", sector = "CC", gender = "M")
+  expect_error(write_defaults("fisdata.json", sector = "CC", gender = "M"),
+               "The file fisdata.json exists.")
+  expect_silent(write_current_defaults("fisdata.json", overwrite = TRUE))
+})
+
+
+test_that("write_defaults() rejects NULL as default", {
+  local_file("fisdata.json")
+  expect_error(write_defaults("fisdata.json", sector = "CC", discipline = NULL),
+               "Defaults must no be NULL.*NULL: discipline")
+  expect_false(file.exists("fisdata.json"))
+})
+
+
 # reset all defaults to their initial state
 reset_fisdata_defaults()
 

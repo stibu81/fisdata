@@ -97,7 +97,30 @@ fd_def <- function(name = c("sector", "season", "gender",
 #' 
 #' @param file name of the JSON file to read or write
 #' @param overwrite should an existing file be overwritten?
+#' @inheritParams query_athletes
+#' @inheritParams query_results
 #' 
+#' @export
+
+write_defaults <- function(file = "~/.fisdata.json",
+                           overwrite = FALSE,
+                           sector = "",
+                           season = "",
+                           gender = "",
+                           category = "",
+                           discipline = "",
+                           active_only = FALSE) {
+  defs <- prepare_defaults(sector = sector,
+                           season = season,
+                           gender = gender,
+                           category = category,
+                           discipline = discipline,
+                           active_only = active_only)
+  write_defaults_(defs, file, overwrite)
+}
+
+
+#' @rdname write_defaults
 #' @export
 
 write_current_defaults <- function(file = "~/.fisdata.json",
@@ -114,6 +137,19 @@ write_defaults_ <- function(defaults,
   
   if (file.exists(file) && !overwrite) {
     cli::cli_abort("The file {file} exists. Use `overwrite = TRUE` to overwrite it.")
+  }
+
+  # don't write NULL for any default to the file
+  def_is_null <- purrr::map_lgl(defaults, is.null)
+  if (any(def_is_null)) {
+    null_names <- names(def_is_null)[def_is_null]
+    cli::cli_abort(
+      c(
+        "!" = "Defaults must no be NULL when writing to a json file.", 
+        "i" = "The following value{?s} {?is/are} NULL: {null_names}."
+      ),
+      call = error_call
+    )
   }
 
   json <- defaults %>%
