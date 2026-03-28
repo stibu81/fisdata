@@ -2,7 +2,7 @@
 
 Default settings can be written to a JSON file and read again from this
 file. If the file `.fisdata.json` exists in the user's home it is read
-automatically when fisdata is loaded in an interactive session (see
+automatically when fisdata is attached in an interactive session (see
 'Details' for how to configure this behaviour).
 
 ## Usage
@@ -97,10 +97,10 @@ tibble (invisibly).
 
 ## Details
 
-When fisdata is loaded in an interactive session, it tries to load
+When fisdata is attached in an interactive session, it tries to load
 defaults from a file `fisdata.json`. You can use another file by setting
 the environment variable `FISDATA_DEFAULTS_FILE` to the path to this
-file before loading fisdata. To do this once, you can use
+file before attaching fisdata. To do this once, you can use
 [`Sys.setenv()`](https://rdrr.io/r/base/Sys.setenv.html), to configure R
 to always load a different file, you can set `FISDATA_DEFAULTS_FILE` in
 your `.Renviron` file.
