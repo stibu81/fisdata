@@ -61,8 +61,22 @@ is searched for in the description column of \link{disciplines}.}
 \item{verbose}{should the function create output. This defaults
 to \code{TRUE} in interactive sessions or when \code{apply} is \code{FALSE}.}
 }
+\value{
+\code{write_defaults()} and \code{write_current_defaults()} return the json-string that
+was written to the file (invisibly). \code{read_defaults()} returns the default
+values that were read as a tibble (invisibly).
+}
 \description{
 Default settings can be written to a JSON file and read again from
 this file. If the file \code{.fisdata.json} exists in the user's home
-it is read automatically.
+it is read automatically when fisdata is loaded in an interactive
+session (see 'Details' for how to configure this behaviour).
+}
+\details{
+When fisdata is loaded in an interactive session, it tries to load defaults
+from a file \code{fisdata.json}. You can use another file by setting the environment
+variable \code{FISDATA_DEFAULTS_FILE} to the path to this file before loading
+fisdata. To do this once, you can use \code{\link[=Sys.setenv]{Sys.setenv()}}, to configure R to always
+load a different file, you can set \code{FISDATA_DEFAULTS_FILE} in your \code{.Renviron}
+file.
 }

@@ -93,12 +93,26 @@ fd_def <- function(name = c("sector", "season", "gender",
 #'
 #' Default settings can be written to a JSON file and read again from
 #' this file. If the file `.fisdata.json` exists in the user's home
-#' it is read automatically.
+#' it is read automatically when fisdata is loaded in an interactive
+#' session (see 'Details' for how to configure this behaviour).
 #' 
 #' @param file name of the JSON file to read or write
 #' @param overwrite should an existing file be overwritten?
 #' @inheritParams query_athletes
 #' @inheritParams query_results
+#' 
+#' @details
+#' When fisdata is loaded in an interactive session, it tries to load defaults
+#' from a file `fisdata.json`. You can use another file by setting the environment
+#' variable `FISDATA_DEFAULTS_FILE` to the path to this file before loading
+#' fisdata. To do this once, you can use [Sys.setenv()], to configure R to always
+#' load a different file, you can set `FISDATA_DEFAULTS_FILE` in your `.Renviron`
+#' file. 
+#' 
+#' @returns
+#' `write_defaults()` and `write_current_defaults()` return the json-string that
+#' was written to the file (invisibly). `read_defaults()` returns the default
+#' values that were read as a tibble (invisibly).
 #' 
 #' @export
 
@@ -167,6 +181,7 @@ write_defaults_ <- function(defaults,
 #' @param verbose should the function create output. This defaults
 #'  to `TRUE` in interactive sessions or when `apply` is `FALSE`.
 #' @rdname write_defaults
+#' 
 #' @export
 
 read_defaults <- function(file = "~/.fisdata.json", 

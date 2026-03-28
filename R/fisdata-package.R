@@ -27,6 +27,18 @@ cache <- new.env()
 
   # set options to default values
   reset_fisdata_defaults()
+
+  # determine the file that defaults should be read from. The file name is
+  # taken from the environment variable FISDATA_DEFAULTS_FILE. If the variable
+  # is unset, fall back to "~/.fisdata.json".
+  defaults_file <- Sys.getenv("FISDATA_DEFAULTS_FILE", "~/.fisdata.json")
+
+  # if the file exists and R is running interactively,
+  # read defaults from it.
+  if (interactive() && file.exists(defaults_file)) {
+    cli::cli_alert_info("Reading default values from {defaults_file} ...")
+    read_defaults(defaults_file, verbose = TRUE)
+  }
 }
 
 # nocov end
