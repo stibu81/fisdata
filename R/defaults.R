@@ -110,44 +110,44 @@ fd_def <- function(name = c("sector", "season", "gender",
 #' file. 
 #' 
 #' @returns
-#' `write_defaults()` and `write_current_defaults()` return the json-string that
-#' was written to the file (invisibly). `read_defaults()` returns the default
+#' `write_fisdata_defaults()` and `write_current_fisdata_defaults()` return the json-string that
+#' was written to the file (invisibly). `read_fisdata_defaults()` returns the default
 #' values that were read as a tibble (invisibly).
 #' 
 #' @export
 
-write_defaults <- function(file = "~/.fisdata.json",
-                           overwrite = FALSE,
-                           sector = "",
-                           season = "",
-                           gender = "",
-                           category = "",
-                           discipline = "",
-                           active_only = FALSE) {
+write_fisdata_defaults <- function(file = "~/.fisdata.json",
+                                   overwrite = FALSE,
+                                   sector = "",
+                                   season = "",
+                                   gender = "",
+                                   category = "",
+                                   discipline = "",
+                                   active_only = FALSE) {
   defs <- prepare_defaults(sector = sector,
                            season = season,
                            gender = gender,
                            category = category,
                            discipline = discipline,
                            active_only = active_only)
-  write_defaults_(defs, file, overwrite)
+  write_fisdata_defaults_(defs, file, overwrite)
 }
 
 
-#' @rdname write_defaults
+#' @rdname write_fisdata_defaults
 #' @export
 
-write_current_defaults <- function(file = "~/.fisdata.json",
-                                   overwrite = FALSE) {
-  write_defaults_(get_fisdata_defaults(), file, overwrite)
+write_current_fisdata_defaults <- function(file = "~/.fisdata.json",
+                                           overwrite = FALSE) {
+  write_fisdata_defaults_(get_fisdata_defaults(), file, overwrite)
 }
 
 
 # helper function that writes a list or tibble of defaults to a JSON file
-write_defaults_ <- function(defaults, 
-                            file = "~/.fisdata.json",
-                            overwrite = FALSE,
-                            error_call = rlang::caller_env()) {
+write_fisdata_defaults_ <- function(defaults, 
+                                    file = "~/.fisdata.json",
+                                    overwrite = FALSE,
+                                    error_call = rlang::caller_env()) {
   
   if (file.exists(file) && !overwrite) {
     cli::cli_abort("The file {file} exists. Use `overwrite = TRUE` to overwrite it.")
@@ -180,11 +180,11 @@ write_defaults_ <- function(defaults,
 #' @param apply should the defaults be applied? 
 #' @param verbose should the function create output. This defaults
 #'  to `TRUE` in interactive sessions or when `apply` is `FALSE`.
-#' @rdname write_defaults
+#' @rdname write_fisdata_defaults
 #' 
 #' @export
 
-read_defaults <- function(file = "~/.fisdata.json", 
+read_fisdata_defaults <- function(file = "~/.fisdata.json", 
                           apply = TRUE,
                           verbose = !apply || interactive()) {
 

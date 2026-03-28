@@ -37,7 +37,7 @@ cache <- new.env()
   # read defaults from it.
   if (interactive() && file.exists(defaults_file)) {
     cli::cli_alert_info("Reading default values from {defaults_file} ...")
-    read_defaults(defaults_file, verbose = TRUE)
+    read_fisdata_defaults(defaults_file, verbose = TRUE)
   }
 }
 

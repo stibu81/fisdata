@@ -32,6 +32,7 @@ reference:
   - show_url
   - browse_url
   - set_fisdata_defaults
+  - write_fisdata_defaults
 
 - title: Datasets
   desc: Datasets describing values that can be used in the querying functions
