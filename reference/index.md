@@ -52,6 +52,10 @@ Functions to visualise query results
   [`reset_fisdata_defaults()`](https://stibu81.github.io/fisdata/reference/set_fisdata_defaults.md)
   [`fd_def()`](https://stibu81.github.io/fisdata/reference/set_fisdata_defaults.md)
   : Get And Set Default Values for Parameters in Querying Functions
+- [`write_fisdata_defaults()`](https://stibu81.github.io/fisdata/reference/write_fisdata_defaults.md)
+  [`write_current_fisdata_defaults()`](https://stibu81.github.io/fisdata/reference/write_fisdata_defaults.md)
+  [`read_fisdata_defaults()`](https://stibu81.github.io/fisdata/reference/write_fisdata_defaults.md)
+  : Read and Write Defaults from a JSON File
 
 ## Datasets
 
