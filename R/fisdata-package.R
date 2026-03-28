@@ -27,7 +27,9 @@ cache <- new.env()
 
   # set options to default values
   reset_fisdata_defaults()
+}
 
+.onAttach <- function(libname, pkgname) {
   # determine the file that defaults should be read from. The file name is
   # taken from the environment variable FISDATA_DEFAULTS_FILE. If the variable
   # is unset, fall back to "~/.fisdata.json".
@@ -36,8 +38,20 @@ cache <- new.env()
   # if the file exists and R is running interactively,
   # read defaults from it.
   if (interactive() && file.exists(defaults_file)) {
-    cli::cli_alert_info("Reading default values from {defaults_file} ...")
-    read_fisdata_defaults(defaults_file, verbose = TRUE)
+    # catch messages with withCallingHandlers() and convert them to 
+    # package startup messages.
+    msgs <- c()
+    withCallingHandlers(
+      {
+        cli::cli_alert_info("Reading default values from {defaults_file} ...")
+        read_fisdata_defaults(defaults_file, verbose = TRUE)
+      },
+      message = function(cnd) {
+        msgs <<- c(msgs, conditionMessage(cnd))
+        invokeRestart("muffleMessage")
+      }
+    )
+    packageStartupMessage(msgs)
   }
 }
 
