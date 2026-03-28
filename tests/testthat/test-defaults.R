@@ -259,6 +259,101 @@ test_that("write_defaults() rejects NULL as default", {
 })
 
 
-# reset all defaults to their initial state
-reset_fisdata_defaults()
+test_that("read_defaults() reads defaults without applying them", {
+  local_file("fisdata.json")
+  write_defaults("fisdata.json", sector = "AL", season = "2024", gender = "W", 
+                 category = "WC", discipline = "SL", active_only = TRUE)
+  reset_fisdata_defaults()
 
+  expect_equal(
+    read_defaults("fisdata.json", apply = FALSE, verbose = FALSE),
+    tibble(sector = "AL", season = "2024", gender = "W", category = "WC",
+           discipline = "SL", active_only = TRUE)
+  )
+  expect_equal(
+    get_fisdata_defaults(),
+    tibble(sector = "", season = "", gender = "",
+           category = "", discipline = "", active_only = FALSE)
+  )
+})
+
+
+test_that("read_defaults() applies defaults", {
+  local_file("fisdata.json")
+  write_defaults("fisdata.json", sector = "CC", season = "2025", gender = "M", 
+                 category = "WC", discipline = "SP", active_only = TRUE)
+  reset_fisdata_defaults()
+
+  expect_equal(
+    read_defaults("fisdata.json", verbose = FALSE),
+    tibble(sector = "CC", season = "2025", gender = "M",
+           category = "WC", discipline = "SP", active_only = TRUE)
+  )
+  expect_equal(
+    get_fisdata_defaults(),
+    tibble(sector = "CC", season = "2025", gender = "M",
+           category = "WC", discipline = "SP", active_only = TRUE)
+  )
+})
+
+
+test_that("read_defaults() handles invalid files", {
+  local_file("fisdata.json")
+
+  expect_error(read_defaults("fisdata.json"), "does not exist")
+
+  writeLines("{", "fisdata.json")
+  expect_error(read_defaults("fisdata.json"), "Failed to parse")
+
+  writeLines(
+    toJSON(
+      list(sector = "AL", season = "2024", gender = "W", category = "WC",
+           discipline = "SL"),
+      auto_unbox = TRUE
+    ),
+    "fisdata.json"
+  )
+  expect_error(read_defaults("fisdata.json"), "Some defaults have no value set: active_only")
+
+  writeLines(
+    toJSON(
+      list(sector = c("AL", "CC"), season = "1940", gender = "W", category = "WC",
+           discipline = "SL", active_only = TRUE),
+      auto_unbox = TRUE
+    ),
+    "fisdata.json"
+  )
+  expect_error(read_defaults("fisdata.json"), "contents.*not valid")
+
+  writeLines(
+    toJSON(
+      list(sector = "AL", season = "1940", gender = "W", category = "WC",
+           discipline = "SL", active_only = TRUE),
+      auto_unbox = TRUE
+    ),
+    "fisdata.json"
+  )
+  expect_error(read_defaults("fisdata.json"), "'1940' is not a valid season")
+})
+
+
+test_that("read_defaults() creates output in the appropriate situations", {
+  local_file("fisdata.json")
+  write_defaults("fisdata.json", sector = "CC", season = "2025", gender = "M", 
+                 category = "WC", discipline = "SP", active_only = TRUE)
+  
+  expect_silent(read_defaults("fisdata.json", apply = FALSE, verbose = FALSE))
+  expect_silent(read_defaults("fisdata.json", apply = TRUE, verbose = FALSE))
+  read_defaults("fisdata.json", apply = FALSE, verbose = TRUE) %>% 
+    expect_message("contains the following defaults") %>% 
+    expect_output("tibble.*sector +season +gender +category")
+  read_defaults("fisdata.json", apply = TRUE, verbose = TRUE) %>%
+    expect_message("sector.*CC.*Cross-Country") %>%
+    expect_message("season.*2025") %>%
+    expect_message("gender.*M") %>%
+    expect_message("category.*WC.*World Cup") %>%
+    expect_message("discipline.*SP") %>%
+    expect_message("active_only.*'TRUE'")
+})
+
+reset_fisdata_defaults()

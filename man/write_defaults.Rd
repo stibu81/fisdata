@@ -3,6 +3,7 @@
 \name{write_defaults}
 \alias{write_defaults}
 \alias{write_current_defaults}
+\alias{read_defaults}
 \title{Read and Write Defaults from a JSON File}
 \usage{
 write_defaults(
@@ -17,6 +18,12 @@ write_defaults(
 )
 
 write_current_defaults(file = "~/.fisdata.json", overwrite = FALSE)
+
+read_defaults(
+  file = "~/.fisdata.json",
+  apply = TRUE,
+  verbose = !apply || interactive()
+)
 }
 \arguments{
 \item{file}{name of the JSON file to read or write}
@@ -48,6 +55,11 @@ If a string not matching a discipline code is used, a similar string
 is searched for in the description column of \link{disciplines}.}
 
 \item{active_only}{should the query be restricted to active athletes.}
+
+\item{apply}{should the defaults be applied?}
+
+\item{verbose}{should the function create output. This defaults
+to \code{TRUE} in interactive sessions or when \code{apply} is \code{FALSE}.}
 }
 \description{
 Default settings can be written to a JSON file and read again from

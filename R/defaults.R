@@ -163,6 +163,65 @@ write_defaults_ <- function(defaults,
 }
 
 
+#' @param apply should the defaults be applied? 
+#' @param verbose should the function create output. This defaults
+#'  to `TRUE` in interactive sessions or when `apply` is `FALSE`.
+#' @rdname write_defaults
+#' @export
+
+read_defaults <- function(file = "~/.fisdata.json", 
+                          apply = TRUE,
+                          verbose = !apply || interactive()) {
+
+  if (!file.exists(file)) {
+    cli::cli_abort("The file {file} does not exist.")
+  }
+
+  raw <- purrr::possibly(jsonlite::fromJSON)(file)
+  if (is.null(raw)) {
+    cli::cli_abort("Failed to parse file {file} as JSON.")
+  }
+
+  # check that all the expected values are present.
+  expected <- c("sector", "season", "gender", "category", "discipline", "active_only")
+  is_present <- expected %in% names(raw)
+  if (any(!is_present)) {
+    cli::cli_abort("Some defaults have no value set: {expected[!is_present]}")
+  }
+
+  # run the contents of the file through prepare_defs() to check
+  # that the values are valid.
+  error_call = rlang::current_call()
+  defs <- tryCatch(
+    do.call(prepare_defaults, raw[names(raw) %in% expected]),
+    error = function(e) {
+      cli::cli_abort(c("The contents of file {file} are not valid.",
+                       "i" = "Error message: {e$message}"),
+                      call = error_call)
+    },
+    warning = function(w) {
+      cli::cli_abort(c("The contents of file {file} are not valid.",
+                       "i" = "Warning message: {w$message}"),
+                      call = error_call)
+    }
+  )
+
+  # if verbose and the default are not to be applied, print them here
+  # in case the defaults are applied, set_fisdata_defaults() will create output.
+  if (verbose && !apply) {
+    cli::cli_alert_info("The file {file} contains the following defaults:")
+    print(dplyr::as_tibble(defs))
+  }
+
+  # if requested, apply the defaults
+  if (apply) {
+    do.call(set_fisdata_defaults, c(defs, list(verbose = verbose)))
+  }
+
+  invisible(dplyr::as_tibble(defs))
+}
+
+
 # issue a message describing the default value that has been set.
 # The function must be called AFTER setting the default.
 alert_default <- function(type, verbose) {
