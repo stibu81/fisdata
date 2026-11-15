@@ -281,14 +281,17 @@ prepare_defaults <- function(sector = NULL,
 
   if (!is.null(season)) {
     season_int <- suppressWarnings(as.integer(season))
-    if (season == "") {
+    # season is stored as an integer. The only exception is the empty string,
+    # which must be kept as such, because it is passed to the URL in order to
+    # not filter by season.
+    if (identical(season, "")) {
       season <- ""
-    } else if (is.na(season_int) | season_int < 1950 |
-        season_int > lubridate::year(today()) + 1) {
+    } else if (length(season_int) != 1 || is.na(season_int) ||
+        season_int < 1950 || season_int > lubridate::year(today()) + 1) {
       cli::cli_warn("'{season}' is not a valid season.")
       season <- NULL
     } else {
-      season <- as.character(season_int)
+      season <- season_int
     }
   }
 

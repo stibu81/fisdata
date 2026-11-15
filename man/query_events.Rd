@@ -58,10 +58,10 @@ support special characters, but many are handled automatically
 \item{season}{year when the season ended, i.e., 2020 stands for the season
 2019/2020. It is not possible to filter for multiple seasons at once.}
 
-\item{month}{numeric giving the month of the year to filter for. The month
-is only considered when also season is given. Not that the season runs
-from July to June, such that, say, month 11 in season 2025 is translated
-to November 2024.}
+\item{month}{integer giving the month of the year to filter for (1 to 12).
+The month is only considered when also season is given and is ignored
+otherwise. Note that the season runs from July to June, such that, say,
+month 11 in season 2025 is translated to November 2024.}
 
 \item{date}{date at which the event takes place. This must either be a
 \code{Date} or \code{POSIXct} object or a string in the format "\%Y-\%m-\%d". If \code{date}

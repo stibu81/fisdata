@@ -12,10 +12,10 @@
 #'
 #' @param selection which events should be returned: past events, where results
 #'  are available ("results") or upcoming events ("upcoming") or both ("all")?
-#' @param month numeric giving the month of the year to filter for. The month
-#'  is only considered when also season is given. Not that the season runs
-#'  from July to June, such that, say, month 11 in season 2025 is translated
-#'  to November 2024.
+#' @param month integer giving the month of the year to filter for (1 to 12).
+#'  The month is only considered when also season is given and is ignored
+#'  otherwise. Note that the season runs from July to June, such that, say,
+#'  month 11 in season 2025 is translated to November 2024.
 #' @param date date at which the event takes place. This must either be a
 #'  `Date` or `POSIXct` object or a string in the format "%Y-%m-%d". If `date`
 #'   is used, `season` and `month` are ignored.
@@ -132,15 +132,26 @@ get_events_url <- function(selection = c("all", "results", "upcoming"),
     date <- as.Date(date)
     season <- get_season_at_date(date)
     date <- format(date, "%d.%m.%Y")
-  # when date is not given, use month if combined with season
+    month <- ""
+  # when date is not given, use month only if combined with season. Without
+  # a season, the website returns no events for a month, so it is dropped.
+  } else if (identical(month, "") || identical(season, "")) {
+    month <- ""
   } else {
-    if (!identical(month, "") & !identical(season, "")) {
-      month <- if (month <= 6) {
-        paste(formatC(month, width = 2, flag = "0"), season, sep = "-")
-      } else {
-        paste(formatC(month, width = 2, flag = "0"), season - 1, sep = "-")
-      }
+    season <- suppressWarnings(as.integer(season))
+    month <- suppressWarnings(as.integer(month))
+    if (length(season) != 1 || is.na(season)) {
+      cli::cli_abort("'season' must be a single integer or \"\".",
+                     call = error_call)
     }
+    if (length(month) != 1 || is.na(month) || month < 1 || month > 12) {
+      cli::cli_abort("'month' must be an integer between 1 and 12 or \"\".",
+                     call = error_call)
+    }
+    # the season runs from July to June: months July to December belong to
+    # the previous calendar year.
+    year <- if (month <= 6) season else season - 1L
+    month <- paste(formatC(month, width = 2, flag = "0"), year, sep = "-")
   }
 
   glue::glue(
