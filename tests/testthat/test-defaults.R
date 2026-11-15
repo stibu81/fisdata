@@ -25,13 +25,13 @@ test_that("set_fisdata_defaults() works with valid inputs", {
   expect_equal(getOption("fisdata_sector"), "AL")
 
   set_fisdata_defaults(season = 2024)
-  expect_equal(getOption("fisdata_season"), "2024")
+  expect_equal(getOption("fisdata_season"), 2024L)
 
   set_fisdata_defaults(season = "2020")
-  expect_equal(getOption("fisdata_season"), "2020")
+  expect_equal(getOption("fisdata_season"), 2020L)
 
   set_fisdata_defaults(season = 2022.5)
-  expect_equal(getOption("fisdata_season"), "2022")
+  expect_equal(getOption("fisdata_season"), 2022L)
 
   set_fisdata_defaults(gender = "M")
   expect_equal(getOption("fisdata_gender"), "M")
@@ -129,16 +129,16 @@ test_that("set_fisdata_defaults() works with invalid inputs", {
 
   expect_warning(set_fisdata_defaults(season = "43A5"),
                  "'43A5' is not a valid season")
-  expect_equal(getOption("fisdata_season"), "2024")
+  expect_equal(getOption("fisdata_season"), 2024L)
 
   expect_warning(set_fisdata_defaults(season = 1934),
                  "'1934' is not a valid season")
-  expect_equal(getOption("fisdata_season"), "2024")
+  expect_equal(getOption("fisdata_season"), 2024L)
 
   in2years <- year(today()) + 2
   expect_warning(set_fisdata_defaults(season = in2years),
                  glue("'{in2years}' is not a valid season"))
-  expect_equal(getOption("fisdata_season"), "2024")
+  expect_equal(getOption("fisdata_season"), 2024L)
 
   expect_warning(set_fisdata_defaults(active_only = "no"),
                  "'no' is not valid for active_only")
@@ -163,7 +163,7 @@ test_that("get_fisdata_defaults() works", {
                        category = "WC", discipline = "DH", active_only = TRUE)
   expect_equal(
     get_fisdata_defaults(),
-    tibble(sector = "AL", season = "2024", gender = "M",
+    tibble(sector = "AL", season = 2024L, gender = "M",
       category = "WC", discipline = "DH", active_only = TRUE)
   )
 
@@ -188,7 +188,7 @@ test_that("fd_def() works", {
   set_fisdata_defaults(sector = "AL", season = 2024, gender = "M",
                        category = "WC", discipline = "DH", active_only = TRUE)
   expect_equal(fd_def("sector"), "AL")
-  expect_equal(fd_def("season"), "2024")
+  expect_equal(fd_def("season"), 2024L)
   expect_equal(fd_def("gender"), "M")
   expect_equal(fd_def("category"), "WC")
   expect_equal(fd_def("discipline"), "DH")
@@ -267,7 +267,7 @@ test_that("read_fisdata_defaults() reads defaults without applying them", {
 
   expect_equal(
     read_fisdata_defaults("fisdata.json", apply = FALSE, verbose = FALSE),
-    tibble(sector = "AL", season = "2024", gender = "W", category = "WC",
+    tibble(sector = "AL", season = 2024L, gender = "W", category = "WC",
            discipline = "SL", active_only = TRUE)
   )
   expect_equal(
@@ -286,12 +286,12 @@ test_that("read_fisdata_defaults() applies defaults", {
 
   expect_equal(
     read_fisdata_defaults("fisdata.json", verbose = FALSE),
-    tibble(sector = "CC", season = "2025", gender = "M",
+    tibble(sector = "CC", season = 2025L, gender = "M",
            category = "WC", discipline = "SP", active_only = TRUE)
   )
   expect_equal(
     get_fisdata_defaults(),
-    tibble(sector = "CC", season = "2025", gender = "M",
+    tibble(sector = "CC", season = 2025L, gender = "M",
            category = "WC", discipline = "SP", active_only = TRUE)
   )
 })

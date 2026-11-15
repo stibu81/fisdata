@@ -69,6 +69,54 @@ test_that("get_events_url() works with inputs that must be matched", {
 })
 
 
+test_that("get_events_url() handles month and season correctly", {
+  get_month <- function(...) {
+    str_extract(get_events_url(...), "seasonmonth=.*$")
+  }
+
+  # months in the second half of the year belong to the previous year
+  expect_equal(get_month(season = 2025, month = 12), "seasonmonth=12-2024")
+  expect_equal(get_month(season = 2025, month = 7), "seasonmonth=07-2024")
+  expect_equal(get_month(season = 2025, month = 6), "seasonmonth=06-2025")
+  expect_equal(get_month(season = 2025, month = 1), "seasonmonth=01-2025")
+
+  # season and month may also be given as character
+  expect_equal(get_month(season = "2025", month = 12), "seasonmonth=12-2024")
+  expect_equal(get_month(season = 2025, month = "10"), "seasonmonth=10-2024")
+  expect_equal(get_month(season = "2025", month = "3"), "seasonmonth=03-2025")
+
+  # month is dropped if season is not given
+  expect_equal(get_month(month = 12), "seasonmonth=")
+  expect_equal(get_month(season = "", month = 3), "seasonmonth=")
+
+  # month is dropped if date is given
+  expect_equal(get_month(date = "2025-02-01", month = 12), "seasonmonth=")
+})
+
+
+test_that("get_events_url() works with season from the defaults", {
+  withr::defer(reset_fisdata_defaults())
+  set_fisdata_defaults(season = 2025, verbose = FALSE)
+  expect_equal(
+    str_extract(get_events_url(season = fd_def("season"), month = 12),
+                "seasonmonth=.*$"),
+    "seasonmonth=12-2024"
+  )
+})
+
+
+test_that("get_events_url() errors for invalid month or season", {
+  expect_error(get_events_url(season = 2025, month = 13),
+               "'month' must be an integer between 1 and 12")
+  expect_error(get_events_url(season = 2025, month = 0),
+               "'month' must be an integer between 1 and 12")
+  expect_error(get_events_url(season = 2025, month = "Dec"),
+               "'month' must be an integer between 1 and 12")
+  expect_error(get_events_url(season = "abc", month = 12),
+               "'season' must be a single integer")
+})
+
+
 test_that("query_events() works with events from many sectors", {
   local_mocked_bindings(
     get_events_url = function(...) test_path("data", "events_20250201.html.gz"),
