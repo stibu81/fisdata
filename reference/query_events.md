@@ -86,10 +86,10 @@ query_current_events(
 
 - month:
 
-  numeric giving the month of the year to filter for. The month is only
-  considered when also season is given. Not that the season runs from
-  July to June, such that, say, month 11 in season 2025 is translated to
-  November 2024.
+  integer giving the month of the year to filter for (1 to 12). The
+  month is only considered when also season is given and is ignored
+  otherwise. Note that the season runs from July to June, such that,
+  say, month 11 in season 2025 is translated to November 2024.
 
 - date:
 

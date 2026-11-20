@@ -16,16 +16,16 @@ different things.
 The following are the relevant terms with an example value for each.
 Explanations for terms with obvious meaning are omitted.
 
-| Term        | Explanation                                                                                                                              | Examples                                       |
-|-------------|------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
-| athlete     |                                                                                                                                          | Didier Cuche, Lara Gut-Behrami                 |
-| sector      | the major groups of disciplines                                                                                                          | Alpine Skiing, Cross-Country                   |
-| discipline  | a specific discipline                                                                                                                    | Downhill, Large Hill, Aerials                  |
-| brand       | manufacturer of an athlete’s skis or snowboards                                                                                          | Stöckli, Head                                  |
-| competition | a competition in a single discipline and sector                                                                                          | Wengen Downhill 2025                           |
-| event       | a set of one or more competitions in one or more disciplines taking place during one or more days in a specific location during a season | Wengen 2025                                    |
-| category    | type of the event                                                                                                                        | World Cup, Olympic Winter Games                |
-| standings   | the overall ranking for a category or discipline within a category                                                                       | Overall alpine skiing World Cup standings 2025 |
+| Term | Explanation | Examples |
+|----|----|----|
+| athlete |  | Didier Cuche, Lara Gut-Behrami |
+| sector | the major groups of disciplines | Alpine Skiing, Cross-Country |
+| discipline | a specific discipline | Downhill, Large Hill, Aerials |
+| brand | manufacturer of an athlete’s skis or snowboards | Stöckli, Head |
+| competition | a competition in a single discipline and sector | Wengen Downhill 2025 |
+| event | a set of one or more competitions in one or more disciplines taking place during one or more days in a specific location during a season | Wengen 2025 |
+| category | type of the event | World Cup, Olympic Winter Games |
+| standings | the overall ranking for a category or discipline within a category | Overall alpine skiing World Cup standings 2025 |
 
 When filtering for sector, discipline, or category, a code is used
 instead of the full description. See the datasets `sectors`,
@@ -76,6 +76,7 @@ a query by finding an athlete. For example, the following call gets the
 information for Didier Cuche:
 
 ``` r
+
 library(fisdata)
 library(dplyr)
 
@@ -99,6 +100,7 @@ must be called with a single athlete. The following query only obtains
 the results in downhill races:
 
 ``` r
+
 cuche_res <- query_results(cuche, discipline = "DH")
 cuche_res %>% 
   select(athlete:place, category:rank, race_id)
@@ -126,6 +128,7 @@ full results for that race. The following code gets the full result for
 Didier Cuche’s last victory in Wengen:
 
 ``` r
+
 wengen_res <- cuche_res %>% 
   filter(place == "Wengen", rank == 1) %>% 
   head(n = 1) %>%
@@ -152,6 +155,7 @@ Alternatively, you may start by querying for an event. This finds the
 Wengen races from the season 2024/25:
 
 ``` r
+
 wengen2025 <- query_events(sector = "AL", place = "wengen", season = 2025)
 wengen2025 %>% 
   select(start_date:genders)
@@ -165,6 +169,7 @@ The result includes the `event_id`, which is required as input in order
 to query all the competitions that took place during this event:
 
 ``` r
+
 wengen_races <- query_competitions(wengen2025)
 wengen_races %>% 
   select(place:cancelled)
@@ -185,6 +190,7 @@ output from
 For example, the results for the Super G can be obtained as follows:
 
 ``` r
+
 sg_res <- wengen_races %>% 
   filter(competition == "Super G") %>% 
   query_race()
@@ -210,6 +216,7 @@ Note that the objects created by the querying functions always include
 the URL that was downloaded. This URL can be obtained as follows:
 
 ``` r
+
 show_url(cuche_res)
 #> https://www.fis-ski.com/DB/general/athlete-biography.html?sectorcode=AL&seasoncode=&competitorid=11795&type=result&categorycode=&sort=&place=&disciplinecode=DH&position=&limit=2000
 ```
@@ -231,6 +238,7 @@ races but it is expected to fail for some types that are not yet
 covered. For example, it usually cannot handle team races:
 
 ``` r
+
 query_athletes("von allmen", "franjo") %>% 
   query_results(category = "WSC") %>% 
   filter(discipline == "Team Combined") %>% 

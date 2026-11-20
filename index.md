@@ -11,6 +11,7 @@ You can install the development version of fisdata from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("remotes")
 remotes::install_github("stibu81/fisdata")
 ```
@@ -47,6 +48,7 @@ and
 to get Didier Cuche’s full downhill results:
 
 ``` r
+
 library(fisdata)
 library(dplyr)
 
@@ -77,6 +79,7 @@ and
 to get the full results of the Wengen Downhill in 2025:
 
 ``` r
+
 query_events(sector = "AL", place = "wengen", season = 2025) %>% 
   query_competitions() %>% 
   filter(competition == "Downhill") %>% 
@@ -104,6 +107,7 @@ to get the overall and downhill standings of the men’s alpine skiing
 world cup in the season 2022/23:
 
 ``` r
+
 query_standings(sector = "AL", season = 2023,
                 category = "WC", gender = "M") %>% 
   select(athlete, nation, all_rank:dh_points)
@@ -130,6 +134,7 @@ results. The following plot shows the number of World Cup podiums per
 discipline for multiple athletes:
 
 ``` r
+
 bind_rows(
     query_athletes("cuche", "didier") %>%
       query_results(category = "WC"),
