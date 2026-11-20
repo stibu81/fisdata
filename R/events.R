@@ -135,23 +135,26 @@ get_events_url <- function(selection = c("all", "results", "upcoming"),
     month <- ""
   # when date is not given, use month only if combined with season. Without
   # a season, the website returns no events for a month, so it is dropped.
-  } else if (identical(month, "") || identical(season, "")) {
+  } else if (identical(season, "")) {
     month <- ""
   } else {
     season <- suppressWarnings(as.integer(season))
-    month <- suppressWarnings(as.integer(month))
     if (length(season) != 1 || is.na(season)) {
       cli::cli_abort("'season' must be a single integer or \"\".",
                      call = error_call)
     }
-    if (length(month) != 1 || is.na(month) || month < 1 || month > 12) {
-      cli::cli_abort("'month' must be an integer between 1 and 12 or \"\".",
-                     call = error_call)
+
+    if (!identical(month, "")) {
+      month <- suppressWarnings(as.integer(month))
+      if (length(month) != 1 || is.na(month) || month < 1 || month > 12) {
+        cli::cli_abort("'month' must be an integer between 1 and 12 or \"\".",
+                      call = error_call)
+      }
+      # the season runs from July to June: months July to December belong to
+      # the previous calendar year.
+      year <- if (month <= 6) season else season - 1L
+      month <- paste(formatC(month, width = 2, flag = "0"), year, sep = "-")
     }
-    # the season runs from July to June: months July to December belong to
-    # the previous calendar year.
-    year <- if (month <= 6) season else season - 1L
-    month <- paste(formatC(month, width = 2, flag = "0"), year, sep = "-")
   }
 
   glue::glue(
