@@ -1,6 +1,6 @@
 Package: fisdata
 Title: Query Data from the FIS Web Page
-Version: 0.2.0.9003
+Version: 0.2.0.9004
 Authors@R: 
   person("Stefan", "Lanz", , "slanz1137@gmail.com", role = c("aut", "cre"))
 Description: Query data from the web site of the International Ski and
@@ -10,7 +10,6 @@ BugReports: https://github.com/stibu81/fisdata/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Language: en-GB
 LazyData: true
 Depends: 
@@ -50,3 +49,4 @@ Suggests:
     DiagrammeR
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.1.1

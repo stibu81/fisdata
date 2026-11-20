@@ -26,6 +26,8 @@ export(summarise_results)
 export(write_current_fisdata_defaults)
 export(write_fisdata_defaults)
 importFrom(dplyr,"%>%")
-importFrom(rlang,":=")
-importFrom(rlang,.data)
-importFrom(rlang,.env)
+importFrom(rlang,
+  ":=",
+  .data,
+  .env
+)
