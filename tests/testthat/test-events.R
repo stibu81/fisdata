@@ -33,11 +33,11 @@ test_that("get_events_url() works with valid inputs", {
   )
   expect_equal(
     get_events_url(place = "Kitzbühel", discipline = "DH",
-                   season = 2022, month = 1),
+                   season = 2022),
     paste0("https://www.fis-ski.com/DB/general/calendar-results.html?",
            "eventselection=&place=kitzbuehel&sectorcode=&seasoncode=2022&",
            "categorycode=&disciplinecode=DH&gendercode=&racedate=&",
-           "racecodex=&nationcode=&seasonmonth=01-2022")
+           "racecodex=&nationcode=&seasonmonth=")
   )
 })
 
@@ -91,6 +91,9 @@ test_that("get_events_url() handles month and season correctly", {
 
   # month is dropped if date is given
   expect_equal(get_month(date = "2025-02-01", month = 12), "seasonmonth=")
+
+  # seasonmonth is not used to filter for season only
+  expect_equal(get_month(season = 2025), "seasonmonth=")
 })
 
 
@@ -112,6 +115,8 @@ test_that("get_events_url() errors for invalid month or season", {
                "'month' must be an integer between 1 and 12")
   expect_error(get_events_url(season = 2025, month = "Dec"),
                "'month' must be an integer between 1 and 12")
+  expect_error(get_events_url(season = "abc"),
+               "'season' must be a single integer")
   expect_error(get_events_url(season = "abc", month = 12),
                "'season' must be a single integer")
 })

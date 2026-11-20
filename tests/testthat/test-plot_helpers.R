@@ -90,7 +90,7 @@ test_that("fis_plot() works for static plot", {
 })
 
 
-test_that("fis_plot() works for interactive plot", {
+  test_that("fis_plot() works for interactive plot", {
   p <- mtcars %>%
     ggplot(aes(x = disp, y = mpg, colour = factor(cyl))) +
     geom_point()
